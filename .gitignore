@@ -11,6 +11,3 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 composer.lock
-public/article/
-public/article_pdf/
-public/
