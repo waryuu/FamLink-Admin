@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="icon-big text-center">
-                                    <img src="/menu/{{ $item->image }}" alt="..." class="avatar-img rounded-circle">
+                                    <img src="/public/menu/{{ $item->image }}" alt="..." class="avatar-img rounded-circle">
                                 </div>
                             </div>
                             <div class="col-7 col-stats">
@@ -204,7 +204,7 @@
             return '<strong class=" col-red" style="font-size: 12px">'+row['id']+'</strong>';
         }},
         { data: 'id', name: 'id', render : function(data, type, row) {
-            return '<img src="/menu/'+row['assessment'].image+'" width="100px"/>';
+            return '<img src="/public/menu/'+row['assessment'].image+'" width="100px"/>';
         }},
         { data: 'id', name: 'id',
         render : function(data, type, row) {

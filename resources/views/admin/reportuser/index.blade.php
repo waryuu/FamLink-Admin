@@ -167,7 +167,7 @@
             return '<strong class=" col-red" style="font-size: 12px">'+row['id']+'</strong>';
         }},
         { data: 'id', name: 'id', render : function(data, type, row) {
-            return '<img src="/menu/'+row['assessment'].image+'" width="100px"/>';
+            return '<img src="/public/menu/'+row['assessment'].image+'" width="100px"/>';
         }},
         { data: 'id', name: 'id',
         render : function(data, type, row) {
