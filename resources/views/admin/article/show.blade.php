@@ -25,7 +25,7 @@
                                     <div class="form-group form-show-validation row">
                                         <label >Gambar <span class="required-label">*</span></label>
                                         <div class="input-file input-file-image">
-                                            <img class="img-upload-preview" src="/public/article/{{$model['data']->image}}" width="300">
+                                            <img class="img-upload-preview" src="/article/{{$model['data']->image}}" width="300">
                                             <input type="file" class="form-control form-control-file" id="image" name="image" accept="image/*" >
                                             <label for="image" class="btn btn-primary bg-primary btn-round btn-lg"><i class="fa fa-file-image"></i> Ganti Gambar</label>
                                         </div>
@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="form-group form-show-validation row" id="type_value_wrapper" @if($model['data']->type == 1) style="display: none" @endif>
                                         <label ><span>File PDF <span class="required-label">*</span></label>
-                                        <a href="/public/article_pdf/{{$model['data']->type_value}}" target="blank">
+                                        <a href="/article_pdf/{{$model['data']->type_value}}" target="blank">
                                             <div class="input-file input-file-image">
                                                 <label class="btn btn-primary bg-primary btn-round btn-lg"><i class="fa fa-file-image"></i> Download File</label>
                                             </div>
