@@ -22,7 +22,7 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="icon-big text-center">
-                                    <img src="https://famlink.id/images/logo.png" width="100px">
+                                    <img src="https://www.famlink.id/assets/img/logo.png" width="100px">
                                 </div>
                             </div>
                             <div class="col-7 col-stats">

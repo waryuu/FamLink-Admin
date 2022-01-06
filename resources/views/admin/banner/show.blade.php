@@ -25,7 +25,7 @@
                                     <div class="form-group form-show-validation row">
                                         <label >Gambar <span class="required-label">*</span></label>
                                         <div class="input-file input-file-image">
-                                            <img class="img-upload-preview" src="/public/banner/{{$model['data']->image}}" width="300">
+                                            <img class="img-upload-preview" src="/banner/{{$model['data']->image}}" width="300">
                                             <input type="file" class="form-control form-control-file" id="image" name="image" accept="image/*" >
                                             <label for="image" class="btn btn-primary bg-primary btn-round btn-lg"><i class="fa fa-file-image"></i> Ganti Gambar</label>
                                         </div>
