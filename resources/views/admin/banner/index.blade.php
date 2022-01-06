@@ -176,7 +176,7 @@
             return '<strong class=" col-red" style="font-size: 12px">'+row['id']+'</strong>';
         }},
         { data: 'icon', name: 'icon', render : function(data, type, row) {
-            return '<img src="/public/banner/'+row['image']+'" width="100px"/>';
+            return '<img src="/banner/'+row['image']+'" width="100px"/>';
         }},
         { data: 'title', name: 'title',
         render : function(data, type, row) {
