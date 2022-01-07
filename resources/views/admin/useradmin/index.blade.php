@@ -106,7 +106,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="edit_form_validation" action="{{$model['base_url']}}" method="POST">
+                                    <form id="edit_form_validation" action="{{'/admin/useradmin'}}" method="POST">
                                         @csrf
                                         <input type="hidden" id="edit_binding_id" name="edit_binding_id" value="">
                                         <div class="modal-body">
