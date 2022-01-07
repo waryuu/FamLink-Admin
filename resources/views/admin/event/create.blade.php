@@ -1,9 +1,9 @@
 @extends('layouts.base')
-@section('title', 'Tambah Artikel')
+@section('title', 'Tambah Event')
 @section('content')
 <div class="container">
     <div class="page-inner">
-        <div class="page-header"><h4 class="page-title">Tambah Artikel</h4></div>
+        <div class="page-header"><h4 class="page-title">Tambah Event</h4></div>
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -31,28 +31,41 @@
                                     </div>
                                     <div class="separator-solid"></div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="title" >Judul Article <span class="required-label">*</span></label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Masukan Judul Article" required>
+                                        <label for="title" >Judul Event <span class="required-label">*</span></label>
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Masukan Judul Event" required>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="organizer" >Penyelenggara Event <span class="required-label">*</span></label>
+                                        <input type="text" class="form-control" id="organizer" name="organizer" placeholder="Masukan Penyelenggara Event" required>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="price" >Harga Tiket <span class="required-label">* </span></label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1">Rp .</span>
+                                            <input type="number" class="form-control" placeholder="Masukan Harga Satuan Tiket" id="price" name="price">
+                                          </div>
+                                        jika event tidak memungut biaya, anda bisa menuliskan harga 0
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="time" >Waktu Event <span class="required-label">*</span></label>
+                                        <input type="date" class="form-control" id="time" name="time" placeholder="Masukan Waktu Event" required>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="location" >Lokasi Event <span class="required-label">*</span></label>
+                                        <input type="text" class="form-control" id="location" name="location" placeholder="Masukan Lokasi Event" required>
                                     </div>
                                     <div class="">
-                                        <label for="content" >Content <span class="required-label">*</span></label>
+                                        <label for="description" ><b>Deskripsi Event </b><span class="required-label">*</span></label>
                                         <div>
-                                            <textarea id="summernote" name="content" placeholder="Masukan Content" required></textarea>
+                                            <textarea id="summernote" name="description" placeholder="Masukan description" required></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="parent_header">Tipe <span class="required-label">*</span></label>
-                                        <select class="form-control" id="type" name="type" required>
-                                            <option value="1">Text</option>
-                                            <option value="2">PDF</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group form-show-validation row" id="type_value_wrapper" style="display: none">
-                                        <label >File PDF <span class="required-label">*</span></label>
-                                        <input type="file" class="form-control" id="type_value" name="type_value" accept="application/pdf"/>
+                                        <label for="registlink" >Link Pendaftaran Event <span class="required-label">*</span></label>
+                                        <input type="text" class="form-control" id="registlink" name="registlink" placeholder="Masukan Link Pendaftaran" required>
                                     </div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="parent_header">Status <span class="required-label">*</span></label>
+                                        <label for="status">Status <span class="required-label">*</span></label>
                                         <select class="form-control" id="status" name="status" required>
                                             <option value="1">Aktif</option>
                                             <option value="0">Tidak Aktif</option>
