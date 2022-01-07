@@ -24,7 +24,7 @@ class BannerCT extends Controller
 
     public function create()
     {
-        $model['base_url'] = '/admin/banner/';
+        $model['base_url'] = '/admin/banner';
         return view('admin.banner.create', compact('model'));
     }
 

@@ -27,7 +27,7 @@ class ArticleCT extends Controller
 
     public function create()
     {
-        $model['base_url'] = '/admin/article/';
+        $model['base_url'] = '/admin/article';
         return view('admin.article.create', compact('model'));
     }
 

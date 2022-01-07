@@ -7,6 +7,7 @@ use App\Http\Controllers\AssessmentInstrumenCT;
 use App\Http\Controllers\AssesmentResultCT;
 use App\Http\Controllers\AuthCT;
 use App\Http\Controllers\BannerCT;
+use App\Http\Controllers\EventCT;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuNavigationCT;
 use App\Http\Controllers\ReportCT;
@@ -48,5 +49,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('report/download/excel/native', [ReportCT::class, 'downloadNative']);
         Route::get('userapps/download/excel', [UserAppsCT::class, 'download']);
 
+        // PENGEMBANGAN BATCH 2
+        Route::resource('event', EventCT::class);
+        Route::get('event/datatable/list', [EventCT::class, 'data']);
     });
 });
