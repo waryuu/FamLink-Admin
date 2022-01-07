@@ -48,7 +48,7 @@
                                     </div>
                                     <div class="form-group form-show-validation row">
                                         <label for="time" >Waktu Event <span class="required-label">*</span></label>
-                                        <input type="date" class="form-control" id="time" name="time" placeholder="Masukan Waktu Event" required>
+                                        <input type="datetime-local" class="form-control" id="time" name="time" placeholder="Masukan Waktu Event" required>
                                     </div>
                                     <div class="form-group form-show-validation row">
                                         <label for="location" >Lokasi Event <span class="required-label">*</span></label>

@@ -47,8 +47,9 @@ class EventCT extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $request->validate([
-            'image' => 'required|mimes:jpeg,jpg,png,gif|required|max:1000',
+            'image' => 'required|mimes:jpeg,jpg,png,gif|max:1000',
             'title' => 'required',
             'organizer' => 'required',
             'price' => 'required',
@@ -91,7 +92,11 @@ class EventCT extends Controller
      */
     public function show($id)
     {
-        //
+        $model['base_url'] = '/admin/event/';
+        $model['data'] = EventModel::find($id);
+        $model['data']->time = Carbon::parse($model['data']->time)->format('Y-m-d\TH:i');
+        // return $model['data'];
+        return view('admin.event.show', compact('model'));
     }
 
     /**
@@ -114,7 +119,42 @@ class EventCT extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request;
+        $request->validate([
+            'image' => 'mimes:jpeg,jpg,png,gif|max:1000',
+            'title' => 'required',
+            'organizer' => 'required',
+            'price' => 'required',
+            'time' => 'required',
+            'location' => 'required',
+            'description' => 'required',
+            'registlink' => 'required',
+            'status' => 'required',
+            ]
+        );
+        
+        $user = Auth::user();
+        $model = EventModel::find($id);
+        $model->title = $request->title;
+        $model->id_staff = $user->id;
+        $model->organizer = $request->organizer;
+        $model->price = $request->price;
+        $model->time = $request->time;
+        $model->location = $request->location;
+        $model->description = $request->description;
+        $model->registlink = $request->registlink;
+        $model->status = $request->status;
+        $model->updated_at = Carbon::now();
+        
+        if (isset($request->image)){
+            $fileName = $model->id.'-'.time().'.'.$request->image->extension();
+            $request->image->move(public_path('event'), $fileName);
+            $model->image = $fileName;
+        }
+        
+        $model->save();
+        Alert::success('Berhasil', 'Anda berhasil update data');
+        return redirect()->to('/admin/event');
     }
 
     /**
