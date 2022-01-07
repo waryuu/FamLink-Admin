@@ -53,7 +53,7 @@ class AssesmentResultCT extends Controller
 
     public function show($id)
     {
-        $model['base_url'] = '/admin/assessment-result/';
+        $model['base_url'] = '/admin/assessment-result';
         $model['id'] = $id;
         return view('admin.assessment.result_create', compact('model'));
     }

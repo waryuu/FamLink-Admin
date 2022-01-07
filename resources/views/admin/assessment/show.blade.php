@@ -274,7 +274,7 @@
                                                     </div>
                                                     <div class="form-group form-show-validation row">
                                                         <div class="input-file input-file-image">
-                                                            <img class="img-upload-preview img-circle" width="100" height="100" src="/public/menu/{{$model['data']->image}}" alt="preview">
+                                                            <img class="img-upload-preview img-circle" width="100" height="100" src="/menu/{{$model['data']->image}}" alt="preview">
                                                         </div>
                                                     </div>
                                                     <div class="separator-solid"></div>

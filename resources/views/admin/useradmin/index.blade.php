@@ -42,7 +42,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="form_validation" action="{{$model['base_url']}}" method="POST">
+                                    <form id="form_validation" action="{{'/admin/useradmin'}}" method="POST">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="card-body">

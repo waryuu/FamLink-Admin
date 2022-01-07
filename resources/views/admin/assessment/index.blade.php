@@ -44,7 +44,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="form_validation" action="{{$model['base_url']}}" method="POST" enctype="multipart/form-data">
+                                    <form id="form_validation" action="{{'/admin/assessment'}}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="card-body">
