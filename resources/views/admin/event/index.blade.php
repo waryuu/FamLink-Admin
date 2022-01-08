@@ -136,7 +136,7 @@
                                         <th style="width: 5%">Penyelengara</th>
                                         <th style="width: 5%">Waktu</th>
                                         <th style="width: 5%">Lokasi</th>
-                                        <th style="width: 20%">Deskripsi</th>
+                                        {{-- <th style="width: 20%">Deskripsi</th> --}}
                                         <th style="width: 10%">Link</th>
                                         <th style="width: 10%">Status</th>
                                         <th style="width: 10%">Action</th>
@@ -151,7 +151,7 @@
                                         <th>Penyelengara</th>
                                         <th>Waktu</th>
                                         <th>Lokasi</th>
-                                        <th>Deskripsi</th>
+                                        {{-- <th>Deskripsi</th> --}}
                                         <th>Link</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -220,10 +220,10 @@
         render : function(data, type, row) {
             return '<strong class=" col-red" style="font-size: 12px">'+row['location']+'</strong>';
         }},
-        { data: 'description', name: 'description',
-        render : function(data, type, row) {
-            return '<strong class=" col-red" style="font-size: 12px">'+row['description']+'</strong>';
-        }},
+        // { data: 'description', name: 'description',
+        // render : function(data, type, row) {
+        //     return '<strong class=" col-red" style="font-size: 12px">'+row['description']+'</strong>';
+        // }},
         { data: 'registlink', name: 'registlink',
         render : function(data, type, row) {
             return '<strong class=" col-red" style="font-size: 12px">'+row['registlink']+'</strong>';
