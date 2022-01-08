@@ -7,6 +7,7 @@ use App\Http\Controllers\AssessmentInstrumenCT;
 use App\Http\Controllers\AssesmentResultCT;
 use App\Http\Controllers\AuthCT;
 use App\Http\Controllers\BannerCT;
+use App\Http\Controllers\CategoryCT;
 use App\Http\Controllers\EventCT;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaterialCT;
@@ -55,6 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('event/datatable/list', [EventCT::class, 'data']);
         Route::resource('material', MaterialCT::class);
         Route::get('material/datatable/list', [MaterialCT::class, 'data']);
+        Route::resource('category', CategoryCT::class);
         Route::get('category/datatable/list', [MaterialCT::class, 'data_category']);
     });
 });

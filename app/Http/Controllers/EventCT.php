@@ -47,7 +47,6 @@ class EventCT extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
         $request->validate([
             'image' => 'required|mimes:jpeg,jpg,png,gif|max:1000',
             'title' => 'required',
