@@ -40,7 +40,6 @@ class CategoryCT extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
         $request->validate([
             'name' => 'required',
             'status' => 'required',
@@ -76,7 +75,11 @@ class CategoryCT extends Controller
      */
     public function edit($id)
     {
-        //
+        $model = CategoryModel::find($id);
+
+        return response()->json([
+            'data' => $model
+        ]);
     }
 
     /**
@@ -88,7 +91,18 @@ class CategoryCT extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'status' => 'required',
+            ]
+        );
+
+        $model = CategoryModel::find($id);
+        $model->name = $request->name;
+        $model->status = $request->status;
+        $model->save();
+
+        return response()->json([ 'success' => true ]);
     }
 
     /**
@@ -99,6 +113,12 @@ class CategoryCT extends Controller
      */
     public function destroy($id)
     {
-        //
+        CategoryModel::find($id)->delete();
+
+        return response()->json([
+            'state' => true,
+            'data' => null,
+            'message' => 'Anda berhasil menghapus data!'
+        ]);
     }
 }

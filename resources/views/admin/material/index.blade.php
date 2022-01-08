@@ -43,7 +43,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="form_validation" action="/admin/category" method="POST"
+                                    <form id="category_form_validation" action="/admin/category" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-body">
@@ -82,40 +82,35 @@
                             </div>
                         </div>
 
-                        <div class="modal fade" id="category_modal_edit_form" tabindex="-1" role="dialog"
-                            aria-hidden="true">
+                        <div class="modal fade" id="category_modal_edit_form" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header border-0">
                                         <h5 class="modal-title">
                                             <span class="fw-mediumbold">
-                                                Edit Kategori
+                                                Update Kategori
                                             </span>
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="form_validation" action="{{$model['category_base_url']}}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
+                                    <form id="category_edit_form_validation">
+                                        <input type="hidden" id="category_edit_binding_id" name="category_edit_binding_id" value="">
                                         <div class="modal-body">
                                             <div class="card-body">
                                                 <div class="form-group form-show-validation row">
-                                                    <label for="title" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Nama
-                                                        Kategori
-                                                        <span class="required-label">*</span></label>
+                                                    <label for="category_edit_name" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Nama Kategori <span class="required-label">*</span></label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="title" name="title"
-                                                            placeholder="Masukan Nama Kategori" required>
+                                                        <input type="text" class="form-control" id="category_edit_name" name="name" placeholder="Masukan Nama Kategori" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group form-show-validation row">
-                                                    <label for="status"
+                                                    <label for="category_edit_status"
                                                         class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Status <span
                                                             class="required-label">*</span></label>
                                                     <div class="col-12">
-                                                        <select class="form-control" id="status" name="status" required>
+                                                        <select class="form-control" id="category_edit_status" name="status" required>
                                                             <option value="1">Aktif</option>
                                                             <option value="0">Tidak Aktif</option>
                                                         </select>
@@ -124,10 +119,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer border-0">
-                                            <button type="submit" id="addRowButton"
-                                                class="btn btn-primary">Tambah</button>
-                                            <button type="button" class="btn btn-outline-danger"
-                                                data-dismiss="modal">Batal</button>
+                                            <button type="button" id="category_modal_edit_btn_update" class="btn btn-primary">Update</button>
+                                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Batal</button>
                                         </div>
                                     </form>
 
@@ -436,7 +429,6 @@
             }
         }},
         { data: 'id', name: 'id', render : function(data, type, row) {
-            // return '<div class="form-button-action"><a href="'+category_base_endpoint+row['id']+'"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="Edit"><i class="fa fa-eye"></i></button></a><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert('+row['id']+')"><i class="fa fa-times"></i></button></div>';
             return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" onclick="category_editData('+row['id']+')"><i class="fa fa-edit"></i></button><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="category_deleteAlert('+row['id']+')"><i class="fa fa-times"></i></button></div>';
         }}];
         var columns = createColumnsAny(columnsData) ;
@@ -444,7 +436,7 @@
         initFormValidation(category_formId, rulesForm);
         initFormValidation(category_formEditId, rulesFormEdit);
         $(category_modalEditButtonId).click(function(e){
-            setEditAction();
+            category_setEditAction();
         });
     });
 
@@ -476,23 +468,26 @@
         $.get(category_base_endpoint + id + '/edit', function (data) {
             $('#category_modal_edit_form').modal('show');
             $('#category_edit_binding_id').val(data.data.id);
-            $('#category_edit_question').val(data.data.question);
+            $('#category_edit_name').val(data.data.name);
+            $('#category_edit_status').val(data.data.status);
         })
     }
 
-    function setEditAction() {
-        var valid = $(formEditId).valid();
+    function category_setEditAction() {
+        var valid = $(category_formEditId).valid();
         if (valid) {
-            var id = $("#edit_binding_id").val();
-            var name = $("#edit_name").val();
+            var id = $("#category_edit_binding_id").val();
+            var name = $("#category_edit_name").val();
+            var status = $("#category_edit_status").val();
             var body = {
                 "_token": token,
                 "id": id,
                 "name": name,
+                "status": status,
             };
 
-            var endpoint = base_endpoint + id;
-            showDialogConfirmationAjax('#modal_edit_form', 'Apakah anda yakin akan mengupdate data?', 'Update data berhasil!', endpoint, 'PUT', body, table_id);
+            var endpoint = category_base_endpoint + id;
+            showDialogConfirmationAjax('#category_modal_edit_form', 'Apakah anda yakin akan mengupdate data?', 'Update data berhasil!', endpoint, 'PUT', body, category_table_id);
         }
     }
 
