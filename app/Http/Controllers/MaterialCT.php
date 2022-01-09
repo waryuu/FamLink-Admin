@@ -9,6 +9,7 @@ use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class MaterialCT extends Controller
@@ -45,7 +46,9 @@ class MaterialCT extends Controller
      */
     public function create()
     {
-        //
+        $model['category'] = CategoryModel::all();
+        $model['base_url'] = '/admin/material';
+        return view('admin.material.create', compact('model'));
     }
 
     /**
@@ -56,7 +59,54 @@ class MaterialCT extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
+        $request->validate([
+            'image' => 'mimes:jpeg,jpg,png,gif|max:1000',
+            'id_category' => 'required',
+            'title' => 'required',
+            'type' => 'required',
+            'description' => 'required',
+            'status' => 'required',
+            ]
+        );
+
+        $user = Auth::user();
+        $model = new MaterialModel();
+        // return $model->id;
+        $model->id_staff = $user->id;
+        $model->id_category = $request->id_category;
+        $model->title = $request->title;
+        $model->type = $request->type;
+        $model->description = $request->description;
+        $model->status = $request->status;
+        $model->created_at = Carbon::now();
+        $model->save();
+
+        if ($request->type == "video") {
+            $model->link_yt = $request->link_yt;
+            $model->image = NULL;
+            $model->is_locked = 0;
+            $model->download_pass = NULL;
+        }
+
+        if ($request->type == "default") {
+            $fileName = $model->id.'-'.time().'.'.$request->image->extension();
+            $request->image->move(public_path('material'), $fileName);
+            $model->image = $fileName;
+
+            $model->link_yt = NULL;
+            $model->is_locked = $request->is_locked;
+
+            if ($request->is_locked) {
+                $model->download_pass = Hash::make($request->download_pass);
+            }
+        }
+        // return $model;
+
+        $model->save();
+
+        Alert::success('Berhasil', 'Anda berhasil menginputkan data');
+        return redirect()->to('/admin/material');
     }
 
     /**
