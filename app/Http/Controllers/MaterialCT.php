@@ -59,7 +59,6 @@ class MaterialCT extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
         $request->validate([
             'image' => 'mimes:jpeg,jpg,png,gif|max:1000',
             'id_category' => 'required',
@@ -72,7 +71,6 @@ class MaterialCT extends Controller
 
         $user = Auth::user();
         $model = new MaterialModel();
-        // return $model->id;
         $model->id_staff = $user->id;
         $model->id_category = $request->id_category;
         $model->title = $request->title;
@@ -101,7 +99,6 @@ class MaterialCT extends Controller
                 $model->download_pass = Hash::make($request->download_pass);
             }
         }
-        // return $model;
 
         $model->save();
 
@@ -117,7 +114,10 @@ class MaterialCT extends Controller
      */
     public function show($id)
     {
-        //
+        $model['base_url'] = '/admin/material/';
+        $model['category'] = CategoryModel::all();
+        $model['data'] = MaterialModel::find($id);
+        return view('admin.material.show', compact('model'));
     }
 
     /**
@@ -140,7 +140,53 @@ class MaterialCT extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'image' => 'mimes:jpeg,jpg,png,gif|max:1000',
+            'id_category' => 'required',
+            'title' => 'required',
+            'type' => 'required',
+            'description' => 'required',
+            'status' => 'required',
+            ]
+        );
+
+        $user = Auth::user();
+        $model = MaterialModel::find($id);
+        $model->id_staff = $user->id;
+        $model->id_category = $request->id_category;
+        $model->title = $request->title;
+        $model->type = $request->type;
+        $model->description = $request->description;
+        $model->status = $request->status;
+        $model->updated_at = Carbon::now();
+
+        if ($request->type == "video") {
+            $model->link_yt = $request->link_yt;
+            $model->image = NULL;
+            $model->is_locked = 0;
+            $model->download_pass = NULL;
+        }
+
+        if ($request->type == "default") {
+            
+            if (isset($request->image)){
+                $fileName = $model->id.'-'.time().'.'.$request->image->extension();
+                $request->image->move(public_path('material'), $fileName);
+                $model->image = $fileName;
+            }
+
+            $model->link_yt = NULL;
+            $model->is_locked = $request->is_locked;
+
+            if ($request->is_locked && $request->download_pass) {
+                $model->download_pass = Hash::make($request->download_pass);
+            }
+        }
+
+        $model->save();
+
+        Alert::success('Berhasil', 'Anda berhasil update data');
+        return redirect()->to('/admin/material');
     }
 
     /**
@@ -151,6 +197,13 @@ class MaterialCT extends Controller
      */
     public function destroy($id)
     {
-        //
+        MaterialModel::find($id)->delete();
+
+        return response()->json([
+            'state' => true,
+            'data' => null,
+            'message' => 'Anda berhasil menghapus data!'
+            ]
+        );
     }
 }

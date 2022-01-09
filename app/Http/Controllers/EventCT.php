@@ -94,7 +94,6 @@ class EventCT extends Controller
         $model['base_url'] = '/admin/event/';
         $model['data'] = EventModel::find($id);
         $model['data']->time = Carbon::parse($model['data']->time)->format('Y-m-d\TH:i');
-        // return $model['data'];
         return view('admin.event.show', compact('model'));
     }
 
@@ -118,7 +117,6 @@ class EventCT extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return $request;
         $request->validate([
             'image' => 'mimes:jpeg,jpg,png,gif|max:1000',
             'title' => 'required',
@@ -164,6 +162,13 @@ class EventCT extends Controller
      */
     public function destroy($id)
     {
-        //
+        EventModel::find($id)->delete();
+
+        return response()->json([
+            'state' => true,
+            'data' => null,
+            'message' => 'Anda berhasil menghapus data!'
+            ]
+        );
     }
 }

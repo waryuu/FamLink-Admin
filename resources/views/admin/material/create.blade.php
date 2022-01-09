@@ -82,6 +82,7 @@
                                                     class="required-label">*</span></label>
                                             <input type="text" class="form-control" id="download_pass" name="download_pass"
                                                 placeholder="Masukan Password" required>
+                                                Pastikan anda mengingat password yang dimasukan.
                                         </div>
                                     </div>
                                     <div class="form-group form-show-validation row">
