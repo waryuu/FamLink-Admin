@@ -1,9 +1,9 @@
 @extends('layouts.base')
-@section('title', 'Update Assessment')
+@section('title', 'Update Event')
 @section('content')
 <div class="container">
     <div class="page-inner">
-        <div class="page-header"><h4 class="page-title">Update Assessment</h4></div>
+        <div class="page-header"><h4 class="page-title">Update Event</h4></div>
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -25,43 +25,55 @@
                                     <div class="form-group form-show-validation row">
                                         <label >Gambar <span class="required-label">*</span></label>
                                         <div class="input-file input-file-image">
-                                            <img class="img-upload-preview" src="/article/{{$model['data']->image}}" width="300">
+                                            <img class="img-upload-preview" src="/event/{{$model['data']->image}}" width="300">
                                             <input type="file" class="form-control form-control-file" id="image" name="image" accept="image/*" >
                                             <label for="image" class="btn btn-primary bg-primary btn-round btn-lg"><i class="fa fa-file-image"></i> Ganti Gambar</label>
                                         </div>
                                     </div>
                                     <div class="separator-solid"></div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="title" >Judul Article <span class="required-label">*</span></label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Masukan Judul Article" value="{{$model['data']->title}}" required>
+                                        <label for="title" >Judul Event <span class="required-label">*</span></label>
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Masukan Judul Event" value="{{$model['data']->title}}" required>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="organizer" >Penyelenggara Event <span class="required-label">*</span></label>
+                                        <input type="text" class="form-control" id="organizer" name="organizer" placeholder="Masukan Penyelenggara Event" value="{{$model['data']->organizer}}" required>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="price" >Harga Tiket <span class="required-label">* </span></label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1">Rp .</span>
+                                            <input type="number" class="form-control" placeholder="Masukan Harga Satuan Tiket" id="price" name="price" value="{{$model['data']->price}}" required>
+                                          </div>
+                                        jika event tidak memungut biaya, anda bisa menuliskan harga 0
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="start_time" >Waktu Mulai <span class="required-label">*</span></label>
+                                        <input type="datetime-local" class="form-control" id="start_time" name="start_time" placeholder="Masukan Waktu Event" value="{{$model['data']->start_time}}" required>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="end_time" >Waktu Selesai <span class="required-label">*</span></label>
+                                        <input type="datetime-local" class="form-control" id="end_time" name="end_time" placeholder="Masukan Waktu Event " value="{{$model['data']->end_time}}" required>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="location" >Lokasi Event <span class="required-label">*</span></label>
+                                        <input type="text" class="form-control" id="location" name="location" placeholder="Masukan Lokasi Event" value="{{$model['data']->location}}" required>
                                     </div>
                                     <div class="">
-                                        <label for="content" >Content <span class="required-label">*</span></label>
+                                        <label for="description" ><b>Deskripsi Event </b><span class="required-label">*</span></label>
                                         <div>
-                                            <textarea id="summernote" name="content" placeholder="Masukan Content" required>{{$model['data']->content}}</textarea>
+                                            <textarea id="summernote" name="description" placeholder="Masukan description" required>{{$model['data']->description}}</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="parent_header">Tipe <span class="required-label">*</span></label>
-                                        <select class="form-control" id="type" name="type" required>
-                                            <option value="1" @if($model['data']->type == '1') selected @endif >Text</option>
-                                            <option value="2" @if($model['data']->type == '2') selected @endif>PDF</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group form-show-validation row" id="type_value_wrapper" @if($model['data']->type == 1) style="display: none" @endif>
-                                        <label ><span>File PDF <span class="required-label">*</span></label>
-                                        <a href="/article_pdf/{{$model['data']->type_value}}" target="blank">
-                                            <div class="input-file input-file-image">
-                                                <label class="btn btn-primary bg-primary btn-round btn-lg"><i class="fa fa-file-image"></i> Download File</label>
-                                            </div>
-                                        </a>
-                                        <input type="file" class="form-control" id="type_value" name="type_value" accept="application/pdf"/>
+                                        <label for="registlink" >Link Pendaftaran Event <span class="required-label">*</span></label>
+                                        <input type="text" class="form-control" id="registlink" name="registlink" placeholder="Masukan Link Pendaftaran" value="{{$model['data']->registlink}}" required>
                                     </div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="parent_header">Status <span class="required-label">*</span></label>
+                                        <label for="status">Status <span class="required-label">*</span></label>
                                         <select class="form-control" id="status" name="status" required>
                                             <option value="1" @if($model['data']->status == '1') selected @endif >Aktif</option>
-                                            <option value="0" @if($model['data']->status == '0') selected @endif>Tidak Aktif</option>
+                                            <option value="0" @if($model['data']->status == '0') selected @endif >Tidak Aktif</option>
                                         </select>
                                     </div>
                                 </div>

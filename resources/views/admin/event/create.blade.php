@@ -44,11 +44,17 @@
                                             <span class="input-group-text" id="basic-addon1">Rp .</span>
                                             <input type="number" class="form-control" placeholder="Masukan Harga Satuan Tiket" id="price" name="price">
                                           </div>
-                                        jika event tidak memungut biaya, anda bisa menuliskan harga 0
+                                        <p> Jika event tidak memungut biaya, anda bisa menuliskan harga 0</p> 
                                     </div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="time" >Waktu Event <span class="required-label">*</span></label>
-                                        <input type="date" class="form-control" id="time" name="time" placeholder="Masukan Waktu Event" required>
+                                        <label for="start_time" >Waktu Mulai <span class="required-label">*</span></label>
+                                        <input type="datetime-local" class="form-control" id="start_time" name="start_time" placeholder="Masukan Waktu Event" required>
+                                        <p>Waktu dalam zona Waktu Indonesia Barat (WIB)</p>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="end_time" >Waktu Selesai <span class="required-label">*</span></label>
+                                        <input type="datetime-local" class="form-control" id="end_time" name="end_time" placeholder="Masukan Waktu Event" required>
+                                        <p> Waktu dalam zona Waktu Indonesia Barat (WIB)</p>
                                     </div>
                                     <div class="form-group form-show-validation row">
                                         <label for="location" >Lokasi Event <span class="required-label">*</span></label>
