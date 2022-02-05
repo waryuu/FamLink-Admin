@@ -47,18 +47,23 @@ class EventCT extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $request->validate([
             'image' => 'required|mimes:jpeg,jpg,png,gif|max:1000',
             'title' => 'required',
             'organizer' => 'required',
             'price' => 'required',
-            'time' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
             'location' => 'required',
             'description' => 'required',
             'registlink' => 'required',
             'status' => 'required',
-            ]
-        );
+        ],
+        [
+            'end_time.after'=>'Waktu selesai harus diatur setelah waktu mulai',
+        ]);
+        
         
         $user = Auth::user();
         $model = new EventModel();
@@ -66,7 +71,8 @@ class EventCT extends Controller
         $model->id_staff = $user->id;
         $model->organizer = $request->organizer;
         $model->price = $request->price;
-        $model->time = $request->time;
+        $model->start_time = $request->start_time;
+        $model->end_time = $request->end_time;
         $model->location = $request->location;
         $model->description = $request->description;
         $model->registlink = $request->registlink;
@@ -93,7 +99,8 @@ class EventCT extends Controller
     {
         $model['base_url'] = '/admin/event/';
         $model['data'] = EventModel::find($id);
-        $model['data']->time = Carbon::parse($model['data']->time)->format('Y-m-d\TH:i');
+        $model['data']->start_time = Carbon::parse($model['data']->start_time)->format('Y-m-d\TH:i');
+        $model['data']->end_time = Carbon::parse($model['data']->end_time)->format('Y-m-d\TH:i');
         return view('admin.event.show', compact('model'));
     }
 
@@ -122,7 +129,8 @@ class EventCT extends Controller
             'title' => 'required',
             'organizer' => 'required',
             'price' => 'required',
-            'time' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
             'location' => 'required',
             'description' => 'required',
             'registlink' => 'required',
@@ -136,7 +144,8 @@ class EventCT extends Controller
         $model->id_staff = $user->id;
         $model->organizer = $request->organizer;
         $model->price = $request->price;
-        $model->time = $request->time;
+        $model->start_time = $request->start_time;
+        $model->end_time = $request->end_time;
         $model->location = $request->location;
         $model->description = $request->description;
         $model->registlink = $request->registlink;

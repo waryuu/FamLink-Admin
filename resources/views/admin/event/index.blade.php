@@ -31,99 +31,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="modal fade" id="modal_add_form" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header border-0">
-                                        <h5 class="modal-title">
-                                            <span class="fw-mediumbold">
-                                                New
-                                            </span>
-                                            <span class="fw-light">
-                                                Data
-                                            </span>
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form id="form_validation" action="{{$model['base_url']}}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="modal-body">
-                                            <div class="card-body">
-                                                <div class="form-group form-show-validation row">
-                                                    <label for="title" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Nama Assessment <span class="required-label">*</span></label>
-                                                    <div class="col-12">
-                                                        <input type="text" class="form-control" id="title" name="title" placeholder="Masukan Nama Assessment" required>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-show-validation row">
-                                                    <label for="description" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Deskripsi <span class="required-label">*</span></label>
-                                                    <div class="col-12">
-                                                        <input type="text" class="form-control" id="description" name="description" placeholder="Masukan Deskripsi" required>
-                                                    </div>
-                                                </div>
-                                                <div class="separator-solid"></div>
-                                                <div class="form-group form-show-validation row">
-                                                    <label class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Icon <span class="required-label">*</span></label>
-                                                    <div class="col-12">
-                                                        <div class="input-file input-file-image">
-                                                            <img class="img-upload-preview img-circle" width="100" height="100" src="http://placehold.it/100x100" alt="preview">
-                                                            <input type="file" class="form-control form-control-file" id="image" name="image" accept="image/*" required >
-                                                            <label for="image" class="btn btn-primary bg-primary btn-round btn-lg"><i class="fa fa-file-image"></i> Upload a Image</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer border-0">
-                                            <button type="submit" id="addRowButton" class="btn btn-primary">Add</button>
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </form>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal fade" id="modal_edit_form" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header border-0">
-                                        <h5 class="modal-title">
-                                            <span class="fw-mediumbold">
-                                                Update
-                                            </span>
-                                            <span class="fw-light">
-                                                Data
-                                            </span>
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form id="edit_form_validation" action="/menu" method="POST">
-                                        @csrf
-                                        <input type="hidden" id="edit_binding_id" name="edit_binding_id" value="">
-                                        <div class="modal-body">
-                                            <div class="card-body">
-                                                <div class="form-group form-show-validation row">
-                                                    <label for="name" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Nama Role <span class="required-label">*</span></label>
-                                                    <div class="col-12">
-                                                        <input type="text" class="form-control" id="edit_name" name="name" placeholder="Masukan Nama Role" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer border-0">
-                                            <button type="button" id="modal_edit_btn_update" class="btn btn-primary">Update</button>
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </form>
-
-                                </div>
-                            </div>
-                        </div>
+                      
 
                         <div class="table-responsive">
                             <table id="table_view" class="display table table-striped table-hover" >
@@ -131,13 +39,14 @@
                                     <tr>
                                         <th style="width: 5%">ID</th>
                                         <th style="width: 10%">Gambar</th>
-                                        <th style="width: 15%">Judul</th>
+                                        <th style="width: 10%">Judul</th>
                                         <th style="width: 5%">Harga</th>
                                         <th style="width: 5%">Penyelengara</th>
-                                        <th style="width: 5%">Waktu</th>
+                                        <th style="width: 5%">Waktu Mulai</th>
+                                        {{-- <th style="width: 5%">Waktu Selesai</th> --}}
                                         <th style="width: 5%">Lokasi</th>
                                         {{-- <th style="width: 20%">Deskripsi</th> --}}
-                                        <th style="width: 10%">Link</th>
+                                        {{-- <th style="width: 10%">Link</th> --}}
                                         <th style="width: 10%">Status</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
@@ -149,10 +58,11 @@
                                         <th>Judul</th>
                                         <th>Harga</th>
                                         <th>Penyelengara</th>
-                                        <th>Waktu</th>
+                                        <th>Waktu Mulai</th>
+                                        {{-- <th>Waktu Selesai</th> --}}
                                         <th>Lokasi</th>
                                         {{-- <th>Deskripsi</th> --}}
-                                        <th>Link</th>
+                                        {{-- <th>Link</th> --}}
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -212,10 +122,14 @@
         render : function(data, type, row) {
             return '<strong class=" col-red" style="font-size: 12px">'+row['organizer']+'</strong>';
         }},
-        { data: 'time', name: 'time',
+        { data: 'start_time', name: 'start_time',
         render : function(data, type, row) {
-            return '<strong class=" col-red" style="font-size: 12px">'+row['time']+'</strong>';
+            return '<strong class=" col-red" style="font-size: 12px">'+row['start_time']+'</strong>';
         }},
+        // { data: 'end_time', name: 'end_time',
+        // render : function(data, type, row) {
+        //     return '<strong class=" col-red" style="font-size: 12px">'+row['end_time']+'</strong>';
+        // }}
         { data: 'location', name: 'location',
         render : function(data, type, row) {
             return '<strong class=" col-red" style="font-size: 12px">'+row['location']+'</strong>';
@@ -224,10 +138,10 @@
         // render : function(data, type, row) {
         //     return '<strong class=" col-red" style="font-size: 12px">'+row['description']+'</strong>';
         // }},
-        { data: 'registlink', name: 'registlink',
-        render : function(data, type, row) {
-            return '<strong class=" col-red" style="font-size: 12px">'+row['registlink']+'</strong>';
-        }},
+        // { data: 'registlink', name: 'registlink',
+        // render : function(data, type, row) {
+        //     return '<strong class=" col-red" style="font-size: 12px">'+row['registlink']+'</strong>';
+        // }},
         { data: 'status', name: 'status',
         render : function(data, type, row) {
             if (row['status'] == 1) {

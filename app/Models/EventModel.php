@@ -12,5 +12,5 @@ class EventModel extends Model
     protected $table = "events";
     protected $primaryKey = "id";
 
-    protected $fillable = ['id_staff', 'title', 'price', 'organizer', 'time', 'location', 'description', 'registlink', 'status'];
+    protected $fillable = ['id_staff', 'title', 'price', 'organizer', 'start_time', 'end_time', 'location', 'description', 'registlink', 'status'];
 }

@@ -152,6 +152,17 @@ class MaterialCT extends Controller
 
         $user = Auth::user();
         $model = MaterialModel::find($id);
+
+        if ($request->is_locked == 1 && $request->download_pass == NULL && $model->download_pass == NULL) {
+            $request->validate([
+                'download_pass' => 'required',
+            ],
+            [
+                'download_pass.required'=>'Password file belum diisi',
+            ]
+            );
+        }
+
         $model->id_staff = $user->id;
         $model->id_category = $request->id_category;
         $model->title = $request->title;
@@ -177,6 +188,14 @@ class MaterialCT extends Controller
 
             $model->link_yt = NULL;
             $model->is_locked = $request->is_locked;
+
+            if ($request->is_locked == 0) {
+                $model->download_pass = NULL;
+            }
+
+            if ($request->is_locked) {
+                $model->download_pass = NULL;
+            }
 
             if ($request->is_locked && $request->download_pass) {
                 $model->download_pass = Hash::make($request->download_pass);

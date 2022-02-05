@@ -48,8 +48,12 @@
                                         jika event tidak memungut biaya, anda bisa menuliskan harga 0
                                     </div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="time" >Waktu Event <span class="required-label">*</span></label>
-                                        <input type="datetime-local" class="form-control" id="time" name="time" placeholder="Masukan Waktu Event" value="{{$model['data']->time}}" required>
+                                        <label for="start_time" >Waktu Mulai <span class="required-label">*</span></label>
+                                        <input type="datetime-local" class="form-control" id="start_time" name="start_time" placeholder="Masukan Waktu Event" value="{{$model['data']->start_time}}" required>
+                                    </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="end_time" >Waktu Selesai <span class="required-label">*</span></label>
+                                        <input type="datetime-local" class="form-control" id="end_time" name="end_time" placeholder="Masukan Waktu Event " value="{{$model['data']->end_time}}" required>
                                     </div>
                                     <div class="form-group form-show-validation row">
                                         <label for="location" >Lokasi Event <span class="required-label">*</span></label>
