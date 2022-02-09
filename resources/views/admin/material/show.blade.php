@@ -4,6 +4,7 @@
 <div class="container">
     <div class="page-inner">
         <div class="page-header"><h4 class="page-title">Update Materi</h4></div>
+        <p> Update informasi materi disini dan gulir kebawah untuk melihat file.</p>
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -96,6 +97,172 @@
                 </div>
             </div>
 
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h4 class="card-title">File</h4>
+                            <a href="{{$model['base_url_id']}}/create">
+                                <button class="btn btn-primary btn-round ml-auto">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah File Baru
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {{-- MODAL ADD FILE --}}
+                        <div class="modal fade" id="file_modal_add_form" tabindex="-1" role="dialog"
+                            aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title">
+                                            <span class="fw-mediumbold">
+                                                Tambah File Baru
+                                            </span>
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form id="file_form_validation" action="/admin/material/{{$model['data']->id}}/addfile" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="modal-body">
+                                            <div class="card-body">
+                                                <div class="form-group form-show-validation row">
+                                                    <div class="col-12">
+                                                        <h5>Nama Materi : {{$model['data']->title}}</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-show-validation row">
+                                                    <div class="col-12">
+                                                        <input type="hidden" class="form-control" id="id_materials" name="id_materials" value={{$model['data']->id}}>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-show-validation row">
+                                                    <label for="title" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Judul
+                                                        <span class="required-label">*</span></label>
+                                                    <div class="col-12">
+                                                        <input type="text" class="form-control" id="title" name="title"
+                                                            placeholder="Masukan Judul File" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-show-validation row">
+                                                    <label for="file" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Upload File
+                                                        <span class="required-label">*</span></label>
+                                                    <div class="col-12">
+                                                        <input class="form-control" type="file" accept=".pdf" id="file" name="file" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-show-validation row">
+                                                    <label for="status"
+                                                        class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Status <span
+                                                            class="required-label">*</span></label>
+                                                    <div class="col-12">
+                                                        <select class="form-control" id="status" name="status" required>
+                                                            <option value="1">Aktif</option>
+                                                            <option value="0">Tidak Aktif</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-0">
+                                            <button type="submit" id="addRowButton"
+                                                class="btn btn-primary">Tambah</button>
+                                            <button type="button" class="btn btn-outline-danger"
+                                                data-dismiss="modal">Batal</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- MODAL EDIT FILE --}}
+                        <div class="modal fade" id="file_modal_edit_form" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title">
+                                            <span class="fw-mediumbold">
+                                                Update File
+                                            </span>
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form id="file_edit_form_validation">
+                                        <input type="hidden" id="file_edit_binding_id" name="file_edit_binding_id" value="">
+                                        <div class="modal-body">
+                                            <div class="card-body">
+                                                <div class="form-group form-show-validation row">
+                                                    <label for="file_edit_title" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Judul <span class="required-label">*</span></label>
+                                                    <div class="col-12">
+                                                        <input type="text" class="form-control" id="file_edit_title" name="title" placeholder="Masukan Judul File" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-show-validation row">
+                                                    <label for="file_edit" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Ganti File
+                                                        <span class="required-label">*</span></label>
+                                                    <div class="col-12 mb-2">
+                                                        <a class="btn btn-primary" role="button" id="file_existing" name="file_existing">Download File</a>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <input class="form-control" type="file" accept=".pdf" id="file_edit" name="file">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-show-validation row">
+                                                    <label for="file_edit_status"
+                                                        class="col-lg-3 col-md-3 col-sm-4 mt-sm-2">Status <span
+                                                            class="required-label">*</span></label>
+                                                    <div class="col-12">
+                                                        <select class="form-control" id="file_edit_status" name="status" required>
+                                                            <option value="1">Aktif</option>
+                                                            <option value="0">Tidak Aktif</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-0">
+                                            <button type="button" id="file_modal_edit_btn_update" class="btn btn-primary">Update</button>
+                                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Batal</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table id="file_table_view" class="display table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">ID</th>
+                                        <th style="width: 10%">Judul</th>
+                                        <th style="width: 10%">File</th>
+                                        <th style="width: 10%">Status</th>
+                                        <th style="width: 10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Judul</th>
+                                        <th>File</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -138,5 +305,67 @@
             }
         }).trigger('change');
     });
+
+
+    var file_base_endpoint = "{{$model['file_base_url']}}";
+    var file_data_endpoint = "{{$model['file_data_url']}}";
+    var file_table_id = '#file_table_view';
+    var file_table = null;
+    var file_formId = '#file_form_validation';
+    var file_formEditId = '#file_edit_form_validation';
+    var file_modalEditButtonId = '#file_modal_edit_btn_update';
+
+    var rulesForm = {
+        image: {
+            required: true,
+        }
+    };
+
+    var rulesFormEdit = {
+        image: {
+            required: true,
+        }
+    };
+
+    $(document).ready( function() {
+        var columnsData = [
+        { data: 'id', name: 'id', render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['id']+'</strong>';
+        }},
+        { data: 'title', name: 'title',
+        render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['title']+'</strong>';
+        }},
+        { data: 'file', name: 'file',
+        render : function(data, type, row) {
+            return '<a class="btn btn-info" href="/material/file/'+row['file']+'" role="button">Download File</a>';
+        }},
+        { data: 'status', name: 'status',
+        render : function(data, type, row) {
+            if (row['status'] == 1) {
+                return '<button class="btn btn-success">Aktif</button>';
+            }else{
+                return '<button class="btn btn-danger">Tidak Aktif</button>';
+            }
+        }},
+        { data: 'id', name: 'id', render : function(data, type, row) {
+            return '<div class="form-button-action"><a href="'+file_base_endpoint+row['id']+'"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="Edit"><i class="fa fa-eye"></i></button></a><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="file_deleteAlert('+row['id']+')"><i class="fa fa-times"></i></button></div>';
+        }}];
+        var columns = createColumnsAny(columnsData) ;
+        table = initDataTableLoad(file_table_id, file_data_endpoint, columns);
+        initFormValidation(file_formId, rulesForm);
+        initFormValidation(file_formEditId, rulesFormEdit);
+        $(file_modalEditButtonId).click(function(e){
+            file_setEditAction();
+        });
+    });
+
+    function file_deleteAlert(id) {
+        var body = {
+            "id": id,
+            "_token": token,
+        }
+        showDialogConfirmationAjax(null, 'Apakah anda yakin akan menghapus data?', 'Data berhasil dihapus!', file_base_endpoint+id, 'DELETE', body, file_table_id);
+    }
 </script>
 @endsection

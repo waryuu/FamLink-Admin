@@ -6,6 +6,7 @@
         <div class="page-header">
             <h4 class="page-title">Tambah Materi</h4>
         </div>
+        <p> Masukkan informasi materi disini, setelah menyimpannya anda baru dapat mengupload file.</p>
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
