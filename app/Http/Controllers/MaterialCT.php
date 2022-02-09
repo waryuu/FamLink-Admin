@@ -115,6 +115,9 @@ class MaterialCT extends Controller
     public function show($id)
     {
         $model['base_url'] = '/admin/material/';
+        $model['base_url_id'] = '/admin/material/'.$id;
+        $model['file_base_url'] = '/admin/material/file/';
+        $model['file_data_url'] = '/admin/material/file/datatable/list/'.$id;
         $model['category'] = CategoryModel::all();
         $model['data'] = MaterialModel::find($id);
         return view('admin.material.show', compact('model'));

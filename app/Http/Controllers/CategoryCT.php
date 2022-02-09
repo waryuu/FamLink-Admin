@@ -100,6 +100,7 @@ class CategoryCT extends Controller
         $model = CategoryModel::find($id);
         $model->name = $request->name;
         $model->status = $request->status;
+        $model->updated_at = Carbon::now();
         $model->save();
 
         return response()->json([ 'success' => true ]);

@@ -4,6 +4,7 @@
 <div class="container">
     <div class="page-inner">
         <div class="page-header"><h4 class="page-title">Update Materi</h4></div>
+        <p> Update informasi materi disini dan gulir kebawah untuk melihat file.</p>
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -32,7 +33,7 @@
                                     </div>
                                     <div class="form-group form-show-validation row">
                                         <label for="tipe">Tipe Materi <span class="required-label">*</span></label>
-                                        <select class="form-control" id="type" name="type" required>
+                                        <select class="form-control" id="type" name="type" required disabled>
                                             <option @if($model['data']->type == "default") selected @endif value="default">Standar</option>
                                             <option @if($model['data']->type == "video") selected @endif value="video">Video</option>
                                         </select>
@@ -96,6 +97,45 @@
                 </div>
             </div>
 
+            <div id="file_section" class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h4 class="card-title">File</h4>
+                            <a href="{{$model['base_url_id']}}/create">
+                                <button class="btn btn-primary btn-round ml-auto">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah File Baru
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="file_table_view" class="display table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">ID</th>
+                                        <th style="width: 10%">Judul</th>
+                                        <th style="width: 10%">File</th>
+                                        <th style="width: 10%">Status</th>
+                                        <th style="width: 10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Judul</th>
+                                        <th>File</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -123,10 +163,12 @@
                 $('#input_link_yt').show();
                 $('#input_image').hide();
                 $('#input_locked').hide();
+                $('#file_section').hide();
             } else {
                 $('#input_link_yt').hide();
                 $('#input_image').show();
                 $('#input_locked').show();
+                $('#file_section').show();
             }
         }).trigger('change');
 
@@ -138,5 +180,67 @@
             }
         }).trigger('change');
     });
+
+
+    var file_base_endpoint = "{{$model['file_base_url']}}";
+    var file_data_endpoint = "{{$model['file_data_url']}}";
+    var file_table_id = '#file_table_view';
+    var file_table = null;
+    var file_formId = '#file_form_validation';
+    var file_formEditId = '#file_edit_form_validation';
+    var file_modalEditButtonId = '#file_modal_edit_btn_update';
+
+    var rulesForm = {
+        image: {
+            required: true,
+        }
+    };
+
+    var rulesFormEdit = {
+        image: {
+            required: true,
+        }
+    };
+
+    $(document).ready( function() {
+        var columnsData = [
+        { data: 'id', name: 'id', render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['id']+'</strong>';
+        }},
+        { data: 'title', name: 'title',
+        render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['title']+'</strong>';
+        }},
+        { data: 'file', name: 'file',
+        render : function(data, type, row) {
+            return '<a class="btn btn-info" href="/material/file/'+row['file']+'" role="button">Download File</a>';
+        }},
+        { data: 'status', name: 'status',
+        render : function(data, type, row) {
+            if (row['status'] == 1) {
+                return '<button class="btn btn-success">Aktif</button>';
+            }else{
+                return '<button class="btn btn-danger">Tidak Aktif</button>';
+            }
+        }},
+        { data: 'id', name: 'id', render : function(data, type, row) {
+            return '<div class="form-button-action"><a href="'+file_base_endpoint+row['id']+'"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="Edit"><i class="fa fa-eye"></i></button></a><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="file_deleteAlert('+row['id']+')"><i class="fa fa-times"></i></button></div>';
+        }}];
+        var columns = createColumnsAny(columnsData) ;
+        table = initDataTableLoad(file_table_id, file_data_endpoint, columns);
+        initFormValidation(file_formId, rulesForm);
+        initFormValidation(file_formEditId, rulesFormEdit);
+        $(file_modalEditButtonId).click(function(e){
+            file_setEditAction();
+        });
+    });
+
+    function file_deleteAlert(id) {
+        var body = {
+            "id": id,
+            "_token": token,
+        }
+        showDialogConfirmationAjax(null, 'Apakah anda yakin akan menghapus data?', 'Data berhasil dihapus!', file_base_endpoint+id, 'DELETE', body, file_table_id);
+    }
 </script>
 @endsection
