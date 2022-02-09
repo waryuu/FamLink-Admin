@@ -39,7 +39,13 @@ class FileCT extends Controller
     {
         $model['base_url'] = '/admin/material/file/';
         $model['materials'] = MaterialModel::find($id);
-        return view('admin.material.file.create', compact('model'));
+
+        if ($model['materials']->type == 'video') {
+            Alert::warning('Gagal', 'Anda tidak dapat menambahkan file untuk materi jenis Video');
+            return redirect()->to("/admin/material/". $model['materials']->id);
+        } else {
+            return view('admin.material.file.create', compact('model'));
+        }
     }
 
     public function store(Request $request)
