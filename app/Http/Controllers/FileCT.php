@@ -8,6 +8,7 @@ use App\Models\FileModel;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -50,11 +51,11 @@ class FileCT extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
+        
         $request->validate([
             'id_materials' => 'required',
             'title' => 'required',
-            'new_file' => 'mimes:pdf|max:10000|required',
+            'new_file' => 'mimes:pdf|required',
             'status' => 'required',
             ]
         );
@@ -70,6 +71,8 @@ class FileCT extends Controller
         $request->new_file->move(public_path('material/file'), $fileName);
         $model->file = $fileName;
         
+        $model->size = File::size(public_path('material/file/'.$fileName));
+
         $model->save();
         
         Alert::success('Berhasil', 'Anda berhasil menambahkan file');
@@ -106,7 +109,7 @@ class FileCT extends Controller
         $request->validate([
             'id_materials' => 'required',
             'title' => 'required',
-            'new_file' => 'mimes:pdf|max:10000',
+            'new_file' => 'mimes:pdf',
             'status' => 'required',
             ]
         );
@@ -120,6 +123,7 @@ class FileCT extends Controller
             $fileName = $model->id.'-'.time().'.'.$request->new_file->extension();
             $request->new_file->move(public_path('material/file'), $fileName);
             $model->file = $fileName;
+            $model->size = File::size(public_path('material/file/'.$fileName));
         }
 
         $model->save();
