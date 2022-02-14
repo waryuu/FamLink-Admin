@@ -21,6 +21,7 @@
                         <form action="{{$model['base_url']}}{{$model['data']->id}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input name="_method" type="hidden" value="PUT">
+                            <input type="hidden" name="type" value="{{$model['data']->type}}"/>
                             <div class="modal-body">
                                 <div class="card-body">
                                     <div class="form-group form-show-validation row">
@@ -33,7 +34,7 @@
                                     </div>
                                     <div class="form-group form-show-validation row">
                                         <label for="tipe">Tipe Materi <span class="required-label">*</span></label>
-                                        <select class="form-control" id="type" name="type" required disabled>
+                                        <select class="form-control" disabled>
                                             <option @if($model['data']->type == "default") selected @endif value="default">Standar</option>
                                             <option @if($model['data']->type == "video") selected @endif value="video">Video</option>
                                         </select>
