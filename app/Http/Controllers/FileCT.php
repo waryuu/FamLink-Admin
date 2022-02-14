@@ -59,7 +59,7 @@ class FileCT extends Controller
             'status' => 'required',
             ]
         );
-        
+
         $model = new FileModel();
         $model->id_materials = $request->id_materials;
         $model->title = $request->title;
@@ -80,7 +80,7 @@ class FileCT extends Controller
         $fcm_data['to'] = "/topics/GLOBAL";
 
         $data['title'] = 'Update Materi Edukasi Famlink';
-        $data['body'] = 'File '.$model->title.' ditambahkan pada Materi '.$materials[0]->title;
+        $data['body'] = 'File '.$model->title.' ditambahkan pada Materi '.$materials->title;
         $fcm_data['data'] = $data;
 
         $response = Http::withHeaders([
