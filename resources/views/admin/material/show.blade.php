@@ -21,7 +21,7 @@
                         <form action="{{$model['base_url']}}{{$model['data']->id}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input name="_method" type="hidden" value="PUT">
-                            <input type="hidden" name="type" value="{{$model['data']->type}}"/>
+                            <input type="hidden" id="type" name="type" value="{{$model['data']->type}}"/>
                             <div class="modal-body">
                                 <div class="card-body">
                                     <div class="form-group form-show-validation row">
