@@ -28,10 +28,18 @@ class MaterialCT extends Controller
 
     public function data()
     {
-        return Datatables::of(
+        $resprotect = Datatables::of(
             MaterialModel::join('categorys', 'materials.id_category', '=', 'categorys.id')
             ->select('materials.*', 'categorys.name')
             ->get())->make(true);
+
+        $res = $resprotect->getData();
+        for ($i=0; $i < count($res->data); $i++) { 
+            if ($res->data[$i]->link_yt) {
+                $res->data[$i]->link_yt = "https://www.youtube.com/embed/".substr($res->data[$i]->link_yt, 32);
+            }
+        }
+        return $res;
     }
 
     public function data_category()
