@@ -8,15 +8,21 @@ use App\Http\Controllers\AssesmentResultCT;
 use App\Http\Controllers\AuthCT;
 use App\Http\Controllers\BannerCT;
 use App\Http\Controllers\CategoryCT;
+use App\Http\Controllers\CounselorCT;
+use App\Http\Controllers\ConsultationCT;
 use App\Http\Controllers\EventCT;
 use App\Http\Controllers\FileCT;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaterialCT;
 use App\Http\Controllers\MenuNavigationCT;
+use App\Http\Controllers\NotificationCT;
 use App\Http\Controllers\ReportCT;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StakeholderCT;
 use App\Http\Controllers\UserAdminCT;
 use App\Http\Controllers\UserAppsCT;
+
+
 
 Route::get('/', [AuthCT::class, 'loginView'])->name('login');
 Route::get('/login', [AuthCT::class, 'loginView'])->name('login');
@@ -63,5 +69,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('material/{id}/create', [FileCT::class, 'store']);
         Route::resource('category', CategoryCT::class);
         Route::get('category/datatable/list', [MaterialCT::class, 'data_category']);
+        Route::resource('counselor', CounselorCT::class);
+        Route::resource('stakeholder', StakeholderCT::class);
+        Route::get('stakeholder/regencies/{id}', [StakeholderCT::class, 'getRegencyByProvince']);
+        Route::get('stakeholder/{id}', [StakeholderCT::class, 'getStakeholderByID']);
+        // Route::post('stakeholder/{id}', [StakeholderCT::class, 'update']);
+        Route::resource('consultation', ConsultationCT::class);
+        Route::get('consultation/private', [ConsultationCT::class, 'getTypeConsultation']);
+        Route::get('consultation/public', [ConsultationCT::class, 'getTypeConsultation']);
+        Route::get('consultation/id/{id}', [ConsultationCT::class, 'getById']);
+        Route::post('notification/send', [NotificationCT::class, 'sendNotification']);
     });
 });
