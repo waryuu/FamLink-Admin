@@ -51,15 +51,16 @@
                                         style="display: none">
                                         <label for="link_yt">Link Video YouTube <span
                                                 class="required-label">*</span></label>
-                                        <input type="text" class="form-control" id="link_yt" name="link_yt" value="{{$model['data']->link_yt}}"
+                                            <input type="text" class="form-control" id="link_yt" name="link_yt" value="{{$model['data']->link_yt}}"
                                             placeholder="Masukan Link Video YouTube">
+                                            Tuliskan dalam format sebagai berikut: https://www.youtube.com/watch?v=id_video
                                     </div>
                                     <div class="form-group form-show-validation row">
-                                        <label for="title" >Judul Event <span class="required-label">*</span></label>
+                                        <label for="title" >Judul Materi <span class="required-label">*</span></label>
                                         <input type="text" class="form-control" id="title" name="title" placeholder="Masukan Judul Event" value="{{$model['data']->title}}" required>
                                     </div>
                                     <div class="">
-                                        <label for="description" ><b>Deskripsi Event </b><span class="required-label">*</span></label>
+                                        <label for="description" ><b>Deskripsi Materi </b><span class="required-label">*</span></label>
                                         <div>
                                             <textarea id="summernote" name="description" placeholder="Masukan description" required>{{$model['data']->description}}</textarea>
                                         </div>

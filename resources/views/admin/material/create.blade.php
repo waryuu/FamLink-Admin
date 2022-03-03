@@ -56,6 +56,7 @@
                                                 class="required-label">*</span></label>
                                         <input type="text" class="form-control" id="link_yt" name="link_yt"
                                             placeholder="Masukan Link Video YouTube" required>
+                                        Tuliskan dalam format sebagai berikut: https://www.youtube.com/watch?v=id_video
                                     </div>
                                     <div class="form-group form-show-validation row">
                                         <label for="title">Judul Materi <span class="required-label">*</span></label>
