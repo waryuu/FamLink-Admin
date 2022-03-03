@@ -109,7 +109,6 @@ class FileCT extends Controller
     public function edit($id)
     {
         $model = FileModel::find($id);
-        // console.log($id);
         return response()->json([
             'data' => $model
         ]);
