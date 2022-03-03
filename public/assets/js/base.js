@@ -89,6 +89,52 @@ function showDialogConfirmEditPost(modalEditForm, endpoint, body, table){
     });
 }
 
+function showDialogSendNotificationAjax(endpoint, body, table){
+    swal({
+        title: 'Peringatan',
+        text: "Apakah anda yakin akan mengirimkan notifikasi?",
+        type: 'warning',
+        buttons:{
+            confirm: {
+                text : 'Ya',
+                className : 'btn btn-success'
+            },
+            cancel: {
+                text : 'Tidak',
+                visible: true,
+                className: 'btn btn-danger'
+            }
+        }
+    }).then((Confirm) => {
+        if (Confirm) {
+            $.ajax({
+                url: endpoint,
+                type: "POST",
+                data: body,
+                dataType: 'json',
+                success: function () {
+                    showSuccessDialog('Berhasil', 'Berhasil mengirimkan notifikasi', false, table);
+                }
+            });
+        } else {
+            swal.close();
+        }
+    });
+}
+
+// async function fetchData(url, method, body, textAfter, loadAgain, table){
+//     await fetch(url, {
+//         method: method, 
+//         headers: {
+//             "Content-Type": "multipart/form-data",
+//         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+//         },
+//         body: body, 
+//     }).then((response) => {
+//         if (response.status == 200) showSuccessDialog(textAfter, loadAgain, table);
+//     });
+// }
+
 function showDialogConfirmationAjax(modalId, textConfirm, textAfter, url, method, body, table, loadAgain) {
     swal({
         title: 'Pemberitahuan',
@@ -108,14 +154,18 @@ function showDialogConfirmationAjax(modalId, textConfirm, textAfter, url, method
     }).then((Okay) => {
         if (Okay) {
             $(modalId).modal('hide');
-            $.ajax({
+            var responseAjax = {
                 url: url,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
                 type: method,
                 data: body,
                 success: function (){
                     showSuccessDialog(textAfter, loadAgain, table);
                 }
-            });
+            };
+            $.ajax(responseAjax);
         } else {
             swal.close();
         }
