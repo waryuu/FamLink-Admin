@@ -12,7 +12,7 @@ class NotificationCT extends Controller
         $fcm_data['data'] = $request->data;
 
         $response = Http::withHeaders([
-            'Authorization' => 'key=AAAAGG77bCs:APA91bFCbOiqL8wHVoKAw5fmEbJ8C0XSZUDjddlkdbGToV2tyTpiC36Sf_siPSGtHyGUiXeFzjg0G1nEjRCZ1XYUPkv1S9M1mhHXmHMrYtB_MQt51c-Yu__QUSpw6QsqCfvH1OqVGHTv',
+            'Authorization' => 'key=AAAAbuzphk8:APA91bHu2-MEMfW1UlZwLQRjczUhGQRy9Vuse8un-DJTpW7M5_igZ-L9GpXXU3OV_7AVjbZ9coRTtjpIeXNqUlDhoz0sC5jbV3j5e3urlclhDtDtBQ2DDybYCNHdmR5QRm-7RHFJMB_Y',
             'Content-Type' => 'application/json'
         ])->post('https://fcm.googleapis.com/fcm/send', $fcm_data);
 
