@@ -15,6 +15,7 @@ class RoleController extends Controller
     public function index()
     {
         $model['base_url'] = '/admin/role/';
+        $model['post_base_url'] = '/admin/role';
         return view('admin.role.index', compact('model'));
     }
 

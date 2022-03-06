@@ -160,18 +160,13 @@ $menu = App\Http\Controllers\AuthCT::menuNavigation();
                             <div class="collapse in" id="collapseExample">
                                 <ul class="nav">
                                     <li>
-                                        <a href="#profile">
-                                            <span class="link-collapse">My Profile</span>
+                                        <a href='/admin/auth/{{Auth::user()->id}}'>
+                                            <span class="link-collapse">Account Setting</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#edit">
-                                            <span class="link-collapse">Edit Profile</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#settings">
-                                            <span class="link-collapse">Settings</span>
+                                        <a href='/logout'>
+                                            <span class="link-collapse">Logout</span>
                                         </a>
                                     </li>
                                 </ul>

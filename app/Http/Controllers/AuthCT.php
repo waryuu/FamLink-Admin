@@ -35,10 +35,10 @@ class AuthCT extends Controller
 
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
             Alert::success('Sukses login', 'Login Berhasil, Selamat Datang.');
-            return redirect('/admin/role');
+            return redirect('/admin/auth');
         }else{
-            Alert::warning('Login Gagal', 'Login tidak berhasil, harap periksa email dan password anda');
-            return redirect("/login")->with('error','Email-Address And Password Are Wrong.');
+            Alert::warning('Login Gagal', 'Login tidak berhasil, harap periksa username dan password anda');
+            return redirect("/login")->with('error','Username And Password Are Wrong.');
         }
     }
 
