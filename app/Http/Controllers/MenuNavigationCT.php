@@ -13,6 +13,7 @@ class MenuNavigationCT extends Controller
     public function index()
     {
         $model['base_url'] = '/admin/menu/';
+        $model['base_url_post'] = '/admin/menu';
 
         $data = MenuModel::all();
         $menu_header = MenuModel::where('parent', 0)->orderBy('sort_header', 'asc')->get();

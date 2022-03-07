@@ -42,7 +42,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="form_validation" action="{{$model['base_url']}}" method="POST">
+                                    <form id="form_validation" action="{{$model['base_url_post']}}" method="POST">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="card-body">
@@ -107,7 +107,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="edit_form_validation" action="{{$model['base_url']}}" method="POST">
+                                    <form id="edit_form_validation" action="{{$model['base_url_post']}}" method="POST">
                                         @csrf
                                         <input type="hidden" id="edit_binding_id" name="edit_binding_id" value="">
                                         <div class="modal-body">
