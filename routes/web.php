@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('consultation/private', [ConsultationCT::class, 'getTypeConsultation']);
         Route::get('consultation/public', [ConsultationCT::class, 'getTypeConsultation']);
         Route::get('consultation/id/{id}', [ConsultationCT::class, 'getById']);
+        Route::get('notification', [NotificationCT::class, 'index']);
         Route::post('notification/send', [NotificationCT::class, 'sendNotification']);
     });
 });
