@@ -43,10 +43,7 @@
                                         <th style="width: 5%">Harga</th>
                                         <th style="width: 5%">Penyelengara</th>
                                         <th style="width: 5%">Waktu Mulai</th>
-                                        {{-- <th style="width: 5%">Waktu Selesai</th> --}}
                                         <th style="width: 5%">Lokasi</th>
-                                        {{-- <th style="width: 20%">Deskripsi</th> --}}
-                                        {{-- <th style="width: 10%">Link</th> --}}
                                         <th style="width: 10%">Status</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
@@ -59,10 +56,7 @@
                                         <th>Harga</th>
                                         <th>Penyelengara</th>
                                         <th>Waktu Mulai</th>
-                                        {{-- <th>Waktu Selesai</th> --}}
                                         <th>Lokasi</th>
-                                        {{-- <th>Deskripsi</th> --}}
-                                        {{-- <th>Link</th> --}}
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>

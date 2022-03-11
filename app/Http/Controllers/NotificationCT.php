@@ -2,12 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\MenuTraits;
+use App\Models\MenuModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class NotificationCT extends Controller
 {
+    use MenuTraits;
+
+    private $menuName = "Master Notifikasi";
+
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+        });
+    }
+
     public function sendNotification(Request $request) {
         $fcm_data['to'] = $request->to;
 

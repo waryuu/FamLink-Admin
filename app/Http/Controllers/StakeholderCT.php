@@ -1,16 +1,35 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Traits\MenuTraits;
+use App\Models\MenuModel;
 use App\Models\StakeholderModel;
+use App\Models\StakeholderMemberModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class StakeholderCT extends Controller
-{ 
+{
+  use MenuTraits;
+
+  private $menuName = "Master Stakeholder";
+
+  function __construct()
+  {
+    $this->middleware('auth');
+    $this->middleware(function ($request, $next) {
+      $this->user = Auth::user();
+      $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+      if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+    });
+  }
+
   public function index()
   {
     $model['stakeholders'] = StakeholderModel::all();
@@ -22,17 +41,23 @@ class StakeholderCT extends Controller
 
   public function create()
   {
-    return Datatables::of(StakeholderModel::all())->make(true);
+    return Datatables::of(StakeholderModel::where('status', '=', '1')->get())->make(true);
+  }
+
+  public function deletedStakeholder()
+  {
+    return Datatables::of(StakeholderModel::where('status', '=', '0')->get())->make(true);
   }
 
   public function store(Request $request)
   {
     $request->validate([
-      'name' => 'required', 
-      'established' => 'required', 
-      'focus' => 'required', 
-      'id_province' => 'required', 
-      'id_regency' => 'required', 
+      'name' => 'required',
+      'established' => 'required',
+      'focus' => 'required',
+      'id_province' => 'required',
+      'id_regency' => 'required',
+      'cp_number' => 'min:8|max:13',
       'logo' => 'mimes:jpeg,jpg,png,gif|max:1000|required',
     ]);
 
@@ -41,13 +66,14 @@ class StakeholderCT extends Controller
     $model->established = $request->established;
     $model->focus = $request->focus;
     $model->email = $request->email;
+    $model->cp_name = $request->cp_name;
+    $model->cp_number = $request->cp_number;
     $model->id_province = $request->id_province;
     $model->id_regency = $request->id_regency;
     $model->created_at = Carbon::now();
-    $model->save();
-    
-    if (isset($request->logo)){
-      $fileName = $model->id.'-'.time().'.'.$request->logo->extension();
+
+    if (isset($request->logo)) {
+      $fileName = $model->id . '-' . time() . '.' . $request->logo->extension();
       $request->logo->move(public_path('stakeholder'), $fileName);
       $model->logo = $fileName;
     }
@@ -59,13 +85,13 @@ class StakeholderCT extends Controller
   }
 
   public function update(Request $request, $id)
-  {   
+  {
     $request->validate([
-      'name' => 'required', 
-      'established' => 'required', 
-      'focus' => 'required', 
-      'id_province' => 'required', 
-      'id_regency' => 'required', 
+      'name' => 'required',
+      'established' => 'required',
+      'focus' => 'required',
+      'id_province' => 'required',
+      'id_regency' => 'required',
     ]);
 
     $model = StakeholderModel::find($id);
@@ -73,40 +99,77 @@ class StakeholderCT extends Controller
     $model->established = $request->established;
     $model->focus = $request->focus;
     $model->email = $request->email;
+    $model->cp_name = $request->cp_name;
+    $model->cp_number = $request->cp_number;
     $model->id_province = $request->id_province;
     $model->id_regency = $request->id_regency;
     $model->updated_at = Carbon::now();
 
-    if($request->fileName != null) {
+    if ($request->fileName != null) {
       $fileData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->logo));
       $bytesFile = (int) (strlen(rtrim($request->logo, '=')) * 3 / 4) / 1024;
-      // $bytesFile = round((((int)strlen(base64_decode($request->logo))) / 1024.0) * 0.67, 2);
 
-      if($bytesFile > 1024) return response()->json(['success' => false], 422);
+      if ($bytesFile > 1024) {
+        Alert::warning('Gagal', 'Gambar yang Anda masukan terlalu besar!');
+        redirect()->to('/admin/stakeholder');
+        return response()->json([
+          'success' => false,
+          'data' => null,
+          'message' => 'File gambar terlalu besar!'
+        ], 422);
+      }
 
       File::put(public_path('stakeholder') . '/' . $request->fileName, $fileData);
       $model->logo = $request->fileName;
     }
-    
+
     $model->save();
 
-    return response()->json([ 'success' => true ]);
+    return response()->json([
+      'success' => true,
+      'data' => null,
+      'message' => 'Anda berhasil mengedit data!'
+    ]);
   }
 
   public function destroy($id)
   {
-    StakeholderModel::find($id)->delete();
+    // Make all members nonactive
+    $members = StakeholderMemberModel::where('id_stakeholder', '=', $id)->get();
+    foreach ($members as $member) {
+      $member->status = 0;
+      $member->save();
+    }
+
+    $model = StakeholderModel::find($id);
+    $model->status = 0;
+    $model->save();
 
     return response()->json([
-        'state' => true,
-        'data' => null,
-        'message' => 'Anda berhasil menghapus data!'
+      'state' => true,
+      'data' => null,
+      'message' => 'Anda berhasil menghapus data!'
+    ]);
+  }
+
+  public function restoreStakeholder($id)
+  {
+    $model = StakeholderModel::find($id);
+    $model->status = 1;
+    $model->save();
+
+    return response()->json([
+      'state' => true,
+      'data' => null,
+      'message' => 'Anda berhasil mengembalikan data!'
     ]);
   }
 
   public function show($id)
   {
-    return $this->getStakeholderByID($id);
+    if (is_numeric($id)) return $this->getStakeholderByID($id);
+    if ($id == 'nonactive') return $this->deletedStakeholder();
+    return;
   }
 
 

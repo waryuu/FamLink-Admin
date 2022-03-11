@@ -10,6 +10,7 @@ use App\Http\Controllers\BannerCT;
 use App\Http\Controllers\CategoryCT;
 use App\Http\Controllers\CounselorCT;
 use App\Http\Controllers\ConsultationCT;
+use App\Http\Controllers\ConsultationDeletedCT;
 use App\Http\Controllers\EventCT;
 use App\Http\Controllers\FileCT;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,10 @@ use App\Http\Controllers\NotificationCT;
 use App\Http\Controllers\ReportCT;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StakeholderCT;
+use App\Http\Controllers\StakeholderGalleryCT;
+use App\Http\Controllers\StakeholderMemberCT;
+use App\Http\Controllers\StakeholderThreadsCT;
+use App\Http\Controllers\StakeholderThreadsDeletedCT;
 use App\Http\Controllers\UserAdminCT;
 use App\Http\Controllers\UserAppsCT;
 
@@ -59,25 +64,62 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('userapps/download/excel', [UserAppsCT::class, 'download']);
 
         // PENGEMBANGAN BATCH 2
+        // Event
         Route::resource('event', EventCT::class);
         Route::get('event/datatable/list', [EventCT::class, 'data']);
+
+        // Materi
         Route::resource('material', MaterialCT::class);
         Route::get('material/datatable/list', [MaterialCT::class, 'data']);
         Route::resource('material/file', FileCT::class);
         Route::get('material/file/datatable/list/{id}', [FileCT::class, 'data']);
         Route::get('material/{id}/create', [FileCT::class, 'create']);
         Route::post('material/{id}/create', [FileCT::class, 'store']);
+        // Kategori Materi
         Route::resource('category', CategoryCT::class);
         Route::get('category/datatable/list', [MaterialCT::class, 'data_category']);
-        Route::resource('counselor', CounselorCT::class);
+
+        // Stakeholder deleted threads
+        Route::resource('stakeholder/threads/trash', StakeholderThreadsDeletedCT::class);
+        Route::get('stakeholder/threads/trash/{id}', [StakeholderThreadsDeletedCT::class, 'getThreadsByID']);
+        Route::patch('stakeholder/threads/trash/{id}', [StakeholderThreadsDeletedCT::class, 'restore']);
+        // Stakeholder threads
+        Route::resource('stakeholder/threads', StakeholderThreadsCT::class);
+        Route::get('stakeholder/threads/{id}', [StakeholderThreadsCT::class, 'getThreadsByID']);
+        // Stakeholder Members
+        Route::resource('stakeholder/members', StakeholderMemberCT::class);
+        Route::patch('stakeholder/members/restore/{id}', [StakeholderMemberCT::class, 'restoreMember']);
+        // Stakeholder gallery
+        Route::resource('stakeholder/gallery', StakeholderGalleryCT::class);
+        // Stakeholder
         Route::resource('stakeholder', StakeholderCT::class);
-        Route::get('stakeholder/regencies/{id}', [StakeholderCT::class, 'getRegencyByProvince']);
         Route::get('stakeholder/{id}', [StakeholderCT::class, 'getStakeholderByID']);
-        // Route::post('stakeholder/{id}', [StakeholderCT::class, 'update']);
+        Route::get('stakeholder/regencies/{id}', [StakeholderCT::class, 'getRegencyByProvince']);
+        Route::patch('stakeholder/restore/{id}', [StakeholderCT::class, 'restoreStakeholder']);
+
+        // Konselor
+        Route::resource('counselor', CounselorCT::class);
+        Route::patch('counselor/restore/{id}', [CounselorCT::class, 'restore']);
+        // Konsultasi deleted
+        Route::resource('consultation/trash', ConsultationDeletedCT::class);
+        Route::get('consultation/trash/public', [ConsultationDeletedCT::class, 'getPublicConsultation']);
+        Route::get('consultation/trash/private', [ConsultationDeletedCT::class, 'getPrivateConsultation']);
+        Route::get('consultation/trash/{id}', [ConsultationDeletedCT::class, 'getById']);
+        Route::get('consultation/trash/create', [ConsultationDeletedCT::class, 'create']);
+        Route::patch('consultation/trash/{id}/restore', [ConsultationDeletedCT::class, 'restore']);
+        Route::delete('consultation/trash/replies/{id}', [ConsultationDeletedCT::class, 'deleteReply']);
+        // Konsultasi
+        Route::get('consultation/public', [ConsultationCT::class, 'getPublicConsultation']);
+        Route::get('consultation/private', [ConsultationCT::class, 'getPrivateConsultation']);
+        Route::get('consultation/{id}', [ConsultationCT::class, 'getById']);
+        Route::patch('consultation/{id}/close', [ConsultationCT::class, 'closeConsultation']);
+        Route::patch('consultation/{id}/open', [ConsultationCT::class, 'openConsultation']);
+        Route::patch('consultation/{id}/open_user', [ConsultationCT::class, 'makeOtherUserReply']);
+        Route::patch('consultation/{id}/close_user', [ConsultationCT::class, 'closeOtherUserReply']);
+        Route::delete('consultation/replies/{id}', [ConsultationCT::class, 'deleteReply']);
         Route::resource('consultation', ConsultationCT::class);
-        Route::get('consultation/private', [ConsultationCT::class, 'getTypeConsultation']);
-        Route::get('consultation/public', [ConsultationCT::class, 'getTypeConsultation']);
-        Route::get('consultation/id/{id}', [ConsultationCT::class, 'getById']);
+
+        // Notifikasi
         Route::get('notification', [NotificationCT::class, 'index']);
         Route::post('notification/send', [NotificationCT::class, 'sendNotification']);
     });

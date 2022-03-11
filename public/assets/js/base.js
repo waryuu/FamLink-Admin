@@ -42,6 +42,10 @@ function createColumnsAction(columnArray, action){
     return array;
 }
 
+function loadTable(tableID) {
+    $(tableID).DataTable().ajax.reload();
+}
+
 function createColumnsAny(columnArray){
     return columnArray;
 }
@@ -122,18 +126,23 @@ function showDialogSendNotificationAjax(endpoint, body, table){
     });
 }
 
-// async function fetchData(url, method, body, textAfter, loadAgain, table){
-//     await fetch(url, {
-//         method: method, 
-//         headers: {
-//             "Content-Type": "multipart/form-data",
-//         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-//         },
-//         body: body, 
-//     }).then((response) => {
-//         if (response.status == 200) showSuccessDialog(textAfter, loadAgain, table);
-//     });
-// }
+function toLocaleDate(date, format = {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+}) {
+    var dateObj = new Date(date);
+    return dateObj.toLocaleDateString('id-ID', format);
+}
+
+function toLocaleTime(date, format = {
+    hour: '2-digit',
+    minute: '2-digit'
+}) {
+    var dateObj = new Date(date);
+    return dateObj.toLocaleTimeString('id-ID', format)
+}
 
 function showDialogConfirmationAjax(modalId, textConfirm, textAfter, url, method, body, table, loadAgain) {
     swal({
