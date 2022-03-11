@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\MenuTraits;
 use Illuminate\Http\Request;
 use App\Models\EventModel;
+use App\Models\MenuModel;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
@@ -17,6 +19,20 @@ class EventCT extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    use MenuTraits;
+
+    private $menuName = "Master Event";
+
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+        });
+    }
+
     public function index()
     {
         $model['base_url'] = '/admin/event/';
@@ -47,23 +63,25 @@ class EventCT extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'image' => 'required|mimes:jpeg,jpg,png,gif|max:1000',
-            'title' => 'required',
-            'organizer' => 'required',
-            'price' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time',
-            'location' => 'required',
-            'description' => 'required',
-            'registlink' => 'required',
-            'status' => 'required',
-        ],
-        [
-            'end_time.after'=>'Waktu selesai harus diatur setelah waktu mulai',
-        ]);
-        
-        
+        $request->validate(
+            [
+                'image' => 'required|mimes:jpeg,jpg,png,gif|max:1000',
+                'title' => 'required',
+                'organizer' => 'required',
+                'price' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required|after:start_time',
+                'location' => 'required',
+                'description' => 'required',
+                'registlink' => 'required',
+                'status' => 'required',
+            ],
+            [
+                'end_time.after' => 'Waktu selesai harus diatur setelah waktu mulai',
+            ]
+        );
+
+
         $user = Auth::user();
         $model = new EventModel();
         $model->title = $request->title;
@@ -79,7 +97,7 @@ class EventCT extends Controller
         $model->created_at = Carbon::now();
         $model->save();
 
-        $fileName = $model->id.'-'.time().'.'.$request->image->extension();
+        $fileName = $model->id . '-' . time() . '.' . $request->image->extension();
         $request->image->move(public_path('event'), $fileName);
         $model->image = $fileName;
         $model->save();
@@ -134,20 +152,21 @@ class EventCT extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'image' => 'mimes:jpeg,jpg,png,gif|max:1000',
-            'title' => 'required',
-            'organizer' => 'required',
-            'price' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'location' => 'required',
-            'description' => 'required',
-            'registlink' => 'required',
-            'status' => 'required',
+        $request->validate(
+            [
+                'image' => 'mimes:jpeg,jpg,png,gif|max:1000',
+                'title' => 'required',
+                'organizer' => 'required',
+                'price' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'location' => 'required',
+                'description' => 'required',
+                'registlink' => 'required',
+                'status' => 'required',
             ]
         );
-        
+
         $user = Auth::user();
         $model = EventModel::find($id);
         $model->title = $request->title;
@@ -161,13 +180,13 @@ class EventCT extends Controller
         $model->registlink = $request->registlink;
         $model->status = $request->status;
         $model->updated_at = Carbon::now();
-        
-        if (isset($request->image)){
-            $fileName = $model->id.'-'.time().'.'.$request->image->extension();
+
+        if (isset($request->image)) {
+            $fileName = $model->id . '-' . time() . '.' . $request->image->extension();
             $request->image->move(public_path('event'), $fileName);
             $model->image = $fileName;
         }
-        
+
         $model->save();
         Alert::success('Berhasil', 'Anda berhasil update data');
         return redirect()->to('/admin/event');
@@ -183,10 +202,11 @@ class EventCT extends Controller
     {
         EventModel::find($id)->delete();
 
-        return response()->json([
-            'state' => true,
-            'data' => null,
-            'message' => 'Anda berhasil menghapus data!'
+        return response()->json(
+            [
+                'state' => true,
+                'data' => null,
+                'message' => 'Anda berhasil menghapus data!'
             ]
         );
     }

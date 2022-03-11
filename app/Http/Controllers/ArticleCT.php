@@ -2,18 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\MenuTraits;
 use App\Models\AssessmentDetailModel;
 use App\Models\MenuModel;
-use App\Models\RoleHasModel;
 use App\Models\ArticleModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class ArticleCT extends Controller
 {
+    use MenuTraits;
+
+    private $menuName = "Master Article";
+
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+        });
+    }
+
     public function index()
     {
         $model['base_url'] = '/admin/article/';

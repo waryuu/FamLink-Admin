@@ -2,19 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\MenuTraits;
 use Illuminate\Http\Request;
 use App\Models\MaterialModel;
 use App\Models\FileModel;
+use App\Models\MenuModel;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
 use File;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class FileCT extends Controller
 {
+    use MenuTraits;
+
+    private $menuName = "Master Material";
+
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+        });
+    }
+    
     public function data($id)
     {
         return Datatables::of(

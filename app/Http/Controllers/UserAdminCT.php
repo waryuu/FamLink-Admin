@@ -2,15 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\MenuTraits;
+use App\Models\MenuModel;
 use App\Models\RoleModel;
 use App\Models\UserAdminModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class UserAdminCT extends Controller
 {
+    use MenuTraits;
+
+    private $menuName = "Master User Admin";
+
+    function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+        });
+    }
+    
     public function index()
     {
         $model['role'] = RoleModel::all();
