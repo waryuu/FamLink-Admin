@@ -4,7 +4,13 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h4 class="page-title">Master Konsultasi</h4>
+                <a href="/admin/consultation" class="text-light">
+                    <button type="button" class='btn btn-rounded btn-primary pr-3 pl-3 ml-0 mr-3'>
+                        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>
+                        <span class="mr-1">KEMBALI</span>
+                    </button>
+                </a>
+                <h4 class="page-title">Konsultasi yang telah dihapus</h4>
             </div>
             <div class="d-flex mb-3">
                 <button type="button" class="mr-1 btn btn-rounded btn-primary" id="public_text_section"
@@ -13,12 +19,7 @@
                 <button type="button" class="ml-1 mr-auto btn btn-rounded btn-outline-primary" id="private_text_section"
                     onclick="showSectionConsultation('private')">
                     PRIVAT</button>
-                <a href="consultation/trash" class="text-light">
-                    <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='deleted_text_section'>
-                        <i class="fa fa-trash mr-1" aria-hidden="true"></i>
-                        <span>SAMPAH</span>
-                    </button>
-                </a>
+                </button>
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -43,10 +44,10 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 7%">ID</th>
-                                            <th>Nama lengkap</th>
+                                            <th>Nama Lengkap</th>
                                             <th>Judul</th>
                                             <th>Status</th>
-                                            <th>Untuk umum?</th>
+                                            <th>Terbuka</th>
                                             <th>Ditutup oleh</th>
                                             <th>Waktu ditutup</th>
                                             <th>Created at</th>
@@ -56,10 +57,10 @@
                                     <tfoot>
                                         <tr>
                                             <th style="width: 7%">ID</th>
-                                            <th>Nama lengkap</th>
+                                            <th>Nama Lengkap</th>
                                             <th>Judul</th>
                                             <th>Status</th>
-                                            <th>Untuk umum?</th>
+                                            <th>Terbuka</th>
                                             <th>Ditutup oleh</th>
                                             <th>Waktu ditutup</th>
                                             <th>Created at</th>
@@ -82,11 +83,9 @@
                                 <h5 class="modal-title font-weight-bold" id="title_consultation"
                                     i="modal_title_consultation"></h5>
                             </div>
-                            <div class='ml-auto d-flex flex-row' id='action_show_consultation'>
-                                <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
 
                         <div id="content_consultation" class="modal-body pb-0 text-justify"></div>
@@ -110,28 +109,28 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 7%">ID</th>
-                                            <th>Nama lengkap</th>
+                                            <th>Nama Lengkap</th>
                                             <th>Judul</th>
                                             <th>Status</th>
                                             <th>Konselor</th>
                                             <th>Lembaga</th>
-                                            <th>Ditutup oleh</th>
-                                            <th>Waktu ditutup</th>
-                                            <th>Created at</th>
+                                            <th>Ditutup Oleh</th>
+                                            <th>Waktu Ditutup</th>
+                                            <th>Created At</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                             <th style="width: 7%">ID</th>
-                                            <th>Nama lengkap</th>
+                                            <th>Nama Lengkap</th>
                                             <th>Judul</th>
                                             <th>Status</th>
                                             <th>Konselor</th>
                                             <th>Lembaga</th>
-                                            <th>Ditutup oleh</th>
-                                            <th>Waktu ditutup</th>
-                                            <th>Created at</th>
+                                            <th>Ditutup Oleh</th>
+                                            <th>Waktu Ditutup</th>
+                                            <th>Created At</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </tfoot>
@@ -147,7 +146,6 @@
 @section('js')
     <script>
         var base_endpoint = "{{ $model['base_url'] }}";
-        var firebase_endpoint = "{{ $model['firebase_url'] }}";
 
         var table_public = null;
         var table_private = null;
@@ -190,19 +188,11 @@
                     data: 'state',
                     name: 'state',
                     render: function(data, type, row) {
-                        var textTag = '<strong class="col-red text-center" style="font-size: 12px">';
-                        var kodeForNotified = row['kode_user'];
-                        var nameForNotified = row['nama_konselor'];
+                        var textTag = '<strong class="col-red text-center">';
                         if (row['state'] == 'closed') textTag += 'Ditutup</strong>';
                         if (row['state'] == 'waiting_user') textTag += 'Menunggu pengguna</strong>';
-                        if (row['state'] == 'waiting_counselor') {
-                            textTag += 'Menunggu konselor</strong>';
-                            kodeForNotified = row['kode_konselor'];
-                            nameForNotified = row['nama_lengkap'];
-                        }
-                        var buttonNotif =
-                            `<button class="mt-1 btn btn-primary" ${row['state'] == 'closed' ? 'disabled' : ''} onclick='sendNotification("${kodeForNotified}", "${nameForNotified}", "${row['title']}", "${row['state']}", "${row['type']}")'><i class="fa-solid fa-comment-arrow-up-right"></i>Kirim Notifikasi</button>`;
-                        return `<div class="mt-2 mb-3 text-center">${textTag + buttonNotif}</div>`;
+                        if (row['state'] == 'waiting_counselor') textTag += 'Menunggu konselor</strong>';
+                        return `<div class="mt-2 mb-3">${textTag}</div>`;
                     }
                 }
             ];
@@ -210,13 +200,7 @@
                 data: 'open_to_all',
                 name: 'open_to_all',
                 render: function(data, type, row) {
-                    var isNotOpen = row['open_to_all'] == 0;
-                    var isClosed = row['closed_at'] != null;
-                    var text =
-                        `<strong class="col-red" style="font-size: 12px">${isNotOpen ? 'Tidak' : 'Terbuka'}</strong>`;
-                    var action =
-                        `<button type='button' ${isClosed ? 'disabled' : ''} class='mt-1 btn btn-primary ${isNotOpen ? 'btn-primary' : 'btn-secondary'}' onclick='doOpenPublicConsultation(${row['id']}, ${row['open_to_all']})'>${isNotOpen ? 'Buka' : 'Tutup'}</button>`;
-                    return `<div class="mt-2 mb-3 text-center">${text + action}</div>`;
+                    return `<strong class=" col-red" style="font-size: 12px">${row['open_to_all'] == 0 ? 'Khusus Konselor' : 'Dibuka untuk umum'}</strong>`;
                 }
             }];
             var privateColumns = [{
@@ -242,8 +226,8 @@
                     name: 'role_who_closed',
                     render: function(data, type, row) {
                         return row['role_who_closed'] === null ?
-                            '<strong class="col-red" style="font-size: 12px">—</strong>' :
-                            `<strong class="text-capitalize col-red" style="font-size: 12px">${row['role_who_closed']}</strong>`;
+                            '<strong class=" col-red" style="font-size: 12px">—</strong>' :
+                            `<strong class=" col-red" style="font-size: 12px">${row['role_who_closed']}</strong>`;
                     }
                 },
                 {
@@ -269,6 +253,10 @@
                     name: 'action',
                     render: function(data, type, row) {
                         return `<div class="form-button-action">
+                          <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success" data-original-title="Kembalikan"
+                            onclick="restoreAlert(${row['id']})">
+                            <i class="fa fa-history"></i>
+                          </button>
                           <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success" data-original-title="Lihat"
                             onclick="showData(${row['id']})">
                             <i class="fa fa-eye"></i>
@@ -292,70 +280,46 @@
             });
         });
 
-        function doOpenPublicConsultation(id, status) {
-            var endpoint = `${base_endpoint + id}/${status === 0 ? 'open_user' : 'close_user'}`;
-            var message = status === 0 ? 'membuka' : 'menutup';
-            var feedback = status === 0 ? 'dibuka' : 'ditutup';
-
-            var body = {
-                "id": id,
-                "_token": token,
-            }
-            var target_table_id = currentSection === "public" ? table_id_public : table_id_private
-
-            showDialogConfirmationAjax(null, `Apakah anda yakin akan ${message} konsultasi untuk pengguna umum?`,
-                `Konsultasi berhasil ${feedback} untuk umum!`,
-                endpoint, 'patch', body, target_table_id);
-        }
-
         function showSectionConsultation(type) {
             if (type === "public") {
                 currentSection = "public"
                 section_public_consultation.style.display = "block";
                 document.getElementById("public_text_section").className = "mr-1 btn btn-rounded btn-primary";
-                document.getElementById("private_text_section").className =
-                    "ml-1 mr-auto btn btn-rounded btn-outline-primary";
+                document.getElementById("private_text_section").className = "ml-1 btn btn-rounded btn-outline-primary";
                 section_private_consultation.style.display = "none";
             } else {
                 currentSection = "private"
                 section_public_consultation.style.display = "none";
-                document.getElementById("private_text_section").className = "ml-1 mr-auto btn btn-rounded btn-primary";
+                document.getElementById("private_text_section").className = "ml-1 btn btn-rounded btn-primary";
                 document.getElementById("public_text_section").className = "mr-1 btn btn-rounded btn-outline-primary";
                 section_private_consultation.style.display = "block";
             }
         }
 
-        function sendNotification(kodePeserta, nama, title, state, type) {
-            var isKodeExist = kodePeserta !== "null";
-            var isWaitCounselor = state === 'waiting_counselor';
-            var isPublic = type === 'public';
-            var body = {
-                "_token": token,
-                "to": "",
-                "data": {
-                    "title": "",
-                    "body": `Konsultasi ${type} berjudul ${title} belum kamu respon nih, Yuk segera respon!`
-                }
-            }
-            body['to'] = isKodeExist ? "/topics/USER_" + kodePeserta : "/topics/COUNSELOR";
-            body['data']['title'] = isWaitCounselor ? nama + " menunggu responmu" : isPublic ?
-                "Konselor menunggu responmu" : "Konselor " + nama + " menunggu responmu";
-            showDialogSendNotificationAjax(firebase_endpoint, body, isPublic ? table_id_public : table_id_private);
+        function toLocaleDate(date, format = {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }) {
+            var dateObj = new Date(date);
+            return dateObj.toLocaleDateString('id-ID', format);
+        }
+
+        function toLocaleTime(date, format = {
+            hour: '2-digit',
+            minute: '2-digit'
+        }) {
+            var dateObj = new Date(date);
+            return dateObj.toLocaleTimeString('id-ID', format)
         }
 
         function showData(id) {
             $.get(base_endpoint + id, function(responseText) {
                 if (typeof responseText === 'object') {
-                    var date = toLocaleDate(responseText.details.created_at);
-                    var isClosed = responseText.details.closed_at != null;
+                    var date = toLocaleDate(responseText.details.created_at)
                     $("#writer_date_consultation").html(`${responseText.details.nama_lengkap}  •  ${date}`);
                     $("#title_consultation").html(responseText.details.title);
-                    $("#action_show_consultation").children('#btn_action_show_consultation').first().remove();
-                    $("#action_show_consultation").prepend(
-                        `<button id='btn_action_show_consultation' class='btn pr-3 pl-3 btn-rounded ${isClosed ? 'btn-secondary' : 'btn-primary'}' type="button" onclick='closeConsultation(${id}, ${isClosed})'>
-                            <i class="fa ${isClosed ? 'fa-envelope-open' : 'fa-ban'}" aria-hidden="true"></i>
-                            <span>${isClosed ? 'Buka' : 'Tutup'}</span></button>`
-                    );
                     $("#content_consultation").html('');
                     (responseText.details.content).split('\n').forEach((item) => {
                         $("#content_consultation").append(`<p>${item}</p>`);
@@ -402,30 +366,16 @@
             }
         }
 
-        function closeConsultation(id, isClosed) {
-            var endpoint = base_endpoint + id;
+        function restoreAlert(id) {
             var body = {
                 "id": id,
                 "_token": token,
             }
-            var message = '';
-            var feedback = '';
-
-            if (isClosed) {
-                endpoint += '/open';
-                message = 'membuka';
-                feedback = 'dibuka';
-            } else {
-                endpoint += '/close';
-                message = 'menutup';
-                feedback = 'ditutup';
-            }
-
+            
             var target_table_id = currentSection === "public" ? table_id_public : table_id_private
-            showDialogConfirmationAjax(null, `Apakah anda yakin akan ${message} konsultasi ini?`,
-                `Konsultasi berhasil ${feedback}!`,
-                endpoint, 'PATCH', body, target_table_id)
-            $('#modal_show_consultation').modal('hide');
+            showDialogConfirmationAjax(null, 'Apakah Anda yakin akan menampilkan kembali konsultasi ini?',
+                'Data berhasil ditampilkan kembali!',
+                base_endpoint + id + '/restore', 'PATCH', body, target_table_id);
         }
 
         function deleteAlert(id) {
