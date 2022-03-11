@@ -25,6 +25,8 @@ class EventCT extends Controller
 
     function __construct()
     {
+        $this->fcm_key = env("FCM_KEY", "");;
+        
         $this->middleware('auth');
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
@@ -109,7 +111,7 @@ class EventCT extends Controller
         $fcm_data['data'] = $data;
 
         $response = Http::withHeaders([
-            'Authorization' => 'key=AAAAbuzphk8:APA91bHu2-MEMfW1UlZwLQRjczUhGQRy9Vuse8un-DJTpW7M5_igZ-L9GpXXU3OV_7AVjbZ9coRTtjpIeXNqUlDhoz0sC5jbV3j5e3urlclhDtDtBQ2DDybYCNHdmR5QRm-7RHFJMB_Y',
+            'Authorization' => 'key='.$this->fcm_key,
             'Content-Type' => 'application/json'
         ])->post('https://fcm.googleapis.com/fcm/send', $fcm_data);
 

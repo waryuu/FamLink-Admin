@@ -17,6 +17,8 @@ class NotificationCT extends Controller
 
     function __construct()
     {
+        $this->fcm_key = env("FCM_KEY", "");;
+
         $this->middleware('auth');
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
@@ -37,7 +39,7 @@ class NotificationCT extends Controller
         }
 
         $response = Http::withHeaders([
-            'Authorization' => 'key=AAAAGG77bCs:APA91bFCbOiqL8wHVoKAw5fmEbJ8C0XSZUDjddlkdbGToV2tyTpiC36Sf_siPSGtHyGUiXeFzjg0G1nEjRCZ1XYUPkv1S9M1mhHXmHMrYtB_MQt51c-Yu__QUSpw6QsqCfvH1OqVGHTv',
+            'Authorization' => 'key='.$this->fcm_key,
             'Content-Type' => 'application/json'
         ])->post('https://fcm.googleapis.com/fcm/send', $fcm_data);
 
