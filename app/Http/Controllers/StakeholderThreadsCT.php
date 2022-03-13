@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\MenuTraits;
 use App\Models\MenuModel;
+use App\Models\RulesModel;
 use App\Models\StakeholderThreadModel;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -29,10 +30,18 @@ class StakeholderThreadsCT extends Controller
 
   public function index()
   {
+    $menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+    $rules = RulesModel::where('id_menu', $menu->id)->first();
+
     $model['stakeholders'] = StakeholderThreadModel::all();
     $model['public_url_thread'] = $this->api_url . '/stakeholder/threads/';
     $model['public_url_replies'] = $this->api_url . '/stakeholder/replies/';
     $model['base_url'] = '/admin/stakeholder/threads/';
+    $model['rules_url'] = '/admin/rules';
+    $model['menu_id'] = $menu->id;
+
+    if (isset($rules)) $model['rules'] = $rules;
+    else $model['rules'] = null;
     return view('admin.stakeholder.threads', compact('model'));
   }
 

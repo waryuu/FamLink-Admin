@@ -19,6 +19,7 @@ use App\Http\Controllers\MenuNavigationCT;
 use App\Http\Controllers\NotificationCT;
 use App\Http\Controllers\ReportCT;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RulesCT;
 use App\Http\Controllers\StakeholderCT;
 use App\Http\Controllers\StakeholderGalleryCT;
 use App\Http\Controllers\StakeholderMemberCT;
@@ -122,5 +123,8 @@ Route::group(['middleware' => 'auth'], function () {
         // Notifikasi
         Route::get('notification', [NotificationCT::class, 'index']);
         Route::post('notification/send', [NotificationCT::class, 'sendNotification']);
+
+        // Aturan atau Panduan
+        Route::resource('rules', RulesCT::class);
     });
 });

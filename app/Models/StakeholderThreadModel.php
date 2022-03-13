@@ -12,8 +12,12 @@ class StakeholderThreadModel extends Model
     protected $table = "stakeholderthreads";
     protected $primaryKey = "id";
 
-    protected $fillable = ['id_konselor', 'title', 'content', 'images'];
-
+    protected $fillable = ['id_stmember', 'title', 'content', 'images', 'state', 'status', 'closed_by'];
+    
+    protected $hidden = [
+        'status',
+    ];
+    
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
