@@ -5,6 +5,21 @@
         <div class="page-inner">
             <div class="page-header d-flex flex-row align-items-center">
                 <h4 class="page-title ml-0 mr-auto">Master Stakeholder</h4>
+                <a href="#" class="text-light">
+                    @if ($model['rules'] == null)
+                        <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='rules_section'
+                            data-toggle="modal" data-target="#modal_create_rules">
+                            <i class="fa fa-book mr-1" aria-hidden="true"></i>
+                            <span>BUAT ATURAN</span>
+                        </button>
+                    @else
+                        <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='rules_section'
+                            data-toggle="modal" data-target="#modal_edit_rules">
+                            <i class="fa fa-book mr-1" aria-hidden="true"></i>
+                            <span>ATURAN TERSIMPAN</span>
+                        </button>
+                    @endif
+                </a>
                 <a href="{{ $model['base_url'] }}trash" class="text-light">
                     <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='deleted_text_section'>
                         <i class="fa fa-trash mr-1" aria-hidden="true"></i>
@@ -79,6 +94,76 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="modal_edit_rules" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Ubah Aturan Diskusi Jejaring</h5>
+                            <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="rules_form_validation" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" id="rules_edit_binding_id" name="rules_edit_binding_id" value=
+                                @if ($model['rules'] != null)
+                                    {{ $model['rules']->id }}
+                                @endif
+                            >
+                            <div class="modal-body">
+                                <div class="card-body">
+                                    <div class="">
+                                        <label for="description"><b>Aturan </b><span class="required-label">*</span></label>
+                                        <div>
+                                            <textarea id="summernote_edit" name="rule_edit" placeholder="Masukan Aturan disini" required>
+                                                @if ($model['rules'] != null)
+                                                    {{ $model['rules']->rule }}
+                                                @endif
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" id="modal_rules_btn_update" class="btn btn-primary">Simpan</button>
+                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Batal</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modal_create_rules" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Buat Aturan Diskusi Jejaring</h5>
+                            <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="rules_form_validation" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body">
+                                <div class="card-body">
+                                    <div class="">
+                                        <label for="description"><b>Aturan </b><span class="required-label">*</span></label>
+                                        <div>
+                                            <textarea id="summernote_create" name="rule_create" placeholder="Masukan Aturan disini" required>
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" id="modal_rules_btn_create" class="btn btn-primary">Simpan</button>
+                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Batal</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -87,12 +172,20 @@
         var base_endpoint = "{{ $model['base_url'] }}";
         var thread_public_endpoint = "{{ $model['public_url_thread'] }}";
         var replies_public_endpoint = "{{ $model['public_url_replies'] }}";
+        var id_menu = "{{ $model['menu_id'] }}";
+        var rules_endpoint = "{{ $model['rules_url'] }}";
 
         var table = null;
         var table_id = '#table_view';
         var modal_show_threads = "#modal_show_threads";
         var repliesContainer = document.getElementById('replies_thread');
         var dividerReplies = document.getElementById('divider_replies');
+
+        var modal_create_rules = "#modal_create_rules";
+        var modal_edit_rules = "#modal_edit_rules";
+        var modal_rules_btn_create = "#modal_rules_btn_create";
+        var modal_rules_btn_update = "#modal_rules_btn_update";
+        var rules_form_validation = "#rules_form_validation";
 
         $(document).ready(function() {
             var columnData = [{
@@ -159,7 +252,53 @@
             $(modal_show_threads).click(function(e) {
                 showData(e);
             });
+            $(modal_edit_rules).on('shown.bs.modal', function() {
+                $('#summernote_edit').summernote();
+            })
+            $(modal_create_rules).on('shown.bs.modal', function() {
+                $('#summernote_create').summernote();
+            })
+            $(modal_rules_btn_update).click(function(e) {
+                saveEditRules(e);
+            });
+            $(modal_rules_btn_create).click(function(e) {
+                createRules(e);
+            });
         });
+
+        function createRules() {
+            var valid = $(rules_form_validation).valid();
+            if (valid) {
+                var rule = $("#summernote_create").val();
+                var body = {
+                    "_token": token,
+                    "id_menu": id_menu,
+                    "rule": rule,
+                };
+                console.log(body);
+                var endpoint = rules_endpoint;
+                showDialogConfirmationAjax(modal_create_rules, 'Apakah anda yakin akan membuat aturan?',
+                    'Aturan berhasil disimpan!', endpoint, 'POST', body, table_id, true);
+            }
+        }
+
+        function saveEditRules(id) {
+            var valid = $(rules_form_validation).valid();
+            if (valid) {
+                var id = $("#rules_edit_binding_id").val();
+                var rule = $("#summernote_edit").val();
+                var body = {
+                    "_token": token,
+                    "id": id,
+                    "rule": rule,
+                };
+
+                console.log(body);
+                var endpoint = rules_endpoint + '/' + id;
+                showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan memperbaharui aturan?',
+                    'Aturan berhasil diperbaharui!', endpoint, 'PUT', body, table_id, true);
+            }
+        }
 
         function toLocaleDate(date, format = {
             weekday: 'short',

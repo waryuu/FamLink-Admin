@@ -38,7 +38,6 @@ class RulesCT extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
         $request->validate([
             'id_menu' => 'required',
             'rule' => 'required',
@@ -84,7 +83,15 @@ class RulesCT extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'rule' => 'required',
+            ]
+        );
+
+        $model = RulesModel::find($id);
+        $model->rule = $request->rule;
+        $model->updated_at = Carbon::now('Asia/Jakarta');
+        $model->save();
     }
 
     /**
