@@ -6,6 +6,7 @@ use App\Http\Traits\MenuTraits;
 use App\Models\ConsultationThreadModel;
 use App\Models\CtReplyModel;
 use App\Models\MenuModel;
+use App\Models\RulesModel;
 use App\Models\StakeholderModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,8 +34,17 @@ class ConsultationCT extends Controller
 
   public function index()
   {
+    $menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+    $rules = RulesModel::where('id_menu', $menu->id)->first();
+    
     $model['base_url'] = '/admin/consultation/';
     $model['firebase_url'] = '/admin/notification/send';
+    $model['rules_url'] = '/admin/rules';
+    $model['menu_id'] = $menu->id;
+    
+    if (isset($rules)) $model['rules'] = $rules;
+    else $model['rules'] = null;
+    
     return view('admin.consultation.index', compact('model'));
   }
 

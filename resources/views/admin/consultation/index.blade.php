@@ -13,6 +13,21 @@
                 <button type="button" class="ml-1 mr-auto btn btn-rounded btn-outline-primary" id="private_text_section"
                     onclick="showSectionConsultation('private')">
                     PRIVAT</button>
+                <a href="#" class="text-light">
+                    @if ($model['rules'] == null)
+                        <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='rules_section'
+                            data-toggle="modal" data-target="#modal_create_rules">
+                            <i class="fa fa-book mr-1" aria-hidden="true"></i>
+                            <span>BUAT ATURAN</span>
+                        </button>
+                    @else
+                        <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='rules_section'
+                            data-toggle="modal" data-target="#modal_edit_rules">
+                            <i class="fa fa-book mr-1" aria-hidden="true"></i>
+                            <span>ATURAN TERSIMPAN</span>
+                        </button>
+                    @endif
+                </a>
                 <a href="consultation/trash" class="text-light">
                     <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='deleted_text_section'>
                         <i class="fa fa-trash mr-1" aria-hidden="true"></i>
@@ -141,6 +156,80 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="modal_edit_rules" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header align-items-center">
+                            <h3 class="modal-title font-weight-bold">Ubah Aturan Konsultasi</h3>
+                            <div class="action-button">
+                                <button type="button" id="modal_rules_btn_delete" class='ml-1 btn btn-rounded btn-secondary'>
+                                    <i class="fa fa-trash mr-1" aria-hidden="true"></i>
+                                    <span>Hapus Aturan</span>
+                                </button>
+                                <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                        <form id="rules_form_validation" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" id="rules_edit_binding_id" name="rules_edit_binding_id"
+                                value=@if ($model['rules'] != null) {{ $model['rules']->id }} @endif>
+                            <div class="modal-body">
+                                <div class="card-body">
+                                    <div class="">
+                                        <label for="description"><b>Aturan </b><span class="required-label">*</span></label>
+                                        <div>
+                                            <textarea id="summernote_edit" name="rule_edit" placeholder="Masukan Aturan disini" required>
+                                                @if ($model['rules'] != null)
+                                                    {{ $model['rules']->rule }}
+                                                @endif
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" id="modal_rules_btn_update" class="btn btn-primary">Simpan</button>
+                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Batal</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modal_create_rules" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">Buat Aturan Konsultasi</h5>
+                            <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="rules_form_validation" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body">
+                                <div class="card-body">
+                                    <div class="">
+                                        <label for="description"><b>Aturan </b><span class="required-label">*</span></label>
+                                        <div>
+                                            <textarea id="summernote_create" name="rule_create" placeholder="Masukan Aturan disini" required>
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" id="modal_rules_btn_create" class="btn btn-primary">Simpan</button>
+                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Batal</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection
@@ -148,6 +237,8 @@
     <script>
         var base_endpoint = "{{ $model['base_url'] }}";
         var firebase_endpoint = "{{ $model['firebase_url'] }}";
+        var id_menu = "{{ $model['menu_id'] }}";
+        var rules_endpoint = "{{ $model['rules_url'] }}";
 
         var table_public = null;
         var table_private = null;
@@ -160,6 +251,13 @@
         var repliesContainer = document.getElementById('replies_consultation');
         var dividerReplies = document.getElementById('divider_replies');
         var currentSection = "public";
+
+        var modal_create_rules = "#modal_create_rules";
+        var modal_edit_rules = "#modal_edit_rules";
+        var modal_rules_btn_create = "#modal_rules_btn_create";
+        var modal_rules_btn_update = "#modal_rules_btn_update";
+        var modal_rules_btn_delete = "#modal_rules_btn_delete";
+        var rules_form_validation = "#rules_form_validation";
 
         $(document).ready(function() {
             var firstColumn = [{
@@ -290,7 +388,72 @@
             $(modal_show_consultation).click(function(e) {
                 showData(e);
             });
+            $(modal_edit_rules).on('shown.bs.modal', function() {
+                $('#summernote_edit').summernote();
+            })
+            $(modal_create_rules).on('shown.bs.modal', function() {
+                $('#summernote_create').summernote();
+            })
+            $(modal_rules_btn_update).click(function(e) {
+                saveEditRules(e);
+            });
+            $(modal_rules_btn_create).click(function(e) {
+                createRules(e);
+            });
+            $(modal_rules_btn_delete).click(function(e) {
+                deleteRules(e);
+            });
         });
+
+        function deleteRules() {
+            var id = $("#rules_edit_binding_id").val();
+            var endpoint = rules_endpoint + '/' + id;
+
+            var body = {
+                "id": id,
+                "_token": token,
+            }
+
+            var target_table_id = currentSection === "public" ? table_id_public : table_id_private
+            showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan menghapus aturan?', 'Aturan berhasil dihapus!',
+                endpoint, 'DELETE', body, target_table_id, true);
+        }
+
+        function createRules() {
+            var valid = $(rules_form_validation).valid();
+            if (valid) {
+                var rule = $("#summernote_create").val();
+                var body = {
+                    "_token": token,
+                    "id_menu": id_menu,
+                    "rule": rule,
+                };
+
+                var endpoint = rules_endpoint;
+                var target_table_id = currentSection === "public" ? table_id_public : table_id_private
+
+                showDialogConfirmationAjax(modal_create_rules, 'Apakah anda yakin akan membuat aturan?',
+                    'Aturan berhasil disimpan!', endpoint, 'POST', body, target_table_id, true);
+            }
+        }
+
+        function saveEditRules() {
+            var valid = $(rules_form_validation).valid();
+            if (valid) {
+                var id = $("#rules_edit_binding_id").val();
+                var rule = $("#summernote_edit").val();
+                var body = {
+                    "_token": token,
+                    "id": id,
+                    "rule": rule,
+                };
+
+                var endpoint = rules_endpoint + '/' + id;
+                var target_table_id = currentSection === "public" ? table_id_public : table_id_private
+                showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan memperbaharui aturan?',
+                    'Aturan berhasil diperbaharui!', endpoint, 'PUT', body, target_table_id, true);
+            }
+        }
 
         function doOpenPublicConsultation(id, status) {
             var endpoint = `${base_endpoint + id}/${status === 0 ? 'open_user' : 'close_user'}`;

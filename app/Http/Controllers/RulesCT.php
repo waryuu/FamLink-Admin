@@ -102,6 +102,12 @@ class RulesCT extends Controller
      */
     public function destroy($id)
     {
-        //
+        RulesModel::find($id)->delete();
+
+        return response()->json([
+            'state' => true,
+            'data' => null,
+            'message' => 'Anda berhasil menghapus data!'
+        ]);
     }
 }

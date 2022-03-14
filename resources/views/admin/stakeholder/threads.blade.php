@@ -98,19 +98,22 @@
             <div class="modal fade" id="modal_edit_rules" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title font-weight-bold">Ubah Aturan Diskusi Jejaring</h5>
-                            <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <div class="modal-header align-items-center">
+                            <h3 class="modal-title font-weight-bold">Ubah Aturan Konsultasi</h3>
+                            <div class="action-button">
+                                <button type="button" id="modal_rules_btn_delete" class='ml-1 btn btn-rounded btn-secondary'>
+                                    <i class="fa fa-trash mr-1" aria-hidden="true"></i>
+                                    <span>Hapus Aturan</span>
+                                </button>
+                                <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         </div>
                         <form id="rules_form_validation" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" id="rules_edit_binding_id" name="rules_edit_binding_id" value=
-                                @if ($model['rules'] != null)
-                                    {{ $model['rules']->id }}
-                                @endif
-                            >
+                            <input type="hidden" id="rules_edit_binding_id" name="rules_edit_binding_id"
+                                value=@if ($model['rules'] != null) {{ $model['rules']->id }} @endif>
                             <div class="modal-body">
                                 <div class="card-body">
                                     <div class="">
@@ -133,6 +136,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class="modal fade" id="modal_create_rules" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -185,6 +189,7 @@
         var modal_edit_rules = "#modal_edit_rules";
         var modal_rules_btn_create = "#modal_rules_btn_create";
         var modal_rules_btn_update = "#modal_rules_btn_update";
+        var modal_rules_btn_delete = "#modal_rules_btn_delete";
         var rules_form_validation = "#rules_form_validation";
 
         $(document).ready(function() {
@@ -264,7 +269,23 @@
             $(modal_rules_btn_create).click(function(e) {
                 createRules(e);
             });
+            $(modal_rules_btn_delete).click(function(e) {
+                deleteRules(e);
+            });
         });
+
+        function deleteRules() {
+            var id = $("#rules_edit_binding_id").val();
+            var endpoint = rules_endpoint + '/' + id;
+
+            var body = {
+                "id": id,
+                "_token": token,
+            }
+
+            showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan menghapus aturan?', 'Aturan berhasil dihapus!',
+                endpoint, 'DELETE', body, table_id, true);
+        }
 
         function createRules() {
             var valid = $(rules_form_validation).valid();
@@ -275,14 +296,14 @@
                     "id_menu": id_menu,
                     "rule": rule,
                 };
-                console.log(body);
+
                 var endpoint = rules_endpoint;
                 showDialogConfirmationAjax(modal_create_rules, 'Apakah anda yakin akan membuat aturan?',
                     'Aturan berhasil disimpan!', endpoint, 'POST', body, table_id, true);
             }
         }
 
-        function saveEditRules(id) {
+        function saveEditRules() {
             var valid = $(rules_form_validation).valid();
             if (valid) {
                 var id = $("#rules_edit_binding_id").val();
@@ -293,7 +314,6 @@
                     "rule": rule,
                 };
 
-                console.log(body);
                 var endpoint = rules_endpoint + '/' + id;
                 showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan memperbaharui aturan?',
                     'Aturan berhasil diperbaharui!', endpoint, 'PUT', body, table_id, true);
