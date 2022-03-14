@@ -203,7 +203,7 @@
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title font-weight-bold">Buat Aturan Konsultasi</h5>
+                            <h3 class="modal-title font-weight-bold">Buat Aturan Konsultasi</h3>
                             <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
