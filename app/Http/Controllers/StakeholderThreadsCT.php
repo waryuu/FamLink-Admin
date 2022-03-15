@@ -115,7 +115,7 @@ class StakeholderThreadsCT extends Controller
     return response()->json([
       'state' => true,
       'data' => null,
-      'message' => 'Anda berhasil menutup konsultasi!'
+      'message' => 'Anda berhasil menutup diskusi!'
     ]);
   }
 
@@ -130,7 +130,7 @@ class StakeholderThreadsCT extends Controller
     return response()->json([
       'state' => true,
       'data' => null,
-      'message' => 'Anda berhasil membuka konsultasi!'
+      'message' => 'Anda berhasil membuka diskusi!'
     ]);
   }
 }
