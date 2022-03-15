@@ -68,16 +68,18 @@ class ConsultationCT extends Controller
   public function getTypeReportConsultation($filter)
   {
     $allConsultation = $this->getConsultation();
-    if ($filter == 'all') return Datatables::of($allConsultation)->make(true);
-    else if ($filter == 'public' || $filter == 'private') {
+    
+    if ($filter == 'public' || $filter == 'private') {
       $filtered = $allConsultation->where("consultationthreads.type", '=', $filter)->get();
       return Datatables::of($filtered)->make(true);
     } else if ($filter == 'closed') {
       $filtered = $allConsultation->where("consultationthreads.state", '=', 'closed')->get();
       return Datatables::of($filtered)->make(true);
-    } else {
+    } else if ($filter == 'ongoing') {
       $filtered = $allConsultation->where("consultationthreads.state", '!=', 'closed')->get();
       return Datatables::of($filtered)->make(true);
+    } else {
+      return Datatables::of($allConsultation)->make(true);
     }
   }
 
