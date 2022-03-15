@@ -18,6 +18,7 @@ use App\Http\Controllers\MaterialCT;
 use App\Http\Controllers\MenuNavigationCT;
 use App\Http\Controllers\NotificationCT;
 use App\Http\Controllers\ReportCT;
+use App\Http\Controllers\ReportConsultationCT;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RulesCT;
 use App\Http\Controllers\StakeholderCT;
@@ -128,5 +129,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Aturan atau Panduan
         Route::resource('rules', RulesCT::class);
+
+        // Laporan Konsultasi
+        Route::get('reportconsultation', [ReportConsultationCT::class, 'index']);
+        Route::get('reportconsultation/datatable/list/{type}', [ConsultationCT::class, 'getTypeReportConsultation']);
     });
 });

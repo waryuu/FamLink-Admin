@@ -36,15 +36,15 @@ class ConsultationCT extends Controller
   {
     $menu = MenuModel::where('title', $this->menuName)->select('id')->first();
     $rules = RulesModel::where('id_menu', $menu->id)->first();
-    
+
     $model['base_url'] = '/admin/consultation/';
     $model['firebase_url'] = '/admin/notification/send';
     $model['rules_url'] = '/admin/rules';
     $model['menu_id'] = $menu->id;
-    
+
     if (isset($rules)) $model['rules'] = $rules;
     else $model['rules'] = null;
-    
+
     return view('admin.consultation.index', compact('model'));
   }
 
@@ -63,6 +63,22 @@ class ConsultationCT extends Controller
     $allConsultation = $this->getConsultation();
     $filtered = $allConsultation->where("consultationthreads.type", '=', $type)->where('consultationthreads.status', '=', '1')->get();
     return Datatables::of($filtered)->make(true);
+  }
+
+  public function getTypeReportConsultation($filter)
+  {
+    $allConsultation = $this->getConsultation();
+    if ($filter == 'all') return Datatables::of($allConsultation)->make(true);
+    else if ($filter == 'public' || $filter == 'private') {
+      $filtered = $allConsultation->where("consultationthreads.type", '=', $filter)->get();
+      return Datatables::of($filtered)->make(true);
+    } else if ($filter == 'closed') {
+      $filtered = $allConsultation->where("consultationthreads.state", '=', 'closed')->get();
+      return Datatables::of($filtered)->make(true);
+    } else {
+      $filtered = $allConsultation->where("consultationthreads.state", '!=', 'closed')->get();
+      return Datatables::of($filtered)->make(true);
+    }
   }
 
   public function getById($id)
@@ -113,7 +129,7 @@ class ConsultationCT extends Controller
     $model->closed_at = null;
 
     $lastReply = CtReplyModel::where('id_cthread', $id)->orderBy('created_at', 'desc')->first();
-    
+
     if (isset($lastReply)) {
       if ($lastReply->reply_from == "user") $model->state = "waiting_counselor";
       else $model->state = "waiting_user";
