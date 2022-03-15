@@ -6,6 +6,7 @@ use App\Http\Traits\MenuTraits;
 use App\Models\MenuModel;
 use App\Models\RulesModel;
 use App\Models\StakeholderThreadModel;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
@@ -97,6 +98,39 @@ class StakeholderThreadsCT extends Controller
     return response()->json([
       'detail' => $detail,
       'replies' => $replies,
+    ]);
+  }
+
+  public function closeThreads($id)
+  {
+    $userLoggedIn = Auth::user();
+    $currentUserID = $userLoggedIn->id;
+
+    $model = StakeholderThreadModel::find($id);
+    $model->closed_by = $currentUserID;
+    $model->state = "CLOSED";
+    $model->closed_at = Carbon::now('Asia/Jakarta');
+    $model->save();
+
+    return response()->json([
+      'state' => true,
+      'data' => null,
+      'message' => 'Anda berhasil menutup konsultasi!'
+    ]);
+  }
+
+  public function openThreads($id)
+  {
+    $model = StakeholderThreadModel::find($id);
+    $model->closed_by = null;
+    $model->state = "OPEN";
+    $model->closed_at = null;
+    $model->save();
+
+    return response()->json([
+      'state' => true,
+      'data' => null,
+      'message' => 'Anda berhasil membuka konsultasi!'
     ]);
   }
 }

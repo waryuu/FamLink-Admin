@@ -87,6 +87,8 @@ Route::group(['middleware' => 'auth'], function () {
         // Stakeholder threads
         Route::resource('stakeholder/threads', StakeholderThreadsCT::class);
         Route::get('stakeholder/threads/{id}', [StakeholderThreadsCT::class, 'getThreadsByID']);
+        Route::patch('stakeholder/threads/{id}/close', [StakeholderThreadsCT::class, 'closeThreads']);
+        Route::patch('stakeholder/threads/{id}/open', [StakeholderThreadsCT::class, 'openThreads']);
         // Stakeholder Members
         Route::resource('stakeholder/members', StakeholderMemberCT::class);
         Route::patch('stakeholder/members/restore/{id}', [StakeholderMemberCT::class, 'restoreMember']);

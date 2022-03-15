@@ -45,7 +45,7 @@
                                             <th>Pekerjaan</th>
                                             <th>Nama Stakeholder</th>
                                             <th>Fokus</th>
-                                            <th>Created At</th>
+                                            <th>Waktu dibuat</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </thead>
@@ -58,7 +58,7 @@
                                             <th>Pekerjaan</th>
                                             <th>Nama Stakeholder</th>
                                             <th>Fokus</th>
-                                            <th>Created At</th>
+                                            <th>Waktu dibuat</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </tfoot>
@@ -76,7 +76,7 @@
                                             <th>Pekerjaan</th>
                                             <th>Nama Stakeholder</th>
                                             <th>Fokus</th>
-                                            <th>Created At</th>
+                                            <th>Waktu dibuat</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </thead>
@@ -89,7 +89,7 @@
                                             <th>Pekerjaan</th>
                                             <th>Nama Stakeholder</th>
                                             <th>Fokus</th>
-                                            <th>Created At</th>
+                                            <th>Waktu dibuat</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </tfoot>

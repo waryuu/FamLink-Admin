@@ -64,7 +64,7 @@
                                             <th>Untuk umum?</th>
                                             <th>Ditutup oleh</th>
                                             <th>Waktu ditutup</th>
-                                            <th>Created at</th>
+                                            <th>Waktu dibuat</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </thead>
@@ -77,7 +77,7 @@
                                             <th>Untuk umum?</th>
                                             <th>Ditutup oleh</th>
                                             <th>Waktu ditutup</th>
-                                            <th>Created at</th>
+                                            <th>Waktu dibuat</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </tfoot>
@@ -132,7 +132,7 @@
                                             <th>Lembaga</th>
                                             <th>Ditutup oleh</th>
                                             <th>Waktu ditutup</th>
-                                            <th>Created at</th>
+                                            <th>Waktu dibuat</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </thead>
@@ -146,7 +146,7 @@
                                             <th>Lembaga</th>
                                             <th>Ditutup oleh</th>
                                             <th>Waktu ditutup</th>
-                                            <th>Created at</th>
+                                            <th>Waktu dibuat</th>
                                             <th style="width: 10%">Action</th>
                                         </tr>
                                     </tfoot>

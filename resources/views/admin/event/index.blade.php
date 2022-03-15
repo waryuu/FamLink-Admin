@@ -120,22 +120,10 @@
         render : function(data, type, row) {
             return '<strong class=" col-red" style="font-size: 12px">'+row['start_time']+'</strong>';
         }},
-        // { data: 'end_time', name: 'end_time',
-        // render : function(data, type, row) {
-        //     return '<strong class=" col-red" style="font-size: 12px">'+row['end_time']+'</strong>';
-        // }}
         { data: 'location', name: 'location',
         render : function(data, type, row) {
             return '<strong class=" col-red" style="font-size: 12px">'+row['location']+'</strong>';
         }},
-        // { data: 'description', name: 'description',
-        // render : function(data, type, row) {
-        //     return '<strong class=" col-red" style="font-size: 12px">'+row['description']+'</strong>';
-        // }},
-        // { data: 'registlink', name: 'registlink',
-        // render : function(data, type, row) {
-        //     return '<strong class=" col-red" style="font-size: 12px">'+row['registlink']+'</strong>';
-        // }},
         { data: 'status', name: 'status',
         render : function(data, type, row) {
             if (row['status'] == 1) {

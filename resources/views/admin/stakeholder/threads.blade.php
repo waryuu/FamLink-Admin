@@ -53,7 +53,9 @@
                                         <th>Nama lengkap</th>
                                         <th>Judul</th>
                                         <th>Nama lembaga</th>
-                                        <th>Created at</th>
+                                        <th>Status</th>
+                                        <th>Waktu dibuat</th>
+                                        <th>Waktu ditutup</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -63,7 +65,9 @@
                                         <th>Nama lengkap</th>
                                         <th>Judul</th>
                                         <th>Nama lembaga</th>
-                                        <th>Created at</th>
+                                        <th>Status</th>
+                                        <th>Waktu dibuat</th>
+                                        <th>Waltu ditutup</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </tfoot>
@@ -79,12 +83,14 @@
                         <div class="modal-header">
                             <div>
                                 <span id="writer_date_thread" class='text-muted'></span>
-                                <span id="stakeholder_name_thread" class='text-muted'></span>
+                                <h6 id="stakeholder_name_thread" class='text-muted font-weight-bold'></h6>
                                 <h5 class="modal-title font-weight-bold" id="title_thread" i="modal_title_thread"></h5>
                             </div>
-                            <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <div class='ml-auto d-flex flex-row' id='action_show_thread'>
+                                <button class="close pl-3" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         </div>
                         <img id='img_thread' src=''
                             style='object-fit: contain;height: 18.75rem;width: auto;background: #EEEEEE;' />
@@ -101,7 +107,8 @@
                         <div class="modal-header align-items-center">
                             <h3 class="modal-title font-weight-bold">Ubah Aturan Konsultasi</h3>
                             <div class="action-button">
-                                <button type="button" id="modal_rules_btn_delete" class='ml-1 btn btn-rounded btn-secondary'>
+                                <button type="button" id="modal_rules_btn_delete"
+                                    class='ml-1 btn btn-rounded btn-secondary'>
                                     <i class="fa fa-trash mr-1" aria-hidden="true"></i>
                                     <span>Hapus Aturan</span>
                                 </button>
@@ -227,12 +234,32 @@
                     }
                 },
                 {
+                    data: 'state',
+                    name: 'state',
+                    render: function(data, type, row) {
+                        if (row['state'] == 'OPEN') {
+                            return '<button class="btn btn-success">Dibuka</button>';
+                        } else {
+                            return '<button class="btn btn-danger">Ditutup</button>';
+                        }
+                    }
+                },
+                {
                     data: 'created_at',
                     name: 'created_at',
                     render: function(data, type, row) {
                         var date = toLocaleDate(row['created_at']);
                         var time = toLocaleTime(row['created_at']);
                         return `<strong class=" col-red" style="font-size: 12px">${date}, ${time}</strong>`;
+                    }
+                },
+                {
+                    data: 'closed_at',
+                    name: 'closed_at',
+                    render: function(data, type, row) {
+                        var date = toLocaleDate(row['closed_at']);
+                        var time = toLocaleTime(row['closed_at']);
+                        return `<strong class=" col-red" style="font-size: 12px">${row['closed_at'] === null ? '—' : `${date}, ${time}`}</strong>`;
                     }
                 },
                 {
@@ -283,7 +310,8 @@
                 "_token": token,
             }
 
-            showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan menghapus aturan?', 'Aturan berhasil dihapus!',
+            showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan menghapus aturan?',
+                'Aturan berhasil dihapus!',
                 endpoint, 'DELETE', body, table_id, true);
         }
 
@@ -342,9 +370,15 @@
             $.get(base_endpoint + id, function(responseText) {
                 if (typeof responseText === 'object') {
                     var date = toLocaleDate(responseText.detail.created_at);
-                    var isClosed = responseText.detail.closed_at != null;
+                    var isClosed = responseText.detail.state == "CLOSED";
                     $("#writer_date_thread").html(`${responseText.detail.name_user}  •  ${date}`);
                     $("#stakeholder_name_thread").html(responseText.detail.name_stakeholder);
+                    $("#action_show_thread").children('#btn_action_show_thread').first().remove();
+                    $("#action_show_thread").prepend(
+                        `<button id='btn_action_show_thread' class='btn pr-3 pl-3 btn-rounded ${isClosed ? 'btn-secondary' : 'btn-primary'}' type="button" onclick='closeThread(${id}, ${isClosed})'>
+                            <i class="fa ${isClosed ? 'fa-envelope-open' : 'fa-ban'}" aria-hidden="true"></i>
+                            <span>${isClosed ? 'Buka' : 'Tutup'}</span></button>`
+                    );
                     $("#title_thread").html(responseText.detail.title);
                     if (responseText.detail.images != null) {
                         $("#img_thread").css('display', 'block');
@@ -363,6 +397,31 @@
                     $(modal_show_threads).modal('show');
                 }
             });
+        }
+
+        function closeThread(id, isClosed) {
+            var endpoint = base_endpoint + id;
+            var body = {
+                "id": id,
+                "_token": token,
+            }
+            var message = '';
+            var feedback = '';
+
+            if (isClosed) {
+                endpoint += '/open';
+                message = 'membuka';
+                feedback = 'dibuka';
+            } else {
+                endpoint += '/close';
+                message = 'menutup';
+                feedback = 'ditutup';
+            }
+            
+            showDialogConfirmationAjax(null, `Apakah anda yakin akan ${message} konsultasi ini?`,
+                `Konsultasi berhasil ${feedback}!`,
+                endpoint, 'PATCH', body, table_id)
+            $('#modal_show_threads').modal('hide');
         }
 
         function showReplies(arrReplies) {
