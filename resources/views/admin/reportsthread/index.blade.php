@@ -107,7 +107,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <a href="{{ $model['base_url'] }}download/excel">
+                                <a href="{{ $model['base_url'] }}download">
                                     <button class="btn btn-success btn-round ml-auto">
                                         <i class="fa fa-download"></i>
                                         Download Data

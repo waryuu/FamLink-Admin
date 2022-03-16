@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StakeholderThreadExport;
 use App\Http\Traits\MenuTraits;
 use App\Models\MenuModel;
 use App\Models\StakeholderThreadModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class ReportStThreadsCT extends Controller
@@ -71,5 +73,10 @@ class ReportStThreadsCT extends Controller
         } else {
             return Datatables::of($allThreads->get())->make(true);
         }
+    }
+
+    public function downloadExcel()
+    {
+        return Excel::download(new StakeholderThreadExport, 'FAMLINK_LAPORAN_DISKUSI_JEJARING_' . date('Y-m-d_His') . '.xlsx');
     }
 }

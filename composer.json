@@ -14,12 +14,14 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "html2text/html2text": "^4.3",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.1",
         "laravelcollective/html": "^6.2",
         "maatwebsite/excel": "^3.1",
         "realrashid/sweet-alert": "^3.2",
+        "soundasleep/html2text": "^2.0",
         "spatie/laravel-permission": "^3.18",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
@@ -45,7 +47,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "exclude-from-classmap": [
+            "/vendor/erusev/parsedown-extra/test"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

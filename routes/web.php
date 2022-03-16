@@ -134,9 +134,12 @@ Route::group(['middleware' => 'auth'], function () {
         // Laporan Konsultasi
         Route::get('reportconsultation', [ReportConsultationCT::class, 'index']);
         Route::get('reportconsultation/datatable/list/{filter}', [ConsultationCT::class, 'getTypeReportConsultation']);
+        Route::get('reportconsultation/download', [ReportConsultationCT::class, 'downloadExcel']);
+        Route::get('reportconsultation/query', [ReportConsultationCT::class, 'getQuery']);
 
         // Laporan Diskusi Stakeholder
         Route::get('reportsthreads', [ReportStThreadsCT::class, 'index']);
         Route::get('reportsthreads/datatable/list/{filter}', [ReportStThreadsCT::class, 'getThreadsByFilter']);
+        Route::get('reportsthreads/download', [ReportStThreadsCT::class, 'downloadExcel']);
     });
 });
