@@ -35,7 +35,7 @@ class ConsultationSheets implements FromArray, WithHeadings, WithTitle, ShouldAu
             $row->name_stakeholder,
             $row->type,
             $row->title,
-            strip_tags(htmlspecialchars_decode($row->content)),
+            strip_tags($row->content),
             $reply_from,
             $row->state,
             $row->open_to_all,

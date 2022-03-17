@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\MenuTraits;
 use App\Models\KonselorModel;
 use App\Models\MenuModel;
+use App\Models\RulesModel;
 use App\Models\StakeholderModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -61,10 +62,19 @@ class CounselorCT extends Controller
 
   public function index()
   {
+    $menu = MenuModel::where('title', $this->menuName)->select('id')->first();
+    $rules = RulesModel::where('id_menu', $menu->id)->first();
+    
     $model['counselors'] = $this->getKonselor()->where('konselors.status', '=', 1)->get();
     $model['users'] = $this->getUser();
     $model['stakeholders'] = $this->getStakeholder();
     $model['base_url'] = '/admin/counselor/';
+    $model['rules_url'] = '/admin/rules';
+    $model['menu_id'] = $menu->id;
+
+    if (isset($rules)) $model['rules'] = $rules;
+    else $model['rules'] = null;
+    
     return view('admin.counselor.index', compact('model'));
   }
 

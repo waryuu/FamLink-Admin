@@ -135,7 +135,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('reportconsultation', [ReportConsultationCT::class, 'index']);
         Route::get('reportconsultation/datatable/list/{filter}', [ConsultationCT::class, 'getTypeReportConsultation']);
         Route::get('reportconsultation/download', [ReportConsultationCT::class, 'downloadExcel']);
-        Route::get('reportconsultation/query', [ReportConsultationCT::class, 'getQuery']);
 
         // Laporan Diskusi Stakeholder
         Route::get('reportsthreads', [ReportStThreadsCT::class, 'index']);

@@ -7,14 +7,14 @@
                 <h4 class="page-title ml-0 mr-auto">Master Stakeholder</h4>
                 <a href="#" class="text-light">
                     @if ($model['rules'] == null)
-                        <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='rules_section'
-                            data-toggle="modal" data-target="#modal_create_rules">
+                        <button type="button" class='ml-1 btn btn-rounded btn-info' id='rules_section' data-toggle="modal"
+                            data-target="#modal_create_rules">
                             <i class="fa fa-book mr-1" aria-hidden="true"></i>
                             <span>BUAT ATURAN</span>
                         </button>
                     @else
-                        <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='rules_section'
-                            data-toggle="modal" data-target="#modal_edit_rules">
+                        <button type="button" class='ml-1 btn btn-rounded btn-info' id='rules_section' data-toggle="modal"
+                            data-target="#modal_edit_rules">
                             <i class="fa fa-book mr-1" aria-hidden="true"></i>
                             <span>ATURAN TERSIMPAN</span>
                         </button>
@@ -107,8 +107,7 @@
                         <div class="modal-header align-items-center">
                             <h3 class="modal-title font-weight-bold">Ubah Aturan Konsultasi</h3>
                             <div class="action-button">
-                                <button type="button" id="modal_rules_btn_delete"
-                                    class='ml-1 btn btn-rounded btn-secondary'>
+                                <button type="button" id="modal_rules_btn_delete" class='btn btn-rounded btn-danger'>
                                     <i class="fa fa-trash mr-1" aria-hidden="true"></i>
                                     <span>Hapus Aturan</span>
                                 </button>
@@ -128,8 +127,8 @@
                                         <div>
                                             <textarea id="summernote_edit" name="rule_edit" placeholder="Masukan Aturan disini" required>
                                                 @if ($model['rules'] != null)
-                                                    {{ $model['rules']->rule }}
-                                                @endif
+{{ $model['rules']->rule }}
+@endif
                                             </textarea>
                                         </div>
                                     </div>
@@ -212,25 +211,28 @@
                     data: 'name_user',
                     name: 'name_user',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['name_user'] +
-                            '</strong>';
+                        return '<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 5.5rem"><strong>' +
+                            row['name_user'] +
+                            '</strong></p>';
                     }
                 },
                 {
                     data: 'title',
                     name: 'title',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['title'] +
-                            '</strong>';
+                        return '<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 6rem"><strong>' +
+                            row['title'] +
+                            '</strong></p>';
                     }
                 },
                 {
                     data: 'name_stakeholder',
                     name: 'name_stakeholder',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row[
+                        return '<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width:6.2rem"><strong>' +
+                            row[
                                 'name_stakeholder'] +
-                            '</strong>';
+                            '</strong></p>';
                     }
                 },
                 {
@@ -238,9 +240,9 @@
                     name: 'state',
                     render: function(data, type, row) {
                         if (row['state'] == 'OPEN') {
-                            return '<button class="btn btn-success">Dibuka</button>';
+                            return '<button class="btn btn-rounded btn-success btn-sm active" aria-pressed="true"><strong>DIBUKA</strong></button>';
                         } else {
-                            return '<button class="btn btn-danger">Ditutup</button>';
+                            return '<button class="btn btn-rounded btn-danger btn-sm active" aria-pressed="true"><strong>DITUTUP</strong></button>';
                         }
                     }
                 },
@@ -250,7 +252,7 @@
                     render: function(data, type, row) {
                         var date = toLocaleDate(row['created_at']);
                         var time = toLocaleTime(row['created_at']);
-                        return `<strong class=" col-red" style="font-size: 12px">${date}, ${time}</strong>`;
+                        return `<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 5.2rem"><strong>${date}, ${time}</strong></p>`;
                     }
                 },
                 {
@@ -259,7 +261,7 @@
                     render: function(data, type, row) {
                         var date = toLocaleDate(row['closed_at']);
                         var time = toLocaleTime(row['closed_at']);
-                        return `<strong class=" col-red" style="font-size: 12px">${row['closed_at'] === null ? '—' : `${date}, ${time}`}</strong>`;
+                        return `<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 5.2rem"><strong>${row['closed_at'] === null ? '—' : `${date}, ${time}`}</strong></p>`;
                     }
                 },
                 {
@@ -417,7 +419,7 @@
                 message = 'menutup';
                 feedback = 'ditutup';
             }
-            
+
             showDialogConfirmationAjax(null, `Apakah anda yakin akan ${message} konsultasi ini?`,
                 `Konsultasi berhasil ${feedback}!`,
                 endpoint, 'PATCH', body, table_id)

@@ -15,14 +15,14 @@
                     PRIVAT</button>
                 <a href="#" class="text-light">
                     @if ($model['rules'] == null)
-                        <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='rules_section'
-                            data-toggle="modal" data-target="#modal_create_rules">
+                        <button type="button" class='ml-1 btn btn-rounded btn-info' id='rules_section' data-toggle="modal"
+                            data-target="#modal_create_rules">
                             <i class="fa fa-book mr-1" aria-hidden="true"></i>
                             <span>BUAT ATURAN</span>
                         </button>
                     @else
-                        <button type="button" class='ml-1 btn btn-rounded btn-secondary' id='rules_section'
-                            data-toggle="modal" data-target="#modal_edit_rules">
+                        <button type="button" class='ml-1 btn btn-rounded btn-info' id='rules_section' data-toggle="modal"
+                            data-target="#modal_edit_rules">
                             <i class="fa fa-book mr-1" aria-hidden="true"></i>
                             <span>ATURAN TERSIMPAN</span>
                         </button>
@@ -163,7 +163,7 @@
                         <div class="modal-header align-items-center">
                             <h3 class="modal-title font-weight-bold">Ubah Aturan Konsultasi</h3>
                             <div class="action-button">
-                                <button type="button" id="modal_rules_btn_delete" class='ml-1 btn btn-rounded btn-secondary'>
+                                <button type="button" id="modal_rules_btn_delete" class='ml-1 btn btn-rounded btn-danger'>
                                     <i class="fa fa-trash mr-1" aria-hidden="true"></i>
                                     <span>Hapus Aturan</span>
                                 </button>
@@ -183,8 +183,8 @@
                                         <div>
                                             <textarea id="summernote_edit" name="rule_edit" placeholder="Masukan Aturan disini" required>
                                                 @if ($model['rules'] != null)
-                                                    {{ $model['rules']->rule }}
-                                                @endif
+{{ $model['rules']->rule }}
+@endif
                                             </textarea>
                                         </div>
                                     </div>
@@ -272,29 +272,32 @@
                     data: 'nama_lengkap',
                     name: 'nama_lengkap',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['nama_lengkap'] +
-                            '</strong>';
+                        return '<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 6rem"><strong>' +
+                            row['nama_lengkap'] + '</strong></p>';
                     }
                 },
                 {
                     data: 'title',
                     name: 'title',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['title'] +
-                            '</strong>';
+                        return '<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 10rem"><strong>' +
+                            row['title'] + '</strong></p>';
                     }
                 },
                 {
                     data: 'state',
                     name: 'state',
                     render: function(data, type, row) {
-                        var textTag = '<strong class="col-red text-center" style="font-size: 12px">';
+                        var textTag =
+                            `<button ${row['state'] == "closed" ? "disabled" : ""} class="mt-1 mb-1 btn btn-sm btn-rounded `;
                         var kodeForNotified = row['kode_user'];
                         var nameForNotified = row['nama_konselor'];
-                        if (row['state'] == 'closed') textTag += 'Ditutup</strong>';
-                        if (row['state'] == 'waiting_user') textTag += 'Menunggu pengguna</strong>';
+                        if (row['state'] == 'closed') textTag +=
+                            'btn-danger"><strong>DITUTUP</strong></button>';
+                        if (row['state'] == 'waiting_user') textTag +=
+                            'btn-success"><strong>MENUNGGU PENGGUNA</strong></button>';
                         if (row['state'] == 'waiting_counselor') {
-                            textTag += 'Menunggu konselor</strong>';
+                            textTag += 'btn-success"><strong>MENUNGGU KONSELOR</strong></button>';
                             kodeForNotified = row['kode_konselor'];
                             nameForNotified = row['nama_lengkap'];
                         }
@@ -311,7 +314,7 @@
                     var isNotOpen = row['open_to_all'] == 0;
                     var isClosed = row['closed_at'] != null;
                     var text =
-                        `<strong class="col-red" style="font-size: 12px">${isNotOpen ? 'Tidak' : 'Terbuka'}</strong>`;
+                        `<button ${isClosed ? 'disabled' : ''} class="mb-1 btn btn-sm btn-rounded ${isNotOpen ? 'btn-danger' : 'btn-success'}"><strong>${isNotOpen ? 'TIDAK' : 'TERBUKA'}</strong></button>`;
                     var action =
                         `<button type='button' ${isClosed ? 'disabled' : ''} class='mt-1 btn btn-primary ${isNotOpen ? 'btn-primary' : 'btn-secondary'}' onclick='doOpenPublicConsultation(${row['id']}, ${row['open_to_all']})'>${isNotOpen ? 'Buka' : 'Tutup'}</button>`;
                     return `<div class="mt-2 mb-3 text-center">${text + action}</div>`;
@@ -321,17 +324,16 @@
                     data: 'nama_konselor',
                     name: 'nama_konselor',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['nama_konselor'] +
-                            '</strong>';
+                        return '<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 6rem"><strong>' +
+                            row['nama_konselor'] + '</strong></p>';
                     }
                 },
                 {
                     data: 'name_stakeholder',
                     name: 'name_stakeholder',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row[
-                                'name_stakeholder'] +
-                            '</strong>';
+                        return '<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 6rem"><strong>' +
+                            row['name_stakeholder'] + '</strong></p>';
                     }
                 }
             ];
@@ -350,7 +352,7 @@
                     render: function(data, type, row) {
                         var date = toLocaleDate(row['closed_at']);
                         var time = toLocaleTime(row['closed_at']);
-                        return `<strong class=" col-red" style="font-size: 12px">${row['closed_at'] === null ? '—' : `${date}, ${time}`}</strong>`;
+                        return `<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 5.2rem;"><strong>${row['closed_at'] === null ? '—' : `${date}, ${time}`}</strong></p>`;
                     }
                 },
                 {
@@ -359,7 +361,7 @@
                     render: function(data, type, row) {
                         var date = toLocaleDate(row['created_at']);
                         var time = toLocaleTime(row['created_at']);
-                        return `<strong class=" col-red" style="font-size: 12px">${date}, ${time}</strong>`;
+                        return `<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 5.2rem;"><strong>${date}, ${time}</strong></p>`;
                     }
                 },
                 {
@@ -415,7 +417,8 @@
             }
 
             var target_table_id = currentSection === "public" ? table_id_public : table_id_private
-            showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan menghapus aturan?', 'Aturan berhasil dihapus!',
+            showDialogConfirmationAjax(modal_edit_rules, 'Apakah anda yakin akan menghapus aturan?',
+                'Aturan berhasil dihapus!',
                 endpoint, 'DELETE', body, target_table_id, true);
         }
 

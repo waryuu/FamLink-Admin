@@ -55,6 +55,7 @@
                                             <th>Nama Lembaga</th>
                                             <th>Tanggal dibentuk</th>
                                             <th>Fokus Lembaga</th>
+                                            <th>Deskripsi</th>
                                             <th>Email</th>
                                             <th>Narahubung</th>
                                             <th>Nomor Narahubung</th>
@@ -69,6 +70,7 @@
                                             <th>Nama Lembaga</th>
                                             <th>Tanggal dibentuk</th>
                                             <th>Fokus Lembaga</th>
+                                            <th>Deskripsi</th>
                                             <th>Email</th>
                                             <th>Narahubung</th>
                                             <th>Nomor Narahubung</th>
@@ -88,6 +90,7 @@
                                             <th>Nama Lembaga</th>
                                             <th>Tanggal dibentuk</th>
                                             <th>Fokus Lembaga</th>
+                                            <th>Deskripsi</th>
                                             <th>Email</th>
                                             <th>Narahubung</th>
                                             <th>Nomor Narahubung</th>
@@ -102,6 +105,7 @@
                                             <th>Nama Lembaga</th>
                                             <th>Tanggal dibentuk</th>
                                             <th>Fokus Lembaga</th>
+                                            <th>Deskripsi</th>
                                             <th>Email</th>
                                             <th>Narahubung</th>
                                             <th>Nomor Narahubung</th>
@@ -157,6 +161,13 @@
                                                         </label>
                                                         <input class="form-control" type="text" id="focus_stakeholder"
                                                             name="focus" required />
+                                                    </div>
+                                                    <div class="w-100 mt-4">
+                                                        <label for="parent_header">
+                                                            Deskripsi Singkat Lembaga <span class="required-label">*</span>
+                                                        </label>
+                                                        <textarea rows="12" wrap="soft" class="form-control" type="text" id="description" name="description"
+                                                            required></textarea>
                                                     </div>
                                                     <div class="w-100 mt-4">
                                                         <label for="parent_header">
@@ -269,6 +280,13 @@
                                                         </label>
                                                         <input class="form-control" type="text"
                                                             id="edit_focus_stakeholder" name="focus" required />
+                                                    </div>
+                                                    <div class="w-100 mt-4">
+                                                        <label for="parent_header">
+                                                            Deskripsi Singkat Lembaga <span class="required-label">*</span>
+                                                        </label>
+                                                        <textarea rows="12" wrap="soft" class="form-control" type="text" id="edit_description" name="description"
+                                                            required></textarea>
                                                     </div>
                                                     <div class="w-100 mt-4">
                                                         <label for="parent_header">
@@ -479,6 +497,14 @@
                     }
                 },
                 {
+                    data: 'description',
+                    name: 'description',
+                    render: function(data, type, row) {
+                        return '<p class="mt-1 mb-1 col-red" style="font-size: 12px; min-width: 20rem;"><strong>' +
+                            row['description'] + '</strong></p>';
+                    }
+                },
+                {
                     data: 'email',
                     name: 'email',
                     render: function(data, type, row) {
@@ -572,6 +598,9 @@
                 .concat(actionNonActive)));
 
             $(modal_form).on('hidden.bs.modal', function(e) {
+                $(this).find('form').trigger('reset');
+            })
+            $(modalEditButtonId).on('hidden.bs.modal', function(e) {
                 $(this).find('form').trigger('reset');
             })
             $(modalEditButtonId).click(function(e) {
@@ -702,6 +731,7 @@
                 $("#edit_name_stakeholder").val(responseText.name);
                 $("#edit_established").val(responseText.established);
                 $("#edit_focus_stakeholder").val(responseText.focus);
+                $("#edit_description").val(responseText.description);
                 $("#edit_email").val(responseText.email);
                 $("#edit_cp_name").val(responseText.cp_name);
                 $("#edit_cp_number").val(responseText.cp_number);
@@ -833,6 +863,7 @@
                 var name = $("#edit_name_stakeholder").val();
                 var established = $("#edit_established").val();
                 var focus = $("#edit_focus_stakeholder").val();
+                var description = $("#edit_description").val();
                 var email = $("#edit_email").val();
                 var cp_name = $("#edit_cp_name").val();
                 var cp_number = $("#edit_cp_number").val();
@@ -853,6 +884,7 @@
                     "cp_name": cp_name == "" ? null : cp_name,
                     "cp_number": cp_number == "" ? null : cp_number,
                     "focus": focus,
+                    "description": description,
                     "email": email == "" ? null : email,
                     "id_province": id_province,
                     "id_regency": id_regency,
