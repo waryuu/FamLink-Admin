@@ -127,8 +127,8 @@
                                         <div>
                                             <textarea id="summernote_edit" name="rule_edit" placeholder="Masukan Aturan disini" required>
                                                 @if ($model['rules'] != null)
-{{ $model['rules']->rule }}
-@endif
+                                                    {{ $model['rules']->rule }}
+                                                @endif
                                             </textarea>
                                         </div>
                                     </div>
@@ -420,8 +420,8 @@
                 feedback = 'ditutup';
             }
 
-            showDialogConfirmationAjax(null, `Apakah anda yakin akan ${message} konsultasi ini?`,
-                `Konsultasi berhasil ${feedback}!`,
+            showDialogConfirmationAjax(null, `Apakah anda yakin akan ${message} diskusi ini?`,
+                `Diskusi berhasil ${feedback}!`,
                 endpoint, 'PATCH', body, table_id)
             $('#modal_show_threads').modal('hide');
         }
