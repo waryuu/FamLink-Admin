@@ -55,6 +55,7 @@ class StakeholderCT extends Controller
       'name' => 'required',
       'established' => 'required',
       'focus' => 'required',
+      'description' => 'required',
       'id_province' => 'required',
       'id_regency' => 'required',
       'cp_number' => 'min:8|max:13',
@@ -66,6 +67,7 @@ class StakeholderCT extends Controller
     $model->established = $request->established;
     $model->focus = $request->focus;
     $model->email = $request->email;
+    $model->description = $request->description;
     $model->cp_name = $request->cp_name;
     $model->cp_number = $request->cp_number;
     $model->id_province = $request->id_province;
@@ -90,6 +92,7 @@ class StakeholderCT extends Controller
       'name' => 'required',
       'established' => 'required',
       'focus' => 'required',
+      'description' => 'required',
       'id_province' => 'required',
       'id_regency' => 'required',
     ]);
@@ -99,6 +102,7 @@ class StakeholderCT extends Controller
     $model->established = $request->established;
     $model->focus = $request->focus;
     $model->email = $request->email;
+    $model->description = $request->description;
     $model->cp_name = $request->cp_name;
     $model->cp_number = $request->cp_number;
     $model->id_province = $request->id_province;
