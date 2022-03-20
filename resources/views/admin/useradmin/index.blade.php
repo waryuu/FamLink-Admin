@@ -228,10 +228,8 @@
             $('#edit_name').val(data.data.name);
             $('#edit_email').val(data.data.email);
             $('#edit_username').val(data.data.username);
-            $('#edit_role').append($("<option></option>")
-            .attr("value", data.role.id)
-            .attr("selected", true)
-            .text(data.role.name))
+            $('#edit_role').val(data.role.id);
+            
         })
     }
 
