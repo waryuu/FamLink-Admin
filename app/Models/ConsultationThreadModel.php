@@ -12,7 +12,7 @@ class ConsultationThreadModel extends Model
     protected $table = "consultationthreads";
     protected $primaryKey = "id";
 
-    protected $fillable = ['id_user', 'id_konselor', 'type', 'title', 'content'];
+    protected $fillable = ['id_user', 'id_konselor', 'type', 'title', 'content', 'state', 'status', 'closed_by', 'role_who_closed', 'closed_at', 'rating'];
 
     protected function serializeDate(DateTimeInterface $date)
     {

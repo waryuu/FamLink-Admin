@@ -12,7 +12,7 @@ class KonselorModel extends Model
     protected $table = "konselors";
     protected $primaryKey = "id";
 
-    protected $fillable = ['id_user', 'id_stakeholder'];
+    protected $fillable = ['id_user', 'id_stakeholder', 'expertise'];
 
     protected function serializeDate(DateTimeInterface $date)
     {
