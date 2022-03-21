@@ -129,6 +129,7 @@ class ConsultationCT extends Controller
     $model->closed_by = null;
     $model->role_who_closed = null;
     $model->closed_at = null;
+    $model->rating = null;
 
     $lastReply = CtReplyModel::where('id_cthread', $id)->orderBy('created_at', 'desc')->first();
 
