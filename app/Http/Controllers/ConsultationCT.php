@@ -8,6 +8,7 @@ use App\Models\CtReplyModel;
 use App\Models\MenuModel;
 use App\Models\RulesModel;
 use App\Models\StakeholderModel;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,8 @@ class ConsultationCT extends Controller
 
   function __construct()
   {
+    $this->fcm_key = env("FCM_KEY", "");;
+    
     $this->middleware('auth');
     $this->middleware(function ($request, $next) {
       $this->user = Auth::user();
@@ -108,13 +111,27 @@ class ConsultationCT extends Controller
   {
     $userLoggedIn = Auth::user();
     $currentUserID = $userLoggedIn->id;
+   
+    $thread = ConsultationThreadModel::find($id);
+    $userWhoAsked = UserModel::find($thread->id_user);
 
     $model = ConsultationThreadModel::find($id);
-    $model->closed_by = $currentUserID; // supervisor yang mana?
-    $model->state = "closed"; // 2
-    $model->role_who_closed = "supervisor"; // 1
+    $model->closed_by = $currentUserID;
+    $model->state = "closed";
+    $model->role_who_closed = "supervisor";
     $model->closed_at = Carbon::now();
     $model->save();
+
+    $fcm_data['to'] = "/topics/USER_" . $userWhoAsked->kode_peserta;
+
+    $data['title'] = 'Konsultasi selesai, Yuk berikan penilaianmu!';
+    $data['body'] = 'Pengawas menutup konsultasi kamu yang berjudul ' . $thread->title;
+    $fcm_data['data'] = $data;
+
+    $response = Http::withHeaders([
+        'Authorization' => 'key=' . $this->fcm_key,
+        'Content-Type' => 'application/json'
+    ])->post('https://fcm.googleapis.com/fcm/send', $fcm_data);
 
     return response()->json([
       'state' => true,
