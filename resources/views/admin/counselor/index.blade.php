@@ -55,6 +55,7 @@
                                         <tr>
                                             <th style="width: 7%">ID</th>
                                             <th>Nama Lengkap</th>
+                                            <th>Keahlian</th>
                                             <th style="width: 7%">JK</th>
                                             <th>Edukasi</th>
                                             <th>Pekerjaan</th>
@@ -68,6 +69,7 @@
                                         <tr>
                                             <th style="width: 7%">ID</th>
                                             <th>Nama Lengkap</th>
+                                            <th>Keahlian</th>
                                             <th style="width: 7%">JK</th>
                                             <th>Edukasi</th>
                                             <th>Pekerjaan</th>
@@ -86,6 +88,7 @@
                                         <tr>
                                             <th style="width: 7%">ID</th>
                                             <th>Nama Lengkap</th>
+                                            <th>Keahlian</th>
                                             <th style="width: 7%">JK</th>
                                             <th>Edukasi</th>
                                             <th>Pekerjaan</th>
@@ -99,6 +102,7 @@
                                         <tr>
                                             <th style="width: 7%">ID</th>
                                             <th>Nama Lengkap</th>
+                                            <th>Keahlian</th>
                                             <th style="width: 7%">JK</th>
                                             <th>Edukasi</th>
                                             <th>Pekerjaan</th>
@@ -118,10 +122,7 @@
                                         <div class="modal-header border-0">
                                             <h5 class="modal-title">
                                                 <span class="fw-mediumbold">
-                                                    New
-                                                </span>
-                                                <span class="fw-light">
-                                                    Data
+                                                    Tambah Konselor
                                                 </span>
                                             </h5>
                                             <button type="button" class="close" data-dismiss="modal"
@@ -135,9 +136,9 @@
                                             <div class="modal-body">
                                                 <div class="card-body">
                                                     <div class="form-group form-show-validation row w-100">
-                                                        <div id="user_selection" class="row w-100">
+                                                        <div id="user_selection" class="w-100">
                                                             <label for="parent_header">
-                                                                Pilih pengguna <span class="required-label">*</span>
+                                                                Pilih Pengguna <span class="required-label">*</span>
                                                             </label>
                                                             <input class="form-control" type="search" autoComplete="on"
                                                                 list="konselor_list" id="id_user" name="id_user" required
@@ -150,7 +151,7 @@
                                                                 @endforeach
                                                             </datalist>
                                                         </div>
-                                                        <div id="stakeholder_selection" class="row w-100 mt-4">
+                                                        <div id="stakeholder_selection" class="w-100 mt-4">
                                                             <label for="parent_header">Stakeholder <span
                                                                     class="required-label">*</span></label>
                                                             <input class="form-control" type="search" autoComplete="on"
@@ -164,13 +165,79 @@
                                                                 @endforeach
                                                             </datalist>
                                                         </div>
+                                                        <div class="w-100 mt-4">
+                                                            <label for="parent_header">
+                                                                Keahlian Konselor <span class="required-label">*</span>
+                                                            </label>
+                                                            <input class="form-control" type="text" id="expertise"
+                                                                name="expertise" required />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer border-0">
                                                 <button type="submit" id="addRowButton" class="btn btn-primary">Add</button>
                                                 <button type="button" class="btn btn-danger"
-                                                    data-dismiss="modal">Close</button>
+                                                    data-dismiss="modal">Batal</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="modal_edit_counselor" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+
+                                    <div class="modal-content">
+                                        <div class="modal-header border-0">
+                                            <h5 class="modal-title">
+                                                <span class="fw-mediumbold">
+                                                    Edit Konselor
+                                                </span>
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        
+                                        <form id="edit_form_validation" action="{{ '/admin/counselor' }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" id="edit_binding_id"
+                                                name="category_edit_binding_id" value="">
+                                            <div class="modal-body">
+                                                <div class="card-body">
+                                                    <div class="form-group form-show-validation row w-100">
+                                                        <div id="user_selection" class="w-100">
+                                                            <label for="parent_header">
+                                                                Pilih Pengguna <span class="required-label">*</span>
+                                                            </label>
+                                                            <input class="form-control" id="edit_id_user" name="id_user" required
+                                                                style="width: 100%" disabled/>
+                                                            <div id="edit_nama_user"></div>
+                                                        </div>
+                                                        <div id="stakeholder_selection" class="w-100 mt-4">
+                                                            <label for="parent_header">Stakeholder <span
+                                                                    class="required-label">*</span></label>
+                                                            <input class="form-control" id="edit_id_stakeholder"
+                                                                name="id_stakeholder" required disabled/>
+                                                            <div id="edit_nama_stakeholder"></div>
+                                                        </div>
+                                                        <div class="w-100 mt-4">
+                                                            <label for="parent_header">
+                                                                Keahlian Konselor <span class="required-label">*</span>
+                                                            </label>
+                                                            <input class="form-control" type="text" id="edit_expertise"
+                                                                name="expertise" required />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <button type="button" id="btn_edit_counselor" class="btn btn-primary">Ubah</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    data-dismiss="modal">Batal</button>
                                             </div>
                                         </form>
 
@@ -209,8 +276,8 @@
                                                         <div>
                                                             <textarea id="summernote_edit" name="rule_edit" placeholder="Masukan Aturan disini" required>
                                                                 @if ($model['rules'] != null)
-{{ $model['rules']->rule }}
-@endif
+                                                                    {{ $model['rules']->rule }}
+                                                                @endif
                                                             </textarea>
                                                         </div>
                                                     </div>
@@ -287,6 +354,9 @@
         var root_nonactive_table = '#root_nonactive_table';
         var table_view_nonactive = '#table_view_nonactive';
 
+        var btn_edit_counselor = "#btn_edit_counselor";
+        var edit_form_validation = "#edit_form_validation";
+
         var modal_create_rules = "#modal_create_rules";
         var modal_edit_rules = "#modal_edit_rules";
         var modal_rules_btn_create = "#modal_rules_btn_create";
@@ -309,6 +379,15 @@
                     render: function(data, type, row) {
                         return '<p class="mb-1 mt-1 col-red" style="font-size: 12px; min-width: 6rem"><strong>' +
                             row['nama_lengkap'] +
+                            '</strong></p>';
+                    }
+                },
+                {
+                    data: 'expertise',
+                    name: 'expertise',
+                    render: function(data, type, row) {
+                        return '<p class="mb-1 mt-1 col-red" style="font-size: 12px; min-width: 6rem"><strong>' +
+                            row['expertise'] +
                             '</strong></p>';
                     }
                 },
@@ -368,8 +447,9 @@
                 data: 'id',
                 name: 'action',
                 render: function(data, type, row) {
-                    return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert(' +
-                        row['id'] + ')"><i class="fa fa-times"></i></button></div>';
+                    return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="Ubah" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="editExpertise(' +
+                        row['id'] + ')"><i class="fa fa-edit"></i></button> <button type="button" data-toggle="tooltip" title="Hapus" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert(' +
+                        row['id'] + ')"><i class="fa fa-times"></i></button> </div>';
                 }
             }];
             var actionNonActive = [{
@@ -406,7 +486,43 @@
             $(modal_rules_btn_delete).click(function(e) {
                 deleteRules(e);
             });
+            $(btn_edit_counselor).click(function(e) {
+                saveEditExpertise();
+            });
         });
+
+        function saveEditExpertise() {
+            var valid = $(edit_form_validation).valid();
+            if (valid) {
+                var id = $("#edit_binding_id").val();
+                var id_user = $("#edit_id_user").val();
+                var id_stakeholder = $("#edit_id_stakeholder").val();
+                var expertise = $("#edit_expertise").val();
+                var body = {
+                    "_token": token,
+                    "id": id,
+                    "id_user": id_user,
+                    "id_stakeholder": id_stakeholder,
+                    "expertise": expertise,
+                };
+
+                var endpoint = base_endpoint + id;
+                showDialogConfirmationAjax('#modal_edit_counselor', 'Apakah anda yakin akan mengupdate data?',
+                    'Update data berhasil!', endpoint, 'PUT', body, table_id);
+            }
+        }
+
+        function editExpertise(id) {
+            $.get(base_endpoint + id + '/edit', function(data) {
+                $('#modal_edit_counselor').modal('show');
+                $('#edit_binding_id').val(data.data.id);
+                $('#edit_id_user').val(data.data.id_user);
+                $('#edit_nama_user').text("Nama Lengkap : " + data.data.nama_lengkap);
+                $('#edit_id_stakeholder').val(data.data.id_stakeholder);
+                $('#edit_nama_stakeholder').text("Nama Lembaga : " + data.data.nama_stakeholder);
+                $('#edit_expertise').val(data.data.expertise);
+            })
+        }
 
         function deleteRules() {
             var id = $("#rules_edit_binding_id").val();

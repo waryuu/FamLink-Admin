@@ -64,7 +64,7 @@ class CounselorCT extends Controller
   {
     $menu = MenuModel::where('title', $this->menuName)->select('id')->first();
     $rules = RulesModel::where('id_menu', $menu->id)->first();
-    
+
     $model['counselors'] = $this->getKonselor()->where('konselors.status', '=', 1)->get();
     $model['users'] = $this->getUser();
     $model['stakeholders'] = $this->getStakeholder();
@@ -74,7 +74,7 @@ class CounselorCT extends Controller
 
     if (isset($rules)) $model['rules'] = $rules;
     else $model['rules'] = null;
-    
+
     return view('admin.counselor.index', compact('model'));
   }
 
@@ -84,17 +84,31 @@ class CounselorCT extends Controller
     return Datatables::of($konselor)->make(true);
   }
 
+
+  public function edit($id)
+  {
+    $model = KonselorModel::where('konselors.id', $id)->join('m_user', 'konselors.id_user', '=', 'm_user.id')
+      ->join('stakeholders', 'konselors.id_stakeholder', '=', 'stakeholders.id')
+      ->select('konselors.*', 'm_user.nama_lengkap', 'stakeholders.name as nama_stakeholder')->first();
+
+    return response()->json([
+      'data' => $model
+    ]);
+  }
+
   public function store(Request $request)
   {
     $request->validate([
       'id_user' => 'required',
       'id_stakeholder' => 'required',
+      'expertise' => 'required',
     ]);
 
     $model = new KonselorModel();
     $model->id_user = $request->id_user;
     $model->status = 1;
     $model->id_stakeholder = $request->id_stakeholder;
+    $model->expertise = $request->expertise;
     $model->created_at = Carbon::now();
     $model->save();
 
@@ -102,6 +116,25 @@ class CounselorCT extends Controller
     return redirect()->to('/admin/counselor');
   }
 
+  public function update(Request $request, $id)
+  {
+    $request->validate(
+      [
+        'id_user' => 'required',
+        'id_stakeholder' => 'required',
+        'expertise' => 'required',
+      ]
+    );
+
+    $model = KonselorModel::find($id);
+    $model->id_user = $request->id_user;
+    $model->id_stakeholder = $request->id_stakeholder;
+    $model->expertise = $request->expertise;
+    $model->updated_at = Carbon::now();
+    $model->save();
+
+    return response()->json(['success' => true]);
+  }
 
   public function destroy($id)
   {
