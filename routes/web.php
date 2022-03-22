@@ -144,6 +144,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Hubungi Kami
         Route::get('contactus', [ContactUsCT::class, 'index']);
+        Route::post('contactus', [ContactUsCT::class, 'store']);
         Route::put('contactus/{id}', [ContactUsCT::class, 'update']);
     });
 });

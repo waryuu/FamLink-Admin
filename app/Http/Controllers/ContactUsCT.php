@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\MenuTraits;
 use App\Models\ContactModel;
 use App\Models\MenuModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -28,9 +29,30 @@ class ContactUsCT extends Controller
     public function index()
     {
         $model['data'] = ContactModel::latest()->first();
-        $model['data']['phone'] = substr($model['data']['phone'], 2);
+        if (isset($model['data'])) $model['data']['phone'] = substr($model['data']['phone'], 2);
         $model['base_url'] = '/admin/contactus/';
+        $model['post_base_url'] = '/admin/contactus';
         return view('admin.contactus.index', compact('model'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate(
+            [
+                'email' => 'required',
+                'phone' => 'required',
+            ]
+        );
+
+        $model = new ContactModel();
+        $model->email = $request->email;
+        $model->phone = '62'.$request->phone;
+        $model->created_at = Carbon::now('Asia/Jakarta');
+        $model->updated_at = Carbon::now('Asia/Jakarta');
+        $model->save();
+
+        Alert::success('Berhasil', 'Anda berhasil menambahkan data');
+        return redirect()->to('/admin/contactus');
     }
 
     public function update(Request $request, $id)
@@ -42,13 +64,12 @@ class ContactUsCT extends Controller
             ]
         );
 
-        // return $request;
-
         $model = ContactModel::find($id);
         $model->email = $request->email;
         $model->phone = '62'.$request->phone;
-
+        $model->updated_at = Carbon::now('Asia/Jakarta');
         $model->save();
+        
         Alert::success('Berhasil', 'Anda berhasil update data');
         return redirect()->to('/admin/contactus');
     }
