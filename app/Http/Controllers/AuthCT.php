@@ -24,14 +24,14 @@ class AuthCT extends Controller
     }
 
     public function login(Request $request){
-        // $validator = Validator::make($request->all(),
-        //     ['g-recaptcha-response' => 'required|captcha']
-        // );
+        $validator = Validator::make($request->all(),
+            ['g-recaptcha-response' => 'required|captcha']
+        );
 
-        // if ($validator->fails()){
-        //     Alert::warning('Login Gagal', 'Harap isi capcha!');
-        //     return redirect("/login")->with('error','Harap isi capcha!.');
-        // }
+        if ($validator->fails()){
+            Alert::warning('Login Gagal', 'Harap isi capcha!');
+            return redirect("/login")->with('error','Harap isi capcha!.');
+        }
 
         if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
             Alert::success('Sukses login', 'Login Berhasil, Selamat Datang.');
