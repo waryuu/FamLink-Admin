@@ -49,6 +49,66 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            <div class="modal fade" id="modal_edit_members" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+
+                                    <div class="modal-content">
+                                        <div class="modal-header border-0">
+                                            <h5 class="modal-title">
+                                                <span class="fw-mediumbold">
+                                                    Edit Anggota
+                                                </span>
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        
+                                        <form id="edit_form_validation" action="" method="POST">
+                                            @csrf
+                                            <input type="hidden" id="edit_binding_id"
+                                                name="category_edit_binding_id" value="">
+                                            <div class="modal-body">
+                                                <div class="card-body">
+                                                    <div class="form-group form-show-validation row w-100">
+                                                        <div class="w-100">
+                                                            <label for="parent_header">
+                                                                ID Pengguna <span class="required-label">*</span>
+                                                            </label>
+                                                            <input class="form-control" list="user_list" id="edit_id_user" name="id_user"
+                                                                required disabled/>
+                                                            <div id="edit_nama_user"></div>
+                                                        </div>
+                                                        <div class="w-100 mt-4">
+                                                            <label for="parent_header">
+                                                                ID Lembaga <span class="required-label">*</span>
+                                                            </label>
+                                                            <input class="form-control" id="edit_id_stakeholder" style="width: 100%"
+                                                                name="id_stakeholder" required disabled/>
+                                                            <div id="edit_nama_stakeholder"></div>
+                                                        </div>
+                                                        <div class="w-100 mt-4">
+                                                            <label for="parent_header">
+                                                                Posisi Anggota <span class="required-label">*</span>
+                                                            </label>
+                                                            <input class="form-control" type="text" id="edit_position"
+                                                                name="position" required />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <button type="button" id="btn_edit_members" class="btn btn-primary">Ubah</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    data-dismiss="modal">Batal</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="modal fade" id="modal_add_form" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
 
@@ -56,10 +116,7 @@
                                         <div class="modal-header border-0">
                                             <h5 class="modal-title">
                                                 <span class="fw-mediumbold">
-                                                    New
-                                                </span>
-                                                <span class="fw-light">
-                                                    Data
+                                                    Tambah Anggota
                                                 </span>
                                             </h5>
                                             <button type="button" class="close" data-dismiss="modal"
@@ -122,6 +179,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div id="root_table_id" class="table-responsive" style='display:block;'>
                                 <table id="table_view" class="display table table-striped table-hover">
                                     <thead>
@@ -203,6 +261,9 @@
         var root_table_id = "#root_table_id";
         var root_table_id_nonactive = "#root_table_id_nonactive";
         var modal_form = '#modal_add_form';
+
+        var btn_edit_members = "#btn_edit_members";
+        var edit_form_validation = "#edit_form_validation";
 
         $(document).ready(function() {
             var columnsData = [{
@@ -286,7 +347,8 @@
                 data: 'id',
                 name: 'action',
                 render: function(data, type, row) {
-                    return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert(' +
+                    return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="Ubah" class="btn btn-link btn-danger" data-original-title="Ubah" onclick="editPosition(' +
+                        row['id'] + ')"><i class="fa fa-edit"></i></button> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert(' +
                         row['id'] + ')"><i class="fa fa-times"></i></button></div>';
                 }
             }];
@@ -306,8 +368,44 @@
                 columnsData.concat(action_nonactive)));
             $(modal_form).on('hidden.bs.modal', function(e) {
                 $(this).find('form').trigger('reset');
-            })
+            });
+            $(btn_edit_members).click(function(e) {
+                saveEditPosition();
+            });
         });
+
+        function saveEditPosition() {
+            var valid = $(edit_form_validation).valid();
+            if (valid) {
+                var id = $("#edit_binding_id").val();
+                var id_user = $("#edit_id_user").val();
+                var id_stakeholder = $("#edit_id_stakeholder").val();
+                var position = $("#edit_position").val();
+                var body = {
+                    "_token": token,
+                    "id": id,
+                    "id_user": id_user,
+                    "id_stakeholder": id_stakeholder,
+                    "position": position,
+                };
+                
+                var endpoint = base_endpoint + id;
+                showDialogConfirmationAjax('#modal_edit_members', 'Apakah anda yakin akan mengupdate data?',
+                    'Update data berhasil!', endpoint, 'PUT', body, table_id);
+            }
+        }
+
+        function editPosition(id) {
+            $.get(base_endpoint + id + '/edit', function(data) {
+                $('#modal_edit_members').modal('show');
+                $('#edit_binding_id').val(data.data.id);
+                $('#edit_id_user').val(data.data.id_user);
+                $('#edit_nama_user').text("Nama Lengkap : " + data.data.nama_lengkap);
+                $('#edit_id_stakeholder').val(data.data.id_stakeholder);
+                $('#edit_nama_stakeholder').text("Nama Lembaga : " + data.data.nama_stakeholder);
+                $('#edit_position').val(data.data.position);
+            })
+        }
 
         function onChangeTableStatus(state) {
             if (state == 'active') {

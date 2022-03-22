@@ -202,10 +202,10 @@
                                             </button>
                                         </div>
                                         
-                                        <form id="edit_form_validation" action="{{ '/admin/counselor' }}" method="POST">
+                                        <form id="edit_form_validation" action="" method="POST">
                                             @csrf
                                             <input type="hidden" id="edit_binding_id"
-                                                name="category_edit_binding_id" value="">
+                                                name="edit_binding_id" value="">
                                             <div class="modal-body">
                                                 <div class="card-body">
                                                     <div class="form-group form-show-validation row w-100">
@@ -447,7 +447,7 @@
                 data: 'id',
                 name: 'action',
                 render: function(data, type, row) {
-                    return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="Ubah" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="editExpertise(' +
+                    return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="Ubah" class="btn btn-link btn-danger" data-original-title="Ubah" onclick="editExpertise(' +
                         row['id'] + ')"><i class="fa fa-edit"></i></button> <button type="button" data-toggle="tooltip" title="Hapus" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert(' +
                         row['id'] + ')"><i class="fa fa-times"></i></button> </div>';
                 }

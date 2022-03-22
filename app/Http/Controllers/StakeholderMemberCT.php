@@ -41,6 +41,17 @@ class StakeholderMemberCT extends Controller
     return Datatables::of($this->getMember())->make(true);
   }
 
+  public function edit($id)
+  {
+    $model = StakeholderMemberModel::where('stakeholdermembers.id', $id)->join('m_user', 'stakeholdermembers.id_user', '=', 'm_user.id')
+      ->join('stakeholders', 'stakeholdermembers.id_stakeholder', '=', 'stakeholders.id')
+      ->select('stakeholdermembers.*', 'm_user.nama_lengkap', 'stakeholders.name as nama_stakeholder')->first();
+
+    return response()->json([
+      'data' => $model
+    ]);
+  }
+  
   private function getMember()
   {
     $konselor = DB::table('stakeholdermembers')
@@ -96,6 +107,26 @@ class StakeholderMemberCT extends Controller
 
     Alert::success('Berhasil', 'Anda berhasil menginputkan data');
     return redirect()->to('/admin/stakeholder/members');
+  }
+
+  public function update(Request $request, $id)
+  {
+    $request->validate(
+      [
+        'id_user' => 'required',
+        'id_stakeholder' => 'required',
+        'position' => 'required',
+      ]
+    );
+
+    $model = StakeholderMemberModel::find($id);
+    $model->id_user = $request->id_user;
+    $model->id_stakeholder = $request->id_stakeholder;
+    $model->position = $request->position;
+    $model->updated_at = Carbon::now();
+    $model->save();
+
+    return response()->json(['success' => true]);
   }
 
   public function destroy($id)
