@@ -183,8 +183,8 @@
                                         <div>
                                             <textarea id="summernote_edit" name="rule_edit" placeholder="Masukan Aturan disini" required>
                                                 @if ($model['rules'] != null)
-{{ $model['rules']->rule }}
-@endif
+                                                    {{ $model['rules']->rule }}
+                                                @endif
                                             </textarea>
                                         </div>
                                     </div>

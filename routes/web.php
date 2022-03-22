@@ -11,6 +11,7 @@ use App\Http\Controllers\CategoryCT;
 use App\Http\Controllers\CounselorCT;
 use App\Http\Controllers\ConsultationCT;
 use App\Http\Controllers\ConsultationDeletedCT;
+use App\Http\Controllers\ContactUsCT;
 use App\Http\Controllers\EventCT;
 use App\Http\Controllers\FileCT;
 use Illuminate\Support\Facades\Route;
@@ -140,5 +141,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('reportsthreads', [ReportStThreadsCT::class, 'index']);
         Route::get('reportsthreads/datatable/list/{filter}', [ReportStThreadsCT::class, 'getThreadsByFilter']);
         Route::get('reportsthreads/download', [ReportStThreadsCT::class, 'downloadExcel']);
+
+        // Hubungi Kami
+        Route::get('contactus', [ContactUsCT::class, 'index']);
+        Route::put('contactus/{id}', [ContactUsCT::class, 'update']);
     });
 });
