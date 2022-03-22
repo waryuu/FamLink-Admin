@@ -289,11 +289,18 @@
                     name: 'state',
                     render: function(data, type, row) {
                         var textTag =
-                            `<button ${row['state'] == "closed" ? "disabled" : ""} class="mt-1 mb-1 btn btn-sm btn-rounded `;
+                            `<button ${row['rating'] != null ? "disabled" : ""} class="mt-1 mb-1 btn btn-sm btn-rounded `;
                         var kodeForNotified = row['kode_user'];
                         var nameForNotified = row['nama_konselor'];
-                        if (row['state'] == 'closed') textTag +=
-                            'btn-danger"><strong>DITUTUP</strong></button>';
+                        var state = row['state'];
+                        if (row['state'] == 'closed') {
+                            if (row['rating'] != null) textTag +=
+                                'btn-danger"><strong>DITUTUP, RATING DITERIMA</strong></button>';
+                            else {
+                                textTag += 'btn-warning"><strong>DITUTUP, BELUM ADA RATING</strong></button>';
+                                state = 'closed_no_rating';
+                            }
+                        }
                         if (row['state'] == 'waiting_user') textTag +=
                             'btn-success"><strong>MENUNGGU PENGGUNA</strong></button>';
                         if (row['state'] == 'waiting_counselor') {
@@ -302,7 +309,7 @@
                             nameForNotified = row['nama_lengkap'];
                         }
                         var buttonNotif =
-                            `<button class="mt-1 btn btn-primary" ${row['state'] == 'closed' ? 'disabled' : ''} onclick='sendNotification("${kodeForNotified}", "${nameForNotified}", "${row['title']}", "${row['state']}", "${row['type']}")'><i class="fa-solid fa-comment-arrow-up-right"></i>Kirim Notifikasi</button>`;
+                            `<button class="mt-1 btn btn-primary" ${row['rating'] != null ? 'disabled' : ''} onclick='sendNotification("${kodeForNotified}", "${nameForNotified}", "${row['title']}", "${state}", "${row['type']}")'><i class="fa-solid fa-comment-arrow-up-right"></i>Kirim Notifikasi</button>`;
                         return `<div class="mt-2 mb-3 text-center">${textTag + buttonNotif}</div>`;
                     }
                 }
@@ -500,12 +507,20 @@
                 "to": "",
                 "data": {
                     "title": "",
-                    "body": `Konsultasi ${type} berjudul ${title} belum kamu respon nih, Yuk segera respon!`
+                    "body": ""
                 }
             }
             body['to'] = isKodeExist ? "/topics/USER_" + kodePeserta : "/topics/COUNSELOR";
-            body['data']['title'] = isWaitCounselor ? nama + " menunggu responmu" : isPublic ?
-                "Konselor menunggu responmu" : "Konselor " + nama + " menunggu responmu";
+
+            if (state == 'closed_no_rating') {
+                body['data']['title'] = 'Yuk berikan penilaian terhadap konsultasi kamu!';
+                body['data']['body'] = `Konsultasi ${type} berjudul ${title} belum kamu nilai nih, Yuk segera berikan penilaian!`;
+            } else {
+                body['data']['title'] = isWaitCounselor ? nama + " menunggu responmu" : isPublic ?
+                    "Konselor menunggu responmu" : "Konselor " + nama + " menunggu responmu";
+                body['data']['body'] = `Konsultasi ${type} berjudul ${title} belum kamu respon nih, Yuk segera respon!`
+            }
+
             showDialogSendNotificationAjax(firebase_endpoint, body, isPublic ? table_id_public : table_id_private);
         }
 
