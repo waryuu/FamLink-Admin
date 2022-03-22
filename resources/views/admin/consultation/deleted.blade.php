@@ -189,7 +189,8 @@
                     name: 'state',
                     render: function(data, type, row) {
                         var textTag = '<strong class="col-red text-center">';
-                        if (row['state'] == 'closed') textTag += 'Ditutup</strong>';
+                        if (row['state'] == 'closed' && row['rating'] != null) textTag += 'Ditutup, Penilaian diterima</strong>';
+                        if (row['state'] == 'closed' && row['rating'] == null) textTag += 'Ditutup, Belum ada penilaian</strong>';
                         if (row['state'] == 'waiting_user') textTag += 'Menunggu pengguna</strong>';
                         if (row['state'] == 'waiting_counselor') textTag += 'Menunggu konselor</strong>';
                         return `<div class="mt-2 mb-3">${textTag}</div>`;

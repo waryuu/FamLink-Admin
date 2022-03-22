@@ -295,9 +295,9 @@
                         var state = row['state'];
                         if (row['state'] == 'closed') {
                             if (row['rating'] != null) textTag +=
-                                'btn-danger"><strong>DITUTUP, RATING DITERIMA</strong></button>';
+                                'btn-danger"><strong>DITUTUP, PENILAIAN DITERIMA</strong></button>';
                             else {
-                                textTag += 'btn-warning"><strong>DITUTUP, BELUM ADA RATING</strong></button>';
+                                textTag += 'btn-warning"><strong>DITUTUP, BELUM ADA PENILAIAN</strong></button>';
                                 state = 'closed_no_rating';
                             }
                         }
