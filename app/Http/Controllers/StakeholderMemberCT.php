@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Traits\MenuTraits;
 use App\Models\MenuModel;
 use App\Models\StakeholderMemberModel;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class StakeholderMemberCT extends Controller
 {
@@ -20,6 +22,8 @@ class StakeholderMemberCT extends Controller
 
   function __construct()
   {
+    $this->api_url = env("API_URL", "");;
+
     $this->middleware('auth');
     $this->middleware(function ($request, $next) {
       $this->user = Auth::user();
@@ -103,10 +107,18 @@ class StakeholderMemberCT extends Controller
     $model->id_stakeholder = $request->id_stakeholder;
     $model->position = $request->position;
     $model->created_at = Carbon::now();
-    $model->save();
 
-    Alert::success('Berhasil', 'Anda berhasil menginputkan data');
-    return redirect()->to('/admin/stakeholder/members');
+    $user = UserModel::find($request->id_user);
+    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
+
+    if ($response->status() == 200) {
+      $model->save();
+      Alert::success('Berhasil', 'Anda berhasil menginputkan data');
+      return redirect()->to('/admin/stakeholder/members');
+    } else {
+      Alert::warning('Gagal', 'Gagal menambahkan konselor, coba beberapa saat lagi');
+      return redirect()->to('/admin/stakeholder/members');
+    }
   }
 
   public function update(Request $request, $id)
@@ -133,25 +145,47 @@ class StakeholderMemberCT extends Controller
   {
     $model = StakeholderMemberModel::find($id);
     $model->status = 0;
-    $model->save();
 
-    return response()->json([
-      'state' => true,
-      'data' => null,
-      'message' => 'Anda berhasil menghapus data!'
-    ]);
+    $user = UserModel::find($model->id_user);
+    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
+
+    if ($response->status() == 200) {
+      $model->save();
+      return response()->json([
+        'state' => true,
+        'data' => null,
+        'message' => 'Anda berhasil menghapus data!'
+      ]);
+    } else {
+      return response()->json([
+        'state' => false,
+        'data' => null,
+        'message' => 'Anda gagal menghapus data!, coba beberapa saat lagi'
+      ]);
+    }
   }
 
   public function restoreMember($id)
   {
     $model = StakeholderMemberModel::find($id);
     $model->status = 1;
-    $model->save();
 
-    return response()->json([
-      'state' => true,
-      'data' => null,
-      'message' => 'Anda berhasil mengembalikan data!'
-    ]);
+    $user = UserModel::find($model->id_user);
+    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
+
+    if ($response->status() == 200) {
+      $model->save();
+      return response()->json([
+        'state' => true,
+        'data' => null,
+        'message' => 'Anda berhasil mengembalikan data!'
+      ]);
+    } else {
+      return response()->json([
+        'state' => false,
+        'data' => null,
+        'message' => 'Anda gagal mengembalikan data!, coba beberapa saat lagi'
+      ]);
+    }
   }
 }

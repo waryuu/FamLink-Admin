@@ -23,6 +23,7 @@
         "realrashid/sweet-alert": "^3.2",
         "soundasleep/html2text": "^2.0",
         "spatie/laravel-permission": "^3.18",
+        "tymon/jwt-auth": "dev-develop",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {

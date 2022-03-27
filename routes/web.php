@@ -31,8 +31,6 @@ use App\Http\Controllers\StakeholderThreadsDeletedCT;
 use App\Http\Controllers\UserAdminCT;
 use App\Http\Controllers\UserAppsCT;
 
-
-
 Route::get('/', [AuthCT::class, 'loginView'])->name('login');
 Route::get('/login', [AuthCT::class, 'loginView'])->name('login');
 Route::post('/login', [AuthCT::class, 'login']);
