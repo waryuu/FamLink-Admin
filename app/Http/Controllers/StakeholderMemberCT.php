@@ -109,14 +109,16 @@ class StakeholderMemberCT extends Controller
     $model->created_at = Carbon::now();
 
     $user = UserModel::find($request->id_user);
-    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
+    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+      'token' => $user->token,
+    ]);
 
     if ($response->status() == 200) {
       $model->save();
       Alert::success('Berhasil', 'Anda berhasil menginputkan data');
       return redirect()->to('/admin/stakeholder/members');
     } else {
-      Alert::warning('Gagal', 'Gagal menambahkan konselor, coba beberapa saat lagi');
+      Alert::warning('Gagal', 'Gagal menambahkan anggota, coba beberapa saat lagi');
       return redirect()->to('/admin/stakeholder/members');
     }
   }
@@ -147,7 +149,9 @@ class StakeholderMemberCT extends Controller
     $model->status = 0;
 
     $user = UserModel::find($model->id_user);
-    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
+    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+      'token' => $user->token,
+    ]);
 
     if ($response->status() == 200) {
       $model->save();
@@ -171,7 +175,9 @@ class StakeholderMemberCT extends Controller
     $model->status = 1;
 
     $user = UserModel::find($model->id_user);
-    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
+    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+      'token' => $user->token,
+    ]);
 
     if ($response->status() == 200) {
       $model->save();

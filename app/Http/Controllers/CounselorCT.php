@@ -116,7 +116,10 @@ class CounselorCT extends Controller
     $model->created_at = Carbon::now();
 
     $user = UserModel::find($request->id_user);
-    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
+
+    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+      'token' => $user->token,
+    ]);
 
     if ($response->status() == 200) {
       $model->save();
@@ -154,7 +157,9 @@ class CounselorCT extends Controller
     $model->status = 0;
 
     $user = UserModel::find($model->id_user);
-    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
+    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+      'token' => $user->token,
+    ]);
 
     if ($response->status() == 200) {
       $model->save();
@@ -178,8 +183,10 @@ class CounselorCT extends Controller
     $model->status = 1;
 
     $user = UserModel::find($model->id_user);
-    $response = Http::withToken($user->token)->get($this->api_url . '/api/v2/token/reset');
-
+    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+      'token' => $user->token,
+    ]);
+    
     if ($response->status() == 200) {
       $model->save();
       return response()->json([
