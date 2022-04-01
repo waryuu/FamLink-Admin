@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\MenuTraits;
+use App\Models\KonselorModel;
 use App\Models\MenuModel;
 use App\Models\StakeholderMemberModel;
 use App\Models\UserModel;
@@ -31,7 +32,7 @@ class StakeholderMemberCT extends Controller
       if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
     });
   }
-  
+
   public function index()
   {
     $model['base_url'] = '/admin/stakeholder/members/';
@@ -55,7 +56,7 @@ class StakeholderMemberCT extends Controller
       'data' => $model
     ]);
   }
-  
+
   private function getMember()
   {
     $konselor = DB::table('stakeholdermembers')
@@ -102,23 +103,30 @@ class StakeholderMemberCT extends Controller
       'position' => 'required',
     ]);
 
-    $model = new StakeholderMemberModel();
-    $model->id_user = $request->id_user;
-    $model->id_stakeholder = $request->id_stakeholder;
-    $model->position = $request->position;
-    $model->created_at = Carbon::now();
+    $isCounselor = KonselorModel::where('id_user', $request->id_user)->first();
 
-    $user = UserModel::find($request->id_user);
-    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
-      'token' => $user->token,
-    ]);
+    if (!isset($isCounselor)) {
+      $model = new StakeholderMemberModel();
+      $model->id_user = $request->id_user;
+      $model->id_stakeholder = $request->id_stakeholder;
+      $model->position = $request->position;
+      $model->created_at = Carbon::now();
 
-    if ($response->status() == 200) {
-      $model->save();
-      Alert::success('Berhasil', 'Anda berhasil menginputkan data');
-      return redirect()->to('/admin/stakeholder/members');
+      $user = UserModel::find($request->id_user);
+      $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+        'token' => $user->token,
+      ]);
+
+      if ($response->status() == 200) {
+        $model->save();
+        Alert::success('Berhasil', 'Anda berhasil menginputkan data');
+        return redirect()->to('/admin/stakeholder/members');
+      } else {
+        Alert::warning('Gagal', 'Gagal menambahkan anggota, coba beberapa saat lagi');
+        return redirect()->to('/admin/stakeholder/members');
+      }
     } else {
-      Alert::warning('Gagal', 'Gagal menambahkan anggota, coba beberapa saat lagi');
+      Alert::warning('Gagal', 'Pengguna terdeteksi telah ditambahkan sebagai konselor!');
       return redirect()->to('/admin/stakeholder/members');
     }
   }

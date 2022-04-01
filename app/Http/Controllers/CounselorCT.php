@@ -6,6 +6,7 @@ use App\Http\Traits\MenuTraits;
 use App\Models\KonselorModel;
 use App\Models\MenuModel;
 use App\Models\RulesModel;
+use App\Models\StakeholderMemberModel;
 use App\Models\StakeholderModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
@@ -108,25 +109,32 @@ class CounselorCT extends Controller
       'expertise' => 'required',
     ]);
 
-    $model = new KonselorModel();
-    $model->id_user = $request->id_user;
-    $model->status = 1;
-    $model->id_stakeholder = $request->id_stakeholder;
-    $model->expertise = $request->expertise;
-    $model->created_at = Carbon::now();
+    $isStakeholderMember = StakeholderMemberModel::where('id_user', $request->id_user)->first();
 
-    $user = UserModel::find($request->id_user);
+    if (!isset($isStakeholderMember)) {
+      $model = new KonselorModel();
+      $model->id_user = $request->id_user;
+      $model->status = 1;
+      $model->id_stakeholder = $request->id_stakeholder;
+      $model->expertise = $request->expertise;
+      $model->created_at = Carbon::now();
 
-    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
-      'token' => $user->token,
-    ]);
+      $user = UserModel::find($request->id_user);
 
-    if ($response->status() == 200) {
-      $model->save();
-      Alert::success('Berhasil', 'Anda berhasil menginputkan data');
-      return redirect()->to('/admin/counselor');
+      $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+        'token' => $user->token,
+      ]);
+
+      if ($response->status() == 200) {
+        $model->save();
+        Alert::success('Berhasil', 'Anda berhasil menginputkan data');
+        return redirect()->to('/admin/counselor');
+      } else {
+        Alert::warning('Gagal', 'Gagal menambahkan konselor, coba beberapa saat lagi');
+        return redirect()->to('/admin/counselor');
+      }
     } else {
-      Alert::warning('Gagal', 'Gagal menambahkan konselor, coba beberapa saat lagi');
+      Alert::warning('Gagal', 'Pengguna terdeteksi telah ditambahkan sebagai anggota stakeholder!');
       return redirect()->to('/admin/counselor');
     }
   }
@@ -186,7 +194,7 @@ class CounselorCT extends Controller
     $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
       'token' => $user->token,
     ]);
-    
+
     if ($response->status() == 200) {
       $model->save();
       return response()->json([
