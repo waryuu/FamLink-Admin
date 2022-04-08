@@ -120,11 +120,17 @@ class CounselorCT extends Controller
       $model->created_at = Carbon::now();
 
       $user = UserModel::find($request->id_user);
-
-      $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
-        'token' => $user->token,
-      ]);
-
+      
+      if (isset($user->token)) {
+        $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+          'token' => $user->token,
+        ]);
+      } else {
+        $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+          'email' => $user->email,
+        ]);
+      }
+  
       if ($response->status() == 200) {
         $model->save();
         Alert::success('Berhasil', 'Anda berhasil menginputkan data');
@@ -165,9 +171,16 @@ class CounselorCT extends Controller
     $model->status = 0;
 
     $user = UserModel::find($model->id_user);
-    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
-      'token' => $user->token,
-    ]);
+
+    if (isset($user->token)) {
+      $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+        'token' => $user->token,
+      ]);
+    } else {
+      $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+        'email' => $user->email,
+      ]);
+    }
 
     if ($response->status() == 200) {
       $model->save();
@@ -191,9 +204,16 @@ class CounselorCT extends Controller
     $model->status = 1;
 
     $user = UserModel::find($model->id_user);
-    $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
-      'token' => $user->token,
-    ]);
+
+    if (isset($user->token)) {
+      $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+        'token' => $user->token,
+      ]);
+    } else {
+      $response = Http::asForm()->post($this->api_url . '/api/v2/token/reset', [
+        'email' => $user->email,
+      ]);
+    }
 
     if ($response->status() == 200) {
       $model->save();
