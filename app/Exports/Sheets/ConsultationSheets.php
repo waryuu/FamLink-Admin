@@ -29,6 +29,11 @@ class ConsultationSheets implements FromArray, WithHeadings, WithTitle, ShouldAu
             $reply_from = $row->reply_from;
         }
 
+        $rating = null;
+        if (isset($row->rating)) {
+            $rating = $row->rating;
+        }
+
         return [
             $row->id,
             $row->nama_lengkap,
@@ -39,6 +44,7 @@ class ConsultationSheets implements FromArray, WithHeadings, WithTitle, ShouldAu
             $reply_from,
             $row->state,
             $row->open_to_all,
+            $rating,
             $row->status,
             $row->role_who_closed,
             $row->created_at,
@@ -58,6 +64,7 @@ class ConsultationSheets implements FromArray, WithHeadings, WithTitle, ShouldAu
             'BALASAN DARI',
             'STATUS',
             'TERBUKA UNTUK UMUM?',
+            'RATING',
             'DIHAPUS?',
             'DITUTUP OLEH',
             'TANGGAL DIBUAT',
