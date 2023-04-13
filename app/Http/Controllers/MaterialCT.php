@@ -27,8 +27,7 @@ class MaterialCT extends Controller
 
     function __construct()
     {
-        $this->fcm_key = env("FCM_KEY", "");;
-
+        $this->fcm_key = env("FCM_KEY", "");
         $this->middleware('auth');
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
@@ -117,10 +116,8 @@ class MaterialCT extends Controller
             $fileName = $model->id.'-'.time().'.'.$request->image->extension();
             $request->image->move(public_path('material'), $fileName);
             $model->image = $fileName;
-
             $model->link_yt = NULL;
             $model->is_locked = $request->is_locked;
-
             if ($request->is_locked) {
                 $model->download_pass = Hash::make($request->download_pass);
             }

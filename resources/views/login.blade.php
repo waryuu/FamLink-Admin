@@ -34,10 +34,11 @@
 <body class="login">
     <div class="wrapper wrapper-login wrapper-login-full p-0">
         <div
-            class="login-aside w-50 d-flex flex-column align-items-center justify-content-center text-center bg-primary-gradient">
+            class="login-aside w-50 d-flex flex-column align-items-center
+            justify-content-center text-center bg-primary-gradient">
 
             <h1 class="title fw-bold text-white mb-3">
-                <img src="{{ asset('assets/img/logo_white.svg') }}" width="250px" />
+                <img src="{{ asset('assets/img/logo_white.svg') }}"  alt="FamLink" width="250px" />
             </h1>
             <p class="subtitle text-white op-7">Keluarga Ramah dan Sejahtera bersama Famlink</p>
         </div>
@@ -61,9 +62,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             {!! Captcha::display($model['attributes']) !!}
-                        </div>
+                        </div> --}}
                         <div class="form-group form-action-d-flex mb-3">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="rememberme">
