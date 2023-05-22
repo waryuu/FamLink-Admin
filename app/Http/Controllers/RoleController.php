@@ -23,7 +23,9 @@ class RoleController extends Controller
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
             $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+            if ($this->hasAccess($this->user->role, $this->menu->id)) {
+                return $next($request);
+            }
         });
     }
 
@@ -74,7 +76,6 @@ class RoleController extends Controller
 
 
         $model['menu_header_view'] = $menu_header_view;
-        $model['menu_header'] = $menu_header;
         $model['menu_header'] = $menu_header;
         $model['menu_has_role'] = RoleHasModel::where('id_role', $detail->id)->get();
         $model['detail'] = $detail;

@@ -25,7 +25,9 @@ class StakeholderThreadsCT extends Controller
     $this->middleware(function ($request, $next) {
       $this->user = Auth::user();
       $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-      if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+      if ($this->hasAccess($this->user->role, $this->menu->id)) {
+        return $next($request);
+      }
     });
   }
 
@@ -41,8 +43,12 @@ class StakeholderThreadsCT extends Controller
     $model['rules_url'] = '/admin/rules';
     $model['menu_id'] = $menu->id;
 
-    if (isset($rules)) $model['rules'] = $rules;
-    else $model['rules'] = null;
+    if (isset($rules)) {
+      $model['rules'] = $rules;
+    }
+    else {
+      $model['rules'] = null;
+    }
     return view('admin.stakeholder.threads', compact('model'));
   }
 
@@ -53,7 +59,8 @@ class StakeholderThreadsCT extends Controller
       ->join('m_user', 'stakeholdermembers.id_user', '=', 'm_user.id')
       ->join('stakeholders', 'stakeholdermembers.id_stakeholder', '=', 'stakeholders.id')
       ->where('stakeholderthreads.status', '=', 1)
-      ->select('stakeholderthreads.*', 'stakeholdermembers.id_user', 'm_user.nama_lengkap AS name_user', 'stakeholders.name AS name_stakeholder');
+      ->select('stakeholderthreads.*', 'stakeholdermembers.id_user',
+              'm_user.nama_lengkap AS name_user', 'stakeholders.name AS name_stakeholder');
   }
 
   public function create()
@@ -76,7 +83,9 @@ class StakeholderThreadsCT extends Controller
 
   public function show($dir)
   {
-    if (is_numeric($dir)) return $this->getThreadsByID($dir);
+    if (is_numeric($dir)) {
+      return $this->getThreadsByID($dir);
+    }
     else return;
   }
 
@@ -91,7 +100,8 @@ class StakeholderThreadsCT extends Controller
         ->join('m_user', 'stakeholdermembers.id_user', '=', 'm_user.id')
         ->join('stakeholders', 'stakeholdermembers.id_stakeholder', '=', 'stakeholders.id')
         ->where('stakeholderthreads.id', '=', $id)
-        ->select('streplies.*', 'stakeholdermembers.id_user', 'm_user.nama_lengkap AS name_user', 'stakeholders.name AS name_stakeholder')
+        ->select('streplies.*', 'stakeholdermembers.id_user', 'm_user.nama_lengkap AS name_user',
+                'stakeholders.name AS name_stakeholder')
         ->orderBy('streplies.created_at')->get();
     }
 

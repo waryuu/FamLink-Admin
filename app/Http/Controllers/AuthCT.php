@@ -51,12 +51,14 @@ class AuthCT extends Controller
     public static function menuNavigation(){
         $user = Auth::user();
 
-        $menu_header = MenuModel::where('parent', 0)->join('m_has_role', 'm_menu.id', '=', 'id_menu')->select('m_menu.*')->where('id_role', $user->role)->orderBy('sort_header', 'asc')->get();
+        $menu_header = MenuModel::where('parent', 0)->join('m_has_role', 'm_menu.id', '=', 'id_menu')
+            ->select('m_menu.*')->where('id_role', $user->role)->orderBy('sort_header', 'asc')->get();
         $menu_header_view = $menu_header;
 
         for ($i = 0; $i < sizeof($menu_header_view); $i++) {
             $item = $menu_header_view[$i];
-            $sub_menu = MenuModel::join('m_has_role', 'm_menu.id', '=', 'id_menu')->where('id_role', $user->role)->where('parent', $item->id)->get();
+            $sub_menu = MenuModel::join('m_has_role', 'm_menu.id', '=', 'id_menu')
+                ->where('id_role', $user->role)->where('parent', $item->id)->get();
             $menu_header_view[$i]['data'] = $sub_menu;
         }
 

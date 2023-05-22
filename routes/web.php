@@ -5,6 +5,7 @@ use App\Http\Controllers\AssessmentCT;
 use App\Http\Controllers\AssessmentDetailCT;
 use App\Http\Controllers\AssessmentInstrumenCT;
 use App\Http\Controllers\AssesmentResultCT;
+use App\Http\Controllers\AssignmentCT;
 use App\Http\Controllers\AuthCT;
 use App\Http\Controllers\BannerCT;
 use App\Http\Controllers\CategoryCT;
@@ -144,5 +145,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('contactus', [ContactUsCT::class, 'index']);
         Route::post('contactus', [ContactUsCT::class, 'store']);
         Route::put('contactus/{id}', [ContactUsCT::class, 'update']);
+
+
+        //Assignment Batch 3
+        Route::resource('assignment', AssignmentCT::class);
+        Route::get('assignment', [AssignmentCT::class, 'index']);
+        Route::get('assignment/delete/{id}', [AssignmentCT::class, 'delete'])->name('delete');
+
+        
+
     });
 });

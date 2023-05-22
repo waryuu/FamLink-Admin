@@ -31,7 +31,9 @@ class CounselorCT extends Controller
     $this->middleware(function ($request, $next) {
       $this->user = Auth::user();
       $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-      if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+      if ($this->hasAccess($this->user->role, $this->menu->id)) {
+        return $next($request);
+      }
     });
   }
 
@@ -40,7 +42,8 @@ class CounselorCT extends Controller
     $konselor = DB::table('konselors')
       ->join('m_user', 'konselors.id_user', '=', 'm_user.id')
       ->join('stakeholders', 'konselors.id_stakeholder', '=', 'stakeholders.id')
-      ->select('konselors.*', 'stakeholders.name', 'stakeholders.focus', 'm_user.nama_lengkap', 'm_user.jenis_kelamin', 'm_user.education', 'm_user.pekerjaan', 'm_user.instansi', 'm_user.created_at');
+      ->select('konselors.*', 'stakeholders.name', 'stakeholders.focus', 'm_user.nama_lengkap',
+      'm_user.jenis_kelamin', 'm_user.education', 'm_user.pekerjaan', 'm_user.instansi', 'm_user.created_at');
     return $konselor;
   }
 
@@ -61,7 +64,9 @@ class CounselorCT extends Controller
 
   public function show($query)
   {
-    if ($query == "nonactive") return Datatables::of($this->getNonActiveKonselor())->make(true);
+    if ($query == "nonactive") {
+      return Datatables::of($this->getNonActiveKonselor())->make(true);
+    } 
     return;
   }
 
@@ -70,15 +75,20 @@ class CounselorCT extends Controller
     $menu = MenuModel::where('title', $this->menuName)->select('id')->first();
     $rules = RulesModel::where('id_menu', $menu->id)->first();
 
-    $model['counselors'] = $this->getKonselor()->where('konselors.status', '=', 1)->get();
+    $model['counselors'] = $this->getKonselor()->where('assignment.id', '=', 'answer.id_assignment')->get();
     $model['users'] = $this->getUser();
     $model['stakeholders'] = $this->getStakeholder();
     $model['base_url'] = '/admin/counselor/';
     $model['rules_url'] = '/admin/rules';
     $model['menu_id'] = $menu->id;
 
-    if (isset($rules)) $model['rules'] = $rules;
-    else $model['rules'] = null;
+    if (isset($rules)) {
+      $model['rules'] = $rules;
+    } 
+    else {
+      $model['rules'] = null;
+    }
+    
 
     return view('admin.counselor.index', compact('model'));
   }

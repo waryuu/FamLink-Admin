@@ -141,9 +141,7 @@ $menu = App\Http\Controllers\AuthCT::menuNavigation();
                                 <i class="fa fa-ellipsis-h"></i>
                             </span>
                             <h4 class="text-section">MAIN MENU</h4>
-                            @php
-                                $menu = App\Http\Controllers\AuthCT::menuNavigation();
-                            @endphp
+                            
                         </li>
                         @foreach ($menu['navigation'] as $item)
                             <li class="nav-item submenu">

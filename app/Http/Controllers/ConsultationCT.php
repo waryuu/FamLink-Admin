@@ -31,7 +31,9 @@ class ConsultationCT extends Controller
     $this->middleware(function ($request, $next) {
       $this->user = Auth::user();
       $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-      if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+      if ($this->hasAccess($this->user->role, $this->menu->id)) {
+        return $next($request);
+      }
     });
   }
 
@@ -45,8 +47,12 @@ class ConsultationCT extends Controller
     $model['rules_url'] = '/admin/rules';
     $model['menu_id'] = $menu->id;
 
-    if (isset($rules)) $model['rules'] = $rules;
-    else $model['rules'] = null;
+    if (isset($rules)) {
+      $model['rules'] = $rules;
+    } 
+    else {
+      $model['rules'] = null;
+    }
 
     return view('admin.consultation.index', compact('model'));
   }
@@ -58,13 +64,16 @@ class ConsultationCT extends Controller
       ->join('m_user', 'consultationthreads.id_user', '=', 'm_user.id')
       ->leftJoin('stakeholders', 'konselors.id_stakeholder', '=', 'stakeholders.id')
       ->leftJoin('m_user AS users', 'konselors.id_user', '=', 'users.id')
-      ->select('consultationthreads.*', 'm_user.nama_lengkap', 'm_user.kode_peserta as kode_user', 'stakeholders.name AS name_stakeholder', 'users.nama_lengkap AS nama_konselor', 'users.kode_peserta as kode_konselor');
+      ->select('consultationthreads.*', 'm_user.nama_lengkap', 'm_user.kode_peserta as kode_user',
+              'stakeholders.name AS name_stakeholder', 'users.nama_lengkap AS nama_konselor',
+              'users.kode_peserta as kode_konselor');
   }
 
   private function getTypeConsultation($type)
   {
     $allConsultation = $this->getConsultation();
-    $filtered = $allConsultation->where("consultationthreads.type", '=', $type)->where('consultationthreads.status', '=', '1')->get();
+    $filtered = $allConsultation->where("consultationthreads.type", '=', $type)
+                                ->where('consultationthreads.status', '=', '1')->get();
     return Datatables::of($filtered)->make(true);
   }
 
@@ -97,7 +106,8 @@ class ConsultationCT extends Controller
         ->leftJoin('konselors', 'm_user.id', '=', 'konselors.id_user')
         ->leftJoin('stakeholders', 'konselors.id_stakeholder', '=', 'stakeholders.id')
         ->where('consultationthreads.id', '=', $id)
-        ->select('ctreplies.id', 'ctreplies.content', 'ctreplies.reply_from', 'ctreplies.created_at', 'm_user.nama_lengkap AS nama_pembalas', 'stakeholders.name AS name_stakeholder')
+        ->select('ctreplies.id', 'ctreplies.content', 'ctreplies.reply_from', 'ctreplies.created_at',
+                'm_user.nama_lengkap AS nama_pembalas', 'stakeholders.name AS name_stakeholder')
         ->orderBy('ctreplies.created_at')->get();
     }
 
@@ -151,9 +161,14 @@ class ConsultationCT extends Controller
     $lastReply = CtReplyModel::where('id_cthread', $id)->orderBy('created_at', 'desc')->first();
 
     if (isset($lastReply)) {
-      if ($lastReply->reply_from == "user") $model->state = "waiting_counselor";
-      else $model->state = "waiting_user";
-    } else $model->state = "waiting_counselor";
+      if ($lastReply->reply_from == "user") {
+        $model->state = "waiting_counselor";
+      } else {
+        $model->state = "waiting_user";
+      }
+    } else {
+      $model->state = "waiting_counselor";
+    }
 
     $model->save();
 

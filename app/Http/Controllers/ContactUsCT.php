@@ -22,14 +22,18 @@ class ContactUsCT extends Controller
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
             $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+            if ($this->hasAccess($this->user->role, $this->menu->id)) {
+                return $next($request);
+            }
         });
     }
 
     public function index()
     {
         $model['data'] = ContactModel::latest()->first();
-        if (isset($model['data'])) $model['data']['phone'] = substr($model['data']['phone'], 2);
+        if (isset($model['data'])) {
+            $model['data']['phone'] = substr($model['data']['phone'], 2);
+        }
         $model['base_url'] = '/admin/contactus/';
         $model['post_base_url'] = '/admin/contactus';
         return view('admin.contactus.index', compact('model'));

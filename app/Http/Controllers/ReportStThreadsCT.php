@@ -26,7 +26,9 @@ class ReportStThreadsCT extends Controller
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
             $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+            if ($this->hasAccess($this->user->role, $this->menu->id)) {
+                return $next($request);
+            }
         });
     }
     /**
@@ -57,7 +59,8 @@ class ReportStThreadsCT extends Controller
             ->join('stakeholdermembers', 'stakeholderthreads.id_stmember', '=', 'stakeholdermembers.id')
             ->join('m_user', 'stakeholdermembers.id_user', '=', 'm_user.id')
             ->join('stakeholders', 'stakeholdermembers.id_stakeholder', '=', 'stakeholders.id')
-            ->select('stakeholderthreads.*', 'stakeholdermembers.id_user', 'm_user.nama_lengkap AS name_user', 'stakeholders.name AS name_stakeholder');
+            ->select('stakeholderthreads.*', 'stakeholdermembers.id_user',
+            'm_user.nama_lengkap AS name_user', 'stakeholders.name AS name_stakeholder');
     }
 
     public function getThreadsByFilter($filter)
@@ -77,6 +80,7 @@ class ReportStThreadsCT extends Controller
 
     public function downloadExcel()
     {
-        return Excel::download(new StakeholderThreadExport, 'FAMLINK_LAPORAN_DISKUSI_JEJARING_' . date('Y-m-d_His') . '.xlsx');
+        return Excel::download(new StakeholderThreadExport,
+        'FAMLINK_LAPORAN_DISKUSI_JEJARING_' . date('Y-m-d_His') . '.xlsx');
     }
 }

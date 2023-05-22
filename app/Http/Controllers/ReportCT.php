@@ -31,7 +31,9 @@ class ReportCT extends Controller
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
             $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+            if ($this->hasAccess($this->user->role, $this->menu->id)) {
+                return $next($request);
+            }
         });
     }
     
@@ -48,9 +50,12 @@ class ReportCT extends Controller
     public function data(Request $request)
     {
         if(isset($request->id)){
-            return Datatables::of(TrAssessmentModel::with('user', 'assessment', 'assessment_result')->where('result', '!=', null)->where('id_assessment', $request->id)->orderBy('id', 'desc'))->make(true);
+            return Datatables::of(TrAssessmentModel::with('user', 'assessment', 'assessment_result')
+            ->where('result', '!=', null)->where('id_assessment', $request->id)
+            ->orderBy('id', 'desc'))->make(true);
         }
-        return Datatables::of(TrAssessmentModel::with('user', 'assessment', 'assessment_result')->where('result', '!=', null)->orderBy('id', 'desc'))->make(true);
+        return Datatables::of(TrAssessmentModel::with('user', 'assessment', 'assessment_result')
+        ->where('result', '!=', null)->orderBy('id', 'desc'))->make(true);
     }
 
     public function create()
@@ -147,6 +152,7 @@ class ReportCT extends Controller
     }
 
     public function downloadNative() {
-        return Excel::download(new AssessmentNativeExport, 'FAMLINK_LAPORAN_ASSESSMENT_DATA_MENTAH_'.date('Y-m-d_His').'.xlsx');
+        return Excel::download(new AssessmentNativeExport,
+        'FAMLINK_LAPORAN_ASSESSMENT_DATA_MENTAH_'.date('Y-m-d_His').'.xlsx');
     }
 }

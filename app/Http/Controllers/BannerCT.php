@@ -24,7 +24,9 @@ class BannerCT extends Controller
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
             $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+            if ($this->hasAccess($this->user->role, $this->menu->id)) {
+                return $next($request);
+            }
         });
     }
 

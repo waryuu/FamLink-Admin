@@ -29,7 +29,9 @@ class StakeholderMemberCT extends Controller
     $this->middleware(function ($request, $next) {
       $this->user = Auth::user();
       $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-      if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+      if ($this->hasAccess($this->user->role, $this->menu->id)) {
+        return $next($request);
+      }
     });
   }
 
@@ -48,9 +50,11 @@ class StakeholderMemberCT extends Controller
 
   public function edit($id)
   {
-    $model = StakeholderMemberModel::where('stakeholdermembers.id', $id)->join('m_user', 'stakeholdermembers.id_user', '=', 'm_user.id')
+    $model = StakeholderMemberModel::where('stakeholdermembers.id', $id)
+      ->join('m_user', 'stakeholdermembers.id_user', '=', 'm_user.id')
       ->join('stakeholders', 'stakeholdermembers.id_stakeholder', '=', 'stakeholders.id')
-      ->select('stakeholdermembers.*', 'm_user.nama_lengkap', 'stakeholders.name as nama_stakeholder')->first();
+      ->select('stakeholdermembers.*', 'm_user.nama_lengkap', 'stakeholders.name as nama_stakeholder')
+      ->first();
 
     return response()->json([
       'data' => $model
@@ -63,7 +67,9 @@ class StakeholderMemberCT extends Controller
       ->join('m_user', 'stakeholdermembers.id_user', '=', 'm_user.id')
       ->join('stakeholders', 'stakeholdermembers.id_stakeholder', '=', 'stakeholders.id')
       ->where('stakeholdermembers.status', '=', 1)
-      ->select('stakeholdermembers.*', 'stakeholders.name AS name_stakeholder', 'stakeholders.focus', 'm_user.nama_lengkap', 'm_user.jenis_kelamin', 'm_user.education', 'm_user.pekerjaan')
+      ->select('stakeholdermembers.*', 'stakeholders.name AS name_stakeholder',
+              'stakeholders.focus', 'm_user.nama_lengkap', 'm_user.jenis_kelamin', 'm_user.education',
+              'm_user.pekerjaan')
       ->get();
     return $konselor;
   }
@@ -91,7 +97,9 @@ class StakeholderMemberCT extends Controller
 
   public function show($dir)
   {
-    if ($dir == 'nonactive') return Datatables::of($this->getNonActiveMember())->make(true);
+    if ($dir == 'nonactive') {
+      return Datatables::of($this->getNonActiveMember())->make(true);
+    }
     return;
   }
 

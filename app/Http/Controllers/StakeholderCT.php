@@ -26,7 +26,9 @@ class StakeholderCT extends Controller
     $this->middleware(function ($request, $next) {
       $this->user = Auth::user();
       $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-      if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+      if ($this->hasAccess($this->user->role, $this->menu->id)) {
+        return $next($request);
+      }
     });
   }
 
@@ -171,8 +173,12 @@ class StakeholderCT extends Controller
 
   public function show($id)
   {
-    if (is_numeric($id)) return $this->getStakeholderByID($id);
-    if ($id == 'nonactive') return $this->deletedStakeholder();
+    if (is_numeric($id)) {
+      return $this->getStakeholderByID($id);
+    }
+    if ($id == 'nonactive') {
+      return $this->deletedStakeholder();
+    }
     return;
   }
 

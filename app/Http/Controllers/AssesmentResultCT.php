@@ -25,7 +25,9 @@ class AssesmentResultCT extends Controller
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
             $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+            if ($this->hasAccess($this->user->role, $this->menu->id)) {
+                return $next($request);
+            }
         });
     }
     
@@ -36,7 +38,8 @@ class AssesmentResultCT extends Controller
 
     public function data(Request $request, $id)
     {
-        return Datatables::of(AssessmentResultModel::select('id', 'title', 'range_down', 'range_up', 'color')->where('id_assessment', $id))->make(true);
+        return Datatables::of(AssessmentResultModel::select('id', 'title', 'range_down', 'range_up', 'color')
+                                                    ->where('id_assessment', $id))->make(true);
     }
 
 

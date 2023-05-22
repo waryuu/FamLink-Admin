@@ -27,7 +27,9 @@ class ConsultationDeletedCT extends Controller
       $this->middleware(function ($request, $next) {
          $this->user = Auth::user();
          $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-         if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+         if ($this->hasAccess($this->user->role, $this->menu->id)) {
+            return $next($request);
+         }
       });
    }
 
@@ -39,9 +41,15 @@ class ConsultationDeletedCT extends Controller
 
    public function show($dir)
    {
-      if (is_numeric($dir)) return $this->getById($dir);
-      if ($dir == 'public') return $this->getPublicConsultation();
-      if ($dir == 'private') return $this->getPrivateConsultation();
+      if (is_numeric($dir)) {
+         return $this->getById($dir);
+      }
+      if ($dir == 'public') {
+         return $this->getPublicConsultation();
+      }
+      if ($dir == 'private') {
+         return $this->getPrivateConsultation();
+      }
       return;
    }
 
@@ -88,7 +96,8 @@ class ConsultationDeletedCT extends Controller
          ->leftJoin('stakeholders', 'konselors.id_stakeholder', '=', 'stakeholders.id')
          ->leftJoin('m_user AS users', 'konselors.id_user', '=', 'users.id')
          ->where('consultationthreads.status', '=', 0)
-         ->select('consultationthreads.*', 'm_user.nama_lengkap', 'stakeholders.name AS name_stakeholder', 'users.nama_lengkap AS nama_konselor', 'users.kode_peserta as kode_konselor');
+         ->select('consultationthreads.*', 'm_user.nama_lengkap', 'stakeholders.name AS name_stakeholder',
+         'users.nama_lengkap AS nama_konselor', 'users.kode_peserta as kode_konselor');
    }
 
    private function getTypeConsultation($type)
@@ -109,7 +118,8 @@ class ConsultationDeletedCT extends Controller
             ->leftJoin('konselors', 'm_user.id', '=', 'konselors.id_user')
             ->leftJoin('stakeholders', 'konselors.id_stakeholder', '=', 'stakeholders.id')
             ->where('consultationthreads.id', '=', $id)
-            ->select('ctreplies.id', 'ctreplies.content', 'ctreplies.reply_from', 'ctreplies.created_at', 'm_user.nama_lengkap AS nama_pembalas', 'stakeholders.name AS name_stakeholder')
+            ->select('ctreplies.id', 'ctreplies.content', 'ctreplies.reply_from', 'ctreplies.created_at',
+            'm_user.nama_lengkap AS nama_pembalas', 'stakeholders.name AS name_stakeholder')
             ->orderBy('ctreplies.created_at')->get();
       }
 

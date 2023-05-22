@@ -27,7 +27,9 @@ class ArticleCT extends Controller
         $this->middleware(function ($request, $next) {
             $this->user = Auth::user();
             $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-            if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+            if ($this->hasAccess($this->user->role, $this->menu->id)) {
+                return $next($request);
+            }
         });
     }
 
@@ -129,7 +131,8 @@ class ArticleCT extends Controller
         $model->status = $request->status;
         $model->type = $request->type;
         $model->updated_at = Carbon::now();
-        if (isset($request->image)){
+
+        if (isset($request->image)) {
             $fileName = $id.'-'.time().'.'.$request->image->extension();
             $request->image->move(public_path('article'), $fileName);
             $model->image = $fileName;

@@ -28,7 +28,6 @@ class MenuNavigationCT extends Controller
 
         $model['menu_header_view'] = $menu_header_view;
         $model['menu_header'] = $menu_header;
-        $model['menu_header'] = $menu_header;
 
         session(['menu_navigation' => $menu_header_view]);
         return view('admin.menu.index', compact('model'));
