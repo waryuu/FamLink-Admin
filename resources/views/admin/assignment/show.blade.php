@@ -17,50 +17,75 @@
             <div class="col-12 col-lg-12 col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{$model['base_url']}}{{$model['data']->id}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{$model['base_url']}}{{$model['assignment']->id}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input name="_method" type="hidden" value="PUT">
                             <div class="modal-body">
                                 <div class="card-body">
                                     <div class="form-group form-show-validation row">
                                         <label for="title" >Pertanyaan <span class="required-label">*</span></label>
-                                        <input type="text" class="form-control" id="title" name="question" placeholder="Masukan Pertanyaan" value="{{$model['data']->question}}" required>
+                                        <input type="text" class="form-control" id="title" name="question" placeholder="Masukan Pertanyaan" value="{{$model['assignment']->question}}" required>
                                     </div>
                                     <div class="separator-solid"></div>
+
 
                                     <label for="answer" >Jawaban <span class="required-label">*</span>
                                     </label>
                                     @foreach($model['answer'] as $answer)
-                                    <div class="form-group form-show-validation row">
+                                    @php
+                                        $label = "inlineRadio".strval($loop->iteration + 1);
+                                    @endphp
+                                    <div class="form-group row"> 
                                         <input type="hidden" name="id[]" value="{{$answer->id}}"> 
+                                        <label for={{$label}} class="col-sm-1 col-form-label">{{chr(64+ $loop->iteration)}}</label>
 
-                                        {{chr(64+ $loop->iteration)}}.
-                                        <input type="text" class="form-control" id="answer" name="answer[]" placeholder="Masukan Jawaban" value="{{$answer->answer}}" required>
+                                        <input type="text" class="col-sm-11 form-control" name="answer[]" 
+                                         id="answer" placeholder="Masukan Jawaban" 
+                                         value="{{$answer->answer}}" required>
                                     </div>
                                     @endforeach
                                     
+                                    
+                                    
                                     <div class="form-group form-show-validation row">
-                                        <label for="status">Jawaban Benar <span class="required-label">*</span></label>
-                                        <select class="form-control" id="status" name="correct_answer" required>
-                                            <option value="1" 
-                                            @if($model['data']->correct_answer == '1') selected @endif >A</option>
-                                            <option value="2" 
-                                            @if($model['data']->correct_answer == '2') selected @endif >B</option>
-                                            <option value="3" 
-                                            @if($model['data']->correct_answer == '3') selected @endif >C</option>
-                                            <option value="4" 
-                                            @if($model['data']->correct_answer == '4') selected @endif >D</option>
-                                            <option value="5" 
-                                            @if($model['data']->correct_answer == '5') selected @endif >E</option>
-                                        </select>
-                                    </div>                                    
-                                    <div class="form-group form-show-validation row">
-                                        <label for="status">Status <span class="required-label">*</span></label>
-                                        <select class="form-control" id="status" name="status" required>
-                                            <option value="1" @if($model['data']->status == '1') selected @endif >Aktif</option>
-                                            <option value="0" @if($model['data']->status == '0') selected @endif >Tidak Aktif</option>
-                                        </select>
+                                        <label for="correct_answer" class="col-sm-2">Jawaban yang benar <span class="required-label">*</span></label>
+                                        <div class="form-check form-check-inline col-sm-2">
+
+                                            @foreach ($model['answer'] as $answer)
+                                            @php
+                                                $checked = "checked";
+                                                $label = "inlineRadio".strval($loop->iteration + 1);
+                                            @endphp
+                                            @if ($answer->correctness == $model['assignment']->correct_answer)
+                                                <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="{{$label}}" style="height:20px; width:20px;" value="{{$answer->correctness}}" {{$checked}}>
+                                                  <label class="form-check-label" for="{{$label}}">
+                                                      {{chr(64+ $answer->correctness)}} 
+                                                  </label>
+                                            @else
+                                                <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="{{$label}}" style="height:20px; width:20px;" value="{{$answer->correctness}}">
+                                                  <label class="form-check-label" for="{{$label}}">
+                                                      {{chr(64+ $answer->correctness)}} 
+                                                  </label>
+                                            @endif
+                                            @endforeach
+                                        </div>
+                                         
                                     </div>
+                                   
+                                    <div class="form-group form-show-validation row">
+                                        <label for="status" class="col-sm-2">Status <span class="required-label">*</span></label>
+                                        <div class="form-check form-check-inline">
+                                          <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="status" id="active-status" value="1" @if($model['assignment']->status == '1') checked @endif>
+                                          <label class="form-check-label" for="active-status">Aktif</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                          <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="status" id="inactive-status" value="0" @if($model['assignment']->status == '0') checked @endif >
+                                          <label class="form-check-label" for="inactive-status">Arsipkan</label>
+                                        </div>
+                                    </div>
+
+                                    
                                 </div>
                             </div>
                             <div class="modal-footer border-0">

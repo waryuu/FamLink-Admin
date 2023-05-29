@@ -21,7 +21,7 @@ class AssignmentCT extends Controller
      * @return \Illuminate\Http\Response
      */
     use MenuTraits;
-    private $menuName = "Bank Soal";
+    private $menuName = "Soal 1";
 
      function __construct()
      {
@@ -31,13 +31,16 @@ class AssignmentCT extends Controller
          $this->middleware(function ($request, $next) {
              $this->user = Auth::user();
              $this->menu = MenuModel::where('title', $this->menuName)->select('id')->first();
-             if ($this->hasAccess($this->user->role, $this->menu->id)) return $next($request);
+             if ($this->hasAccess($this->user->role, $this->menu->id)) {
+                return $next($request);
+            }
          });
      }
      public function index()
     {
         $model['base_url'] = '/admin/assignment/';
-        $model['assignments'] = AssignmentModel::with('answers')->paginate(20);
+        $model['assignments'] = AssignmentModel::with('answers')->oldest()->paginate(5);
+        $model['i'] = $model['assignments']->firstItem();
         return view('admin.assignment.index', compact('model'));
     }
      /**
@@ -75,7 +78,6 @@ class AssignmentCT extends Controller
         $model['assignment']->created_at = Carbon::now();
         $model['assignment']->correct_answer = $request->correct_answer;
 
-
         $model['answer']->answer = $request->input('answer', []);
         $model['answer']->assignment_model_id = $model['assignment']->id;
         $model['answer']->correctness = $request->input('correctness', []);
@@ -105,8 +107,8 @@ class AssignmentCT extends Controller
     public function show($id)
     {
         $model['base_url'] = '/admin/assignment/';
-        $model['data'] = AssignmentModel::find($id);
-        $model['answer'] = AnswerModel::where('assignment_model_id', $model['data']->id)->get();
+        $model['assignment'] = AssignmentModel::find($id);
+        $model['answer'] = AnswerModel::where('assignment_model_id', $model['assignment']->id)->get();
         return view('admin.assignment.show', compact('model'));
     }
 

@@ -25,94 +25,79 @@
                                         <label >Silahkan masukkan pertanyaan dan jawaban</label>
                                     </div>
                                     <div class="separator-solid"></div>
-                                    <div class="">
-                                        <label for="question" >Pertanyaan <span class="required-label">*</span></label>
-                                        <div>
-                                            <input type="text" class="form-control" name="question" id="question" placeholder="Masukkan Pertanyaan" />
-                                        </div>
-                                    </div>
 
                                     <div class="form-group form-show-validation">
-                                        <label for="answer" >Jawaban <span class="required-label">*</span>
-                                        </label>
+                                        <label for="question" >Pertanyaan <span class="required-label">*</span></label>
+                                        <div>
+                                            <input type="text" class="form-control" name="question" id="question" placeholder="Masukkan Pertanyaan" required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-show-validation">
+                                        <label for="answer" >Jawaban </label>
         
                                         @for ($i = 1; $i <= 5; $i++)
-                                        <div class="form-group form-show-validation "> 
-                                            <input type="hidden" name=correctness[] value={{$i}} > 
-                                            {{chr(64+ $i)}}
-                                            <input type="text" class="form-control" name="answer[]" id="answer" placeholder="Masukkan Jawaban" />
+                                        @php
+                                            $label = "inlineRadio".strval($i);
+                                        @endphp
+                                        <div class="form-group row"> 
+                                                <input type="hidden" name=correctness[] value={{$i}} > 
+                                                <label for={{$label}} class="col-sm-1 col-form-label">{{chr(64+ $i)}}</label>
+                                            
+                                                
+                                                <input type="text" class="col-sm-11 form-control" name="answer[]" id="answer" placeholder="Masukkan Jawaban"/>   
                                         </div>
                                         @endfor
-
-                                        <div class="form-group form-show-validation row">
-                                        <label for="status">Jawaban yang benar <span class="required-label">*</span></label>
-                                        <select class="form-control" name="correct_answer" required>
-                                            <option value="1"> A </option>
-                                            <option value="2">B </option>
-                                            <option value="3">C </option>
-                                            <option value="4">D </option>
-                                            <option value="4">E </option>
-                                        </select>
                                     </div>
 
                                     <div class="form-group form-show-validation row">
-                                        <label for="status">Status <span class="required-label">*</span></label>
-                                        <select class="form-control" id="status" name="status" required>
-                                            <option value="1"> Aktif </option>
-                                            <option value="0">Arsipkan</option>
-                                        </select>
+                                        <label for="correct_answer" class="col-sm-2">Jawaban yang benar <span class="required-label">*</span></label>
+
+                                        <div class="form-check form-check-inline col-sm-3">
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio1" style="height:20px; width:20px;" value="1" required>
+                                          <label class="form-check-label" for="inlineRadio1">A</label>
+
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio2" style="height:20px; width:20px;" value="2">
+                                          <label class="form-check-label" for="inlineRadio2">B</label>
+
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio3" style="height:20px; width:20px;" value="3">
+                                          <label class="form-check-label" for="inlineRadio3">C</label>
+
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio4" style="height:20px; width:20px;" value="4">
+                                         <label class="form-check-label" for="inlineRadio4">D</label>
+
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio5" style="height:20px; width:20px;" value="5">
+                                          <label class="form-check-label" for="inlineRadio5">E</label>
+                                        </div>
                                     </div>
 
+                                    <div class="form-group form-show-validation row">
+                                        <label for="status" class="col-sm-2">Status <span class="required-label">*</span></label>
+                                        <div class="form-check form-check-inline">
+                                          <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="status" id="active-status" value="1" checked>
+                                          <label class="form-check-label" for="active-status">Aktif</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                          <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="status" id="inactive-status" value="0" >
+                                          <label class="form-check-label" for="inactive-status">Arsipkan</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div> 
-                            
+                            </div>
+                                                        
                             <div class="modal-footer border-0">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <a href="{{$model['base_url']}}"><button type="button" class="btn btn-warning">Kembali</button></a>
                             </div>
                         </form>
-
-
-                                    
-                                
-
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>
 @endsection
 @section('js')
-<script>
 
-    var choices = $('#choice').find(":selected").val();
-    var formId = '#form_validation';
-    var rulesForm = {
-        image: {
-            required: true,
-        }
-    };
 
-    $(document).ready(function() {
-        initFormValidation(formId, rulesForm);
-        $('#summernote').summernote({
-			fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
-			tabsize: 2,
-			height: 100 
-		});
-        $('#type').on('change', function() {
-            if (this.value == 2) {
-                $('#type_value_wrapper').show();
-            } else {
-                $('#type_value_wrapper').hide();
-            }
-        });
-    });
-
-    document.getElementById("demo").innerHTML = text;
-</script>
 @endsection

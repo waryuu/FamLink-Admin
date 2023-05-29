@@ -75,6 +75,10 @@ body {
   background-color: #f8fafc;
 }
 
+.wrapper {
+  flex:1;
+}
+
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important;
 }
@@ -10900,6 +10904,16 @@ a.text-dark:focus {
   .table .thead-dark th {
     color: inherit;
     border-color: #dee2e6;
+  }
+
+  .md-radio {
+    -webkit-appearance:button;
+      -moz-appearance:button;
+      appearance:button;
+      border:4px solid #ccc;
+      width:20px;
+      height:20px;
+      border-radius:50%;
   }
 }
 

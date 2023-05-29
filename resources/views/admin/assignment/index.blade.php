@@ -17,7 +17,21 @@
         @endif
         <div class="row">
             <div class="col-md-12">
-                <div class="d-flex align-items-center">
+                <div class="d-flex">
+                    <strong> Total soal = {{$model['assignments']->total()}} <strong>
+                </div>
+
+                @if($model['assignments']->isEmpty())
+                <div class="container square-box d-flex  justify-content-center align-items-center"> Tidak ada data </div>
+                <div class="d-flex justify-content-center">
+                        <a href="{{$model['base_url']}}create" id="btn_add_data" class="btn btn-primary btn-round ml-2">
+                            <i class="fa fa-plus"></i>
+                            Tambah Soal
+                        </a> 
+                </div>
+
+                @else
+                <div class="d-flex justify-content-end">
                         <a href="{{$model['base_url']}}create" id="btn_add_data" class="btn btn-primary btn-round ml-2">
                             <i class="fa fa-plus"></i>
                             Tambah Soal
@@ -25,37 +39,35 @@
                 </div>
                 
                 <br></br>
-                @if($model['assignments']->isEmpty())
-                <div class="card">
-                <div> Tidak ada data </div>
                 
-                @else
+                
                 @foreach($model['assignments'] as $assignment)
                 <div class="card">
                     <div class="card-header">
-                        <div class="d-grid align-items-center">
-                            <h4 class="card-title">Soal {{$loop->iteration}}</h4>
-                        </div>
-
-                        <div class="d-grid justify-content-md-end">
-                            <!-- <a class="btn btn-secondary" 
-                            href="{{$model['base_url']}}{{$assignment->id}}" role="button">
-                                <i class="far fa-edit"></i>
-                                Edit Soal
-                            </a> -->
-                            <a href="{{ route('assignment.show', $assignment->id) }}" role="button">
-                                <i class="fas fa-edit  fa-lg"></i>
-
+                        <div class="d-flex justify-content-end">
+                            
+                            <a href="{{ route('assignment.show', $assignment->id) }}">
+                                <button type="button" class=" p-2 btn btn-link btn-success btn-lg">
+                                    <i class="fa fa-edit fa-lg"> </i>
+                                </button>
                             </a>
 
-                            <!-- <a class="btn btn-warning" data-toggle="modal" id="smallButton" data-target="#smallModal" data-attr="{{ route('delete', $assignment->id) }}"  title="Delete Project">
-                                <i class="far fa-edit"></i>
-                                Hapus Soal
-                            </a> -->
-                            <a data-toggle="modal" id="smallButton" data-target="#smallModal" data-attr="{{ route('delete', $assignment->id) }}" role="button">
-                                <i class="fas fa-trash text-danger  fa-lg"></i>
+                            <!-- <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="Edit"><i class="fa fa-eye"></i></button> -->
+
+
+                            <a href="#" data-toggle="modal" id="smallButton" data-target="#smallModal" data-attr="{{ route('delete', $assignment->id) }}">
+                                <button type="button" class=" p-2 btn btn-link btn-danger btn-lg">
+                                    <i class="fas fa-trash fa-lg"> </i>
+                                </button>
                             </a>
                         </div>
+                        <div class="d-flex">
+                            <h4 class="card-title">
+                                <strong>Soal {{$model['i']++}}</strong>
+                            </h4>
+                        </div>
+
+                        
                         
                         <div class="card-body">
                             <h4 class="card-title">
@@ -76,10 +88,21 @@
                                 </h5>
                             @endforeach
                         </div>
-                    </div>
+                    </div>    
                 </div>
+
+                
                 @endforeach
+                <div class="d-flex">
+                    {!! $model['assignments']->links() !!}
+                </div>
+                <div>
+                Showing {{($model['assignments']->currentpage()-1)*$model['assignments']->perpage()+1}} to {{$model['assignments']->currentpage()*$model['assignments']->perpage()}}
+                    of  {{$model['assignments']->total()}} entries
+                </div>
                 @endif
+                
+
                 <!-- small modal -->
                 <div class="modal fade" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="smallModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -96,11 +119,9 @@
                             </div>
                         </div>
                 </div>
-
-
-
             </div>
         </div>
+
     </div>
 </div>
 @endsection
