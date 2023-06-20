@@ -67,25 +67,23 @@
                             </h4>
                         </div>
 
-                        
-                        
                         <div class="card-body">
-                            <h4 class="card-title">
+                            <h3 class="card-title">
                             {{$assignment->question}}
-                            </h4>
+                            </h3>
                             <br>
                             @foreach($assignment->answers as $answer)         
-                                <h5 class="card-title">
+                                <div class="card-title">
                                     @if($answer->correctness == $assignment->correct_answer)
-                                        <b>
+                                        <b style="background-color:yellow;">
                                         {{chr(64+ $loop->iteration)}}.
                                                     {{$answer->answer}}
-                                        <b>
+                                        </b>
                                     @else
                                         {{chr(64+ $loop->iteration)}}.
                                                     {{$answer->answer}}
                                     @endif
-                                </h5>
+                                </div>
                             @endforeach
                         </div>
                     </div>    

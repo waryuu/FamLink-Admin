@@ -21,8 +21,8 @@
                             @csrf
                             <div class="modal-body">
                                 <div class="card-body">
-                                    <div class="form-group form-show-validation row">
-                                        <label >Silahkan masukkan pertanyaan dan jawaban</label>
+                                    <div class="form-group form-show-validation">
+                                        <b> Silahkan masukkan pertanyaan dan jawaban </b>
                                     </div>
                                     <div class="separator-solid"></div>
 
@@ -41,7 +41,7 @@
                                         @endphp
                                         <div class="form-group row"> 
                                                 <input type="hidden" name=correctness[] value={{$i}} > 
-                                                <label for={{$label}} class="col-sm-1 col-form-label">{{chr(64+ $i)}}</label>
+                                                <button type="button" class="btn default" for={{$label}} class="col-sm-1 col-form-label">{{chr(64+ $i)}}</button>
                                             
                                                 
                                                 <input type="text" class="col-sm-11 form-control" name="answer[]" id="answer" placeholder="Masukkan Jawaban"/>   
@@ -49,10 +49,11 @@
                                         @endfor
                                     </div>
 
-                                    <div class="form-group form-show-validation row">
+                                    <div class="form-group form-show-validation">
                                         <label for="correct_answer" class="col-sm-2">Jawaban yang benar <span class="required-label">*</span></label>
+                                        <br>
 
-                                        <div class="form-check form-check-inline col-sm-3">
+                                        <div class="form-check form-check-inline">
                                           <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio1" style="height:20px; width:20px;" value="1" required>
                                           <label class="form-check-label" for="inlineRadio1">A</label>
 
@@ -70,15 +71,17 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group form-show-validation row">
+                                    <div class="form-group form-show-validation">
                                         <label for="status" class="col-sm-2">Status <span class="required-label">*</span></label>
+                                        <br>
+
                                         <div class="form-check form-check-inline">
-                                          <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="status" id="active-status" value="1" checked>
+                                          <input class="form-check-input col-sm-5" style="height:20px; width:20px;" type="radio" name="status" id="active-status" value="1" checked>
                                           <label class="form-check-label" for="active-status">Aktif</label>
                                         </div>
 
                                         <div class="form-check form-check-inline">
-                                          <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="status" id="inactive-status" value="0" >
+                                          <input class="form-check-input col-sm-5" type="radio" style="height:20px; width:20px;"  name="status" id="inactive-status" value="0" >
                                           <label class="form-check-label" for="inactive-status">Arsipkan</label>
                                         </div>
                                     </div>
