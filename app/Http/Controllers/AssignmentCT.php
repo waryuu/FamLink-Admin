@@ -50,7 +50,7 @@ class AssignmentCT extends Controller
      */
      public function create()
     {
-        $model['base_url'] = '/admin/assignment/';
+        $model['base_url'] = '/admin/assignment';
         return view('admin.assignment.create', compact('model'));
     }
 
@@ -72,8 +72,7 @@ class AssignmentCT extends Controller
 
         $model['assignment']->id = floor(time()-99999999);
         $model['assignment']->question = $request->question;
-        $model['assignment']->category = "Easy"; 
-        //$model->answer = $request->answer;
+        $model['assignment']->category = "Mudah"; 
         $model['assignment']->status = $request->status;
         $model['assignment']->created_at = Carbon::now();
         $model['assignment']->correct_answer = $request->correct_answer;
@@ -89,8 +88,6 @@ class AssignmentCT extends Controller
                 "correctness" => $model['answer']->correctness[$index]
             ];
         }
-
-        //$model['answer']->created_at = Carbon::now();
         $model['assignment']->save();
         AnswerModel::insert($answers);
         

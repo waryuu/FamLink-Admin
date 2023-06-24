@@ -149,7 +149,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Assignment Batch 3
         Route::resource('assignment', AssignmentCT::class);
-        Route::get('assignment', [AssignmentCT::class, 'index']);
+        //Route::get('assignment', [AssignmentCT::class, 'index']);
         Route::get('assignment/delete/{id}', [AssignmentCT::class, 'delete'])->name('delete');
 
         

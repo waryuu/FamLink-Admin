@@ -41,7 +41,7 @@
                                         @endphp
                                         <div class="form-group row"> 
                                                 <input type="hidden" name=correctness[] value={{$i}} > 
-                                                <button type="button" class="btn default" for={{$label}} class="col-sm-1 col-form-label">{{chr(64+ $i)}}</button>
+                                                <label class="btn default" for={{$label}} class="col-sm-1 col-form-label">{{chr(64+ $i)}}</button>
                                             
                                                 
                                                 <input type="text" class="col-sm-11 form-control" name="answer[]" id="answer" placeholder="Masukkan Jawaban"/>   
