@@ -1,10 +1,10 @@
 @extends('layouts.base')
-@section('title', 'Bank Soal')
+@section('title', 'Master Assignment')
 @section('content')
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">Bank Soal</h4>
+            <h4 class="page-title">Master Assignment</h4>
         </div>
         @if ($errors->any())
         <div class="alert alert-danger">
@@ -17,140 +17,164 @@
         @endif
         <div class="row">
             <div class="col-md-12">
-                <div class="d-flex">
-                    <strong> Total soal = {{$model['assignments']->total()}} <strong>
-                </div>
-
-                @if($model['assignments']->isEmpty())
-                <div class="container square-box d-flex  justify-content-center align-items-center"> Tidak ada data </div>
-                <div class="d-flex justify-content-center">
-                        <a href="{{$model['base_url']}}create" id="btn_add_data" class="btn btn-primary btn-round ml-2">
-                            <i class="fa fa-plus"></i>
-                            Tambah Soal
-                        </a> 
-                </div>
-
-                @else
-                <div class="d-flex justify-content-end">
-                        <a href="{{$model['base_url']}}create" id="btn_add_data" class="btn btn-primary btn-round ml-2">
-                            <i class="fa fa-plus"></i>
-                            Tambah Soal
-                        </a> 
-                </div>
-                
-                <br></br>
-                
-                
-                @foreach($model['assignments'] as $assignment)
                 <div class="card">
                     <div class="card-header">
-                        <div class="d-flex justify-content-end">
-                            
-                            <a href="{{ route('assignment.show', $assignment->id) }}">
-                                <button type="button" class=" p-2 btn btn-link btn-success btn-lg">
-                                    <i class="fa fa-edit fa-lg"> </i>
-                                </button>
-                            </a>
-
-                            <!-- <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="Edit"><i class="fa fa-eye"></i></button> -->
-
-
-                            <a href="#" data-toggle="modal" id="smallButton" data-target="#smallModal" data-attr="{{ route('delete', $assignment->id) }}">
-                                <button type="button" class=" p-2 btn btn-link btn-danger btn-lg">
-                                    <i class="fas fa-trash fa-lg"> </i>
+                        <div class="d-flex align-items-center">
+                            {{-- <h4 class="card-title">Add Row</h4> --}}
+                            <a href="{{$model['base_url']}}create">
+                                <button class="btn btn-primary btn-round ml-auto">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah Data
                                 </button>
                             </a>
                         </div>
-                        <div class="d-flex">
-                            <h4 class="card-title">
-                                <strong>Soal {{$model['i']++}}</strong>
-                            </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="table_view" class="display table table-striped table-hover" >
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">ID</th>
+                                        <th>Category</th>
+                                        <th>Question</th>
+                                        <th>Option A</th>
+                                        <th>Option B</th>
+                                        <th>Option C</th>
+                                        <th>Option D</th>
+                                        <th>Correct_Answer</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Category</th>
+                                        <th>Question</th>
+                                        <th>Option A</th>
+                                        <th>Option B</th>
+                                        <th>Option C</th>
+                                        <th>Option D</th>
+                                        <th>Correct_Answer</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-
-                        <div class="card-body">
-                            <h3 class="card-title">
-                            {{$assignment->question}}
-                            </h3>
-                            <br>
-                            @foreach($assignment->answers as $answer)         
-                                <div class="card-title">
-                                    @if($answer->correctness == $assignment->correct_answer)
-                                        <b style="background-color:yellow;">
-                                        {{chr(64+ $loop->iteration)}}.
-                                                    {{$answer->answer}}
-                                        </b>
-                                    @else
-                                        {{chr(64+ $loop->iteration)}}.
-                                                    {{$answer->answer}}
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>    
-                </div>
-
-                
-                @endforeach
-                <div class="d-flex">
-                    {!! $model['assignments']->links() !!}
-                </div>
-                <div>
-                Showing {{($model['assignments']->currentpage()-1)*$model['assignments']->perpage()+1}} to {{$model['assignments']->currentpage()*$model['assignments']->perpage()}}
-                    of  {{$model['assignments']->total()}} entries
-                </div>
-                @endif
-                
-
-                <!-- small modal -->
-                <div class="modal fade" id="smallModal" tabindex="-1" role="dialog" aria-labelledby="smallModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                            <h3 class="modal-title">Konfirmasi Penghapusan</h3>
-                            <button type="button" data-dismiss="modal" class="close">&times;</button>
-                        </div>
-                                <div class="modal-body" id="smallBody">
-                                    <div>
-                                        <!-- delete.blade.php will show here -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 @endsection
-
 @section('js')
 <script>
-    // display a modal (small modal)
-    $(document).on('click', '#smallButton', function(event) {
-        event.preventDefault();
-        let href = $(this).attr('data-attr');
-        $.ajax({
-            url: href
-            , beforeSend: function() {
-                $('#loader').show();
-            },
-            // return the result
-            success: function(result) {
-                $('#smallModal').modal("show");
-                $('#smallBody').html(result).show();
+
+    var base_endpoint = "{{$model['base_url']}}";
+    var table_id = '#table_view';
+    var table = null;
+    var formId = '#form_validation';
+    var formEditId = '#edit_form_validation';
+    var modalEditButtonId = '#modal_edit_btn_update';
+
+    // var rulesForm = {
+    //     image: {
+    //         required: true,
+    //     }
+    // };
+
+    // var rulesFormEdit = {
+    //     image: {
+    //         required: true,
+    //     }
+    // };
+
+
+    $(document).ready( function() {
+        var columnsData = [
+        { data: 'id', name: 'id', render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['id']+'</strong>';
+        }},
+        { data: 'category', name: 'category', render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['category']+'</strong>';
+        }},
+        
+        { data: 'question', name: 'question',
+        render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['question']+'</strong>';
+        }},
+        { data: 'option_a', name: 'option_a',
+        render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['option_a']+'</strong>';
+        }},
+        { data: 'option_b', name: 'option_b',
+        render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['option_b']+'</strong>';
+        }},
+        { data: 'option_c', name: 'option_c',
+        render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['option_c']+'</strong>';
+        }},
+        { data: 'option_d', name: 'option_d',
+        render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['option_d']+'</strong>';
+        }},
+        { data: 'correct_answer', name: 'correct_answer', render : function(data, type, row) {
+            return '<strong class=" col-red" style="font-size: 12px">'+row['correct_answer']+'</strong>';
+        }},
+        { data: 'status', name: 'status',
+        render : function(data, type, row) {
+            if (row['status'] == 1) {
+                return '<button class="btn btn-success">Aktif</button>';
+            }else{
+                return '<button class="btn btn-danger">Tidak Aktif</button>';
             }
-            , complete: function() {
-                $('#loader').hide();
-            }
-            , error: function(jqXHR, testStatus, error) {
-                console.log(error);
-                alert("Page " + href + " cannot open. Error:" + error);
-                $('#loader').hide();
-            }
-            , timeout: 8000
-        })
+        }},
+        { data: 'id', name: 'id', render : function(data, type, row) {
+            return '<div class="form-button-action"><a href="'+base_endpoint+row['id']+'"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="Edit"><i class="fa fa-eye"></i></button></a><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert('+row['id']+')"><i class="fa fa-times"></i></button></div>';
+        }}];
+        var columns = createColumnsAny(columnsData);
+        table = initDataTableLoad(table_id, base_endpoint + 'datatable/list', columns);
+        // initFormValidation(formId, rulesForm);
+        // initFormValidation(formEditId, rulesFormEdit);
+        $(modalEditButtonId).click(function(e){
+            setEditAction();
+        });
     });
+
+    function deleteAlert(id) {
+        var body = {
+            "id": id,
+            "_token": token
+        }
+        showDialogConfirmationAjax(null, 'Apakah anda yakin akan menghapus data?', 'Data berhasil dihapus!', base_endpoint+id, 'DELETE', body, table_id);
+    }
+
+    function editData(id){
+        $.get(base_endpoint + id + '/edit', function (data) {
+            $('#modal_edit_form').modal('show');
+            $('#edit_binding_id').val(data.data.id);
+            $('#edit_name').val(data.data.name);
+        })
+    }
+
+    function setEditAction() {
+        var valid = $(formEditId).valid();
+        if (valid) {
+            var id = $("#edit_binding_id").val();
+            var name = $("#edit_name").val();
+            var body = {
+                "_token": token,
+                "id": id,
+                "name": name,
+            };
+
+            var endpoint = base_endpoint + id;
+            showDialogConfirmationAjax('#modal_edit_form', 'Apakah anda yakin akan mengupdate data?', 'Update data berhasil!', endpoint, 'PUT', body, table_id);
+        }
+    }
 
 </script>
 @endsection

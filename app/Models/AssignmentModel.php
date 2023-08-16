@@ -11,10 +11,7 @@ class AssignmentModel extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    public function answers()
-    {
-        return $this->hasMany(AnswerModel::class);
-    }
+    
     
 }
 

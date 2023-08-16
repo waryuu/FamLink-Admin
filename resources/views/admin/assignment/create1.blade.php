@@ -35,25 +35,18 @@
                                     <div class="form-group form-show-validation">
                                         <label for="answer" >Jawaban </label>
         
+                                        @for ($i = 1; $i <= 5; $i++)
+                                        @php
+                                            $label = "inlineRadio".strval($i);
+                                        @endphp
                                         <div class="form-group row"> 
-                                                <label class="btn default" for="option_A" class="col-sm-1 col-form-label">A</label>
-                                                <input type="text" class="col-sm-11 form-control" name="option_a" id="option_a" placeholder="Masukkan Jawaban"/>   
+                                                <input type="hidden" name=correctness[] value={{$i}} > 
+                                                <label class="btn default" for={{$label}} class="col-sm-1 col-form-label">{{chr(64+ $i)}}</button>
+                                            
+                                                
+                                                <input type="text" class="col-sm-11 form-control" name="answer[]" id="answer" placeholder="Masukkan Jawaban"/>   
                                         </div>
-
-                                        <div class="form-group row"> 
-                                                <label class="btn default" for="option_B" class="col-sm-1 col-form-label">B</label>
-                                                <input type="text" class="col-sm-11 form-control" name="option_b" id="option_b" placeholder="Masukkan Jawaban"/>   
-                                        </div>
-
-                                        <div class="form-group row"> 
-                                                <label class="btn default" for="option_C" class="col-sm-1 col-form-label">C</label>
-                                                <input type="text" class="col-sm-11 form-control" name="option_c" id="option_c" placeholder="Masukkan Jawaban"/>   
-                                        </div>
-
-                                        <div class="form-group row"> 
-                                                <label class="btn default" for="option_D" class="col-sm-1 col-form-label">D</label>
-                                                <input type="text" class="col-sm-11 form-control" name="option_d" id="option_d" placeholder="Masukkan Jawaban"/>   
-                                        </div>
+                                        @endfor
                                     </div>
 
                                     <div class="form-group form-show-validation">
@@ -61,17 +54,21 @@
                                         <br>
 
                                         <div class="form-check form-check-inline">
-                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_A" style="height:20px; width:20px;" value="A" required>
-                                          <label class="form-check-label" for="option_A">A</label>
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio1" style="height:20px; width:20px;" value="1" required>
+                                          <label class="form-check-label" for="inlineRadio1">A</label>
 
-                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_B" style="height:20px; width:20px;" value="B">
-                                          <label class="form-check-label" for="option_B">B</label>
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio2" style="height:20px; width:20px;" value="2">
+                                          <label class="form-check-label" for="inlineRadio2">B</label>
 
-                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_C" style="height:20px; width:20px;" value="C">
-                                          <label class="form-check-label" for="option_C">C</label>
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio3" style="height:20px; width:20px;" value="3">
+                                          <label class="form-check-label" for="inlineRadio3">C</label>
 
-                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_D" style="height:20px; width:20px;" value="D">
-                                         <label class="form-check-label" for="option_D">D</label>
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio4" style="height:20px; width:20px;" value="4">
+                                         <label class="form-check-label" for="inlineRadio4">D</label>
+
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="inlineRadio5" style="height:20px; width:20px;" value="5">
+                                          <label class="form-check-label" for="inlineRadio5">E</label>
+                                        </div>
                                     </div>
 
                                     <div class="form-group form-show-validation">

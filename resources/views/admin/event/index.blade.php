@@ -24,7 +24,6 @@
                             <a href="{{$model['base_url']}}create">
                                 <button class="btn btn-primary btn-round ml-auto">
                                     <i class="fa fa-plus"></i>
-
                                     Tambah Data
                                 </button>
                             </a>
@@ -32,7 +31,6 @@
                     </div>
                     <div class="card-body">
                       
-
                         <div class="table-responsive">
                             <table id="table_view" class="display table table-striped table-hover" >
                                 <thead>

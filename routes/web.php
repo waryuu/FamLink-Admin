@@ -151,6 +151,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('assignment', AssignmentCT::class);
         //Route::get('assignment', [AssignmentCT::class, 'index']);
         Route::get('assignment/delete/{id}', [AssignmentCT::class, 'delete'])->name('delete');
+        Route::get('assignment/datatable/list', [AssignmentCT::class, 'data']);
 
         
 

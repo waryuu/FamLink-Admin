@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@section('title', 'Update Assignment')
+@section('title', 'Update Event')
 @section('content')
 <div class="container">
     <div class="page-inner">
@@ -31,59 +31,45 @@
 
                                     <label for="answer" >Jawaban <span class="required-label">*</span>
                                     </label>
-                                  
+                                    @foreach($model['answer'] as $answer)
+                                    @php
+                                        $label = "inlineRadio".strval($loop->iteration + 1);
+                                    @endphp
                                     <div class="form-group row"> 
-                                        <label for="A" class="col-sm-1 col-form-label">A</label>
+                                        <input type="hidden" name="id[]" value="{{$answer->id}}"> 
+                                        <label for={{$label}} class="col-sm-1 col-form-label">{{chr(64+ $loop->iteration)}}</label>
 
-                                        <input type="text" class="col-sm-11 form-control" name="option_a" 
-                                         id="option_a" placeholder="Masukan Jawaban" 
-                                         value="{{$model['assignment']->option_a}}" >
+                                        <input type="text" class="col-sm-11 form-control" name="answer[]" 
+                                         id="answer" placeholder="Masukan Jawaban" 
+                                         value="{{$answer->answer}}" required>
                                     </div>
-
-                                    <div class="form-group row"> 
-                                        <label for="B" class="col-sm-1 col-form-label">B</label>
-
-                                        <input type="text" class="col-sm-11 form-control" name="option_b" 
-                                         id="option_b" placeholder="Masukan Jawaban" 
-                                         value="{{$model['assignment']->option_b}}" >
-                                    </div>
-
-                                    <div class="form-group row"> 
-                                        <label for="C" class="col-sm-1 col-form-label">C</label>
-
-                                        <input type="text" class="col-sm-11 form-control" name="option_c" 
-                                         id="option_c" placeholder="Masukan Jawaban" 
-                                         value="{{$model['assignment']->option_c}}">
-                                    </div>
-
-                                    <div class="form-group row"> 
-                                        <label for="D"} class="col-sm-1 col-form-label">D</label>
-                                        <input type="text" class="col-sm-11 form-control" name="option_d" 
-                                         id="option_d" placeholder="Masukan Jawaban" 
-                                         value="{{$model['assignment']->option_d}}">
-                                    </div>
+                                    @endforeach
+                                    
                                     
                                     
                                     <div class="form-group form-show-validation row">
-                                        <label for="correct_answer" class="col-sm-2">Jawaban yang benar 
-                                            <span class="required-label">*</span></label>
+                                        <label for="correct_answer" class="col-sm-2">Jawaban yang benar <span class="required-label">*</span></label>
                                         <div class="form-check form-check-inline col-sm-2">
-                                            <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="A" style="height:20px; width:20px;" value="A" 
-                                            @if($model['assignment']->correct_answer == "A") checked @endif>
-                                            <label class="form-check-label" for="A"> "A" </label>
 
-                                            <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="B" style="height:20px; width:20px;" value="B"
-                                            @if($model['assignment']->correct_answer == "B") checked @endif>
-                                            <label class="form-check-label" for="B"> "B" </label>
-
-                                            <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="C" style="height:20px; width:20px;" value="C"
-                                            @if($model['assignment']->correct_answer == "C") checked @endif>
-                                            <label class="form-check-label" for="C"> C </label>
-
-                                            <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="D" style="height:20px; width:20px;" value="D"
-                                            @if($model['assignment']->correct_answer == "D") checked @endif>
-                                            <label class="form-check-label" for="D"> D </label>
+                                            @foreach ($model['answer'] as $answer)
+                                            @php
+                                                $checked = "checked";
+                                                $label = "inlineRadio".strval($loop->iteration + 1);
+                                            @endphp
+                                            @if ($answer->correctness == $model['assignment']->correct_answer)
+                                                <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="{{$label}}" style="height:20px; width:20px;" value="{{$answer->correctness}}" {{$checked}}>
+                                                  <label class="form-check-label" for="{{$label}}">
+                                                      {{chr(64+ $answer->correctness)}} 
+                                                  </label>
+                                            @else
+                                                <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="{{$label}}" style="height:20px; width:20px;" value="{{$answer->correctness}}">
+                                                  <label class="form-check-label" for="{{$label}}">
+                                                      {{chr(64+ $answer->correctness)}} 
+                                                  </label>
+                                            @endif
+                                            @endforeach
                                         </div>
+                                         
                                     </div>
                                    
                                     <div class="form-group form-show-validation row">
