@@ -6,11 +6,12 @@ use App\Http\Traits\MenuTraits;
 use Illuminate\Http\Request;
 use App\Models\MenuModel;
 use App\Models\AssignmentModel;
-use App\Models\AnswerModel;
+use App\Models\AssignmentCategoryModel;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class AssignmentCT extends Controller
@@ -47,13 +48,26 @@ class AssignmentCT extends Controller
      public function index()
     {
         $model['base_url'] = '/admin/assignment/';
+        $model['category_base_url'] = '/admin/assignment-category/';
         return view('admin.assignment.index', compact('model'));
     }
 
-     public function data()
+    public function data()
     {
-        return Datatables::of(AssignmentModel::all())->make(true);
+        $resprotect = Datatables::of(
+            AssignmentModel::join('assignment_categorys', 'assignment.id_category', '=', 'assignment_categorys.id')
+            ->select('assignment.*', 'assignment_categorys.name')
+            ->get())->make(true);
+
+        $res = $resprotect->getData();
+        return $res;
     }
+
+    public function data_category()
+    {
+        return Datatables::of(AssignmentCategoryModel::all())->make(true);
+    }
+
      /**
      * Show the form for creating a new resource.
      *
@@ -61,6 +75,7 @@ class AssignmentCT extends Controller
      */
      public function create()
     {
+        $model['category'] = AssignmentCategoryModel::all();
         $model['base_url'] = '/admin/assignment';
         return view('admin.assignment.create', compact('model'));
     }
@@ -78,20 +93,23 @@ class AssignmentCT extends Controller
             'question' => 'required'
             ]
         );
+        
+        $user = Auth::user();
         $model['assignment'] = new AssignmentModel();
+        $model['assignment']->id_staff = $user->id;
+        $model['assignment']->id_category = $request->id_category;
         $model['assignment']->question = $request->question;
         $model['assignment']->option_a = $request->option_a;
         $model['assignment']->option_b = $request->option_b;
         $model['assignment']->option_c = $request->option_c;
         $model['assignment']->option_d = $request->option_d;
-        $model['assignment']->category = "Mudah"; 
+        
         $model['assignment']->status = $request->status;
         $model['assignment']->created_at = Carbon::now();
         $model['assignment']->correct_answer = $request->correct_answer;
 
         
         $model['assignment']->save();
-        // AnswerModel::insert($answers);
         
         Alert::success('Berhasil', 'Anda berhasil menginputkan data');
         return redirect()->to('/admin/assignment');
@@ -106,6 +124,7 @@ class AssignmentCT extends Controller
     public function show($id)
     {
         $model['base_url'] = '/admin/assignment/';
+        $model['category'] = AssignmentCategoryModel::all();
         $model['assignment'] = AssignmentModel::find($id);
         //$model['answer'] = AnswerModel::where('assignment_model_id', $model['assignment']->id)->get();
         return view('admin.assignment.show', compact('model'));
@@ -125,8 +144,12 @@ class AssignmentCT extends Controller
         
       ]
       );
-
+      
+        $user = Auth::user();
         $model['assignment'] = AssignmentModel::find($id);
+        $model['assignment']->id_staff = $user->id;
+        $model['assignment']->id_category = $request->id_category;
+
         $model['assignment']->question = $request->question;
         $model['assignment']->option_a = $request->option_a;
         $model['assignment']->option_b = $request->option_b;
@@ -136,22 +159,19 @@ class AssignmentCT extends Controller
         $model['assignment']->correct_answer = $request->correct_answer;
         $model['assignment']->updated_at = Carbon::now();
         $model['assignment']->save();
-          // foreach($request->id as $key => $value){
-          //   $item = AnswerModel::find($value);
-          //   $item->answer = $request->answer[$key];
-          //   $item->updated_at = Carbon::now();
-        //return response()->json(['success' => true]);
+
+
         Alert::success('Berhasil', 'Anda berhasil mengupdate data');
             return redirect()->to('/admin/assignment');
     }
 
 
-    public function delete($id)
-    {
-        $assignment = AssignmentModel::find($id);
+    // public function delete($id)
+    // {
+    //     $assignment = AssignmentModel::find($id);
 
-        return view('admin.assignment.delete', compact('assignment'));
-    }
+    //     return view('admin.assignment.delete', compact('assignment'));
+    // }
 
     /**
      * Remove the specified resource from storage.

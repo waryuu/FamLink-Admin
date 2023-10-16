@@ -75,7 +75,7 @@ class CounselorCT extends Controller
     $menu = MenuModel::where('title', $this->menuName)->select('id')->first();
     $rules = RulesModel::where('id_menu', $menu->id)->first();
 
-    $model['counselors'] = $this->getKonselor()->where('assignment.id', '=', 'answer.id_assignment')->get();
+    $model['counselors'] = $this->getKonselor();
     $model['users'] = $this->getUser();
     $model['stakeholders'] = $this->getStakeholder();
     $model['base_url'] = '/admin/counselor/';

@@ -6,6 +6,7 @@ use App\Http\Controllers\AssessmentDetailCT;
 use App\Http\Controllers\AssessmentInstrumenCT;
 use App\Http\Controllers\AssesmentResultCT;
 use App\Http\Controllers\AssignmentCT;
+use App\Http\Controllers\AssignmentCategoryCT;
 use App\Http\Controllers\AuthCT;
 use App\Http\Controllers\BannerCT;
 use App\Http\Controllers\CategoryCT;
@@ -78,6 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('material/file/datatable/list/{id}', [FileCT::class, 'data']);
         Route::get('material/{id}/create', [FileCT::class, 'create']);
         Route::post('material/{id}/create', [FileCT::class, 'store']);
+
         // Kategori Materi
         Route::resource('category', CategoryCT::class);
         Route::get('category/datatable/list', [MaterialCT::class, 'data_category']);
@@ -149,9 +151,12 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Assignment Batch 3
         Route::resource('assignment', AssignmentCT::class);
-        //Route::get('assignment', [AssignmentCT::class, 'index']);
         Route::get('assignment/delete/{id}', [AssignmentCT::class, 'delete'])->name('delete');
         Route::get('assignment/datatable/list', [AssignmentCT::class, 'data']);
+
+        //Kategori Assignment
+        Route::resource('assignment-category', AssignmentCategoryCT::class);
+        Route::get('assignment-category/datatable/list', [AssignmentCT::class, 'data_category']);
 
         
 

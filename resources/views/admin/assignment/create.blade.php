@@ -21,20 +21,31 @@
                             @csrf
                             <div class="modal-body">
                                 <div class="card-body">
+
+                                    
+
                                     <div class="form-group form-show-validation">
                                         <b> Silahkan masukkan pertanyaan dan jawaban </b>
                                     </div>
                                     <div class="separator-solid"></div>
 
-                                    <div class="form-group form-show-validation">
-                                        <label for="question" >Pertanyaan <span class="required-label">*</span></label>
-                                        <div>
-                                            <input type="text" class="form-control" name="question" id="question" placeholder="Masukkan Pertanyaan" required/>
-                                        </div>
+                                    <div class="form-group form-show-validation row">
+                                        <label for="category">Kategori <span class="required-label">*</span></label>
+                                        <select class="form-control" id="category" name="id_category" required>
+                                            @foreach ($model['category'] as $category)
+                                            <option value={{$category->id}}>{{$category->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
+
+                                    <div class="form-group form-show-validation row">
+                                        <label for="question" >Pertanyaan <span class="required-label">*</span></label>
+                                            <input type="text" class="form-control" name="question" id="question" placeholder="Masukkan Pertanyaan" required/>
+                                    </div>
+
                                     <div class="form-group form-show-validation">
                                         <label for="answer" >Jawaban </label>
-        
+                                        
                                         <div class="form-group row"> 
                                                 <label class="btn default" for="option_A" class="col-sm-1 col-form-label">A</label>
                                                 <input type="text" class="col-sm-11 form-control" name="option_a" id="option_a" placeholder="Masukkan Jawaban"/>   

@@ -22,6 +22,16 @@
                             <input name="_method" type="hidden" value="PUT">
                             <div class="modal-body">
                                 <div class="card-body">
+
+                                    <div class="form-group form-show-validation row">
+                                        <label for="category">Kategori <span class="required-label">*</span></label>
+                                        <select class="form-control" id="category" name="id_category" required>
+                                            @foreach ($model['category'] as $category)
+                                            <option @if($model['assignment']->id_category == $category->id) selected @endif  value={{$category->id}}>{{$category->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="form-group form-show-validation row">
                                         <label for="title" >Pertanyaan <span class="required-label">*</span></label>
                                         <input type="text" class="form-control" id="title" name="question" placeholder="Masukan Pertanyaan" value="{{$model['assignment']->question}}" required>
@@ -57,30 +67,30 @@
                                     </div>
 
                                     <div class="form-group row"> 
-                                        <label for="D"} class="col-sm-1 col-form-label">D</label>
+                                        <label for="D" class="col-sm-1 col-form-label">D</label>
                                         <input type="text" class="col-sm-11 form-control" name="option_d" 
                                          id="option_d" placeholder="Masukan Jawaban" 
                                          value="{{$model['assignment']->option_d}}">
                                     </div>
                                     
                                     
-                                    <div class="form-group form-show-validation row">
+                                    <div class="form-group row">
                                         <label for="correct_answer" class="col-sm-2">Jawaban yang benar 
                                             <span class="required-label">*</span></label>
-                                        <div class="form-check form-check-inline col-sm-2">
-                                            <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="A" style="height:20px; width:20px;" value="A" 
+                                        <div class="form-check form-check-inline ">
+                                            <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="correct_answer" id="A" style="height:20px; width:20px;" value="A" 
                                             @if($model['assignment']->correct_answer == "A") checked @endif>
-                                            <label class="form-check-label" for="A"> "A" </label>
+                                            <label class="form-check-label" for="A"> A </label>
 
-                                            <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="B" style="height:20px; width:20px;" value="B"
+                                            <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="correct_answer" id="B" style="height:20px; width:20px;" value="B"
                                             @if($model['assignment']->correct_answer == "B") checked @endif>
-                                            <label class="form-check-label" for="B"> "B" </label>
+                                            <label class="form-check-label" for="B"> B </label>
 
-                                            <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="C" style="height:20px; width:20px;" value="C"
+                                            <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="correct_answer" id="C" style="height:20px; width:20px;" value="C"
                                             @if($model['assignment']->correct_answer == "C") checked @endif>
                                             <label class="form-check-label" for="C"> C </label>
 
-                                            <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="D" style="height:20px; width:20px;" value="D"
+                                            <input class="form-check-input" style="height:20px; width:20px;" type="radio" name="correct_answer" id="D" style="height:20px; width:20px;" value="D"
                                             @if($model['assignment']->correct_answer == "D") checked @endif>
                                             <label class="form-check-label" for="D"> D </label>
                                         </div>
