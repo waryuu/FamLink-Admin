@@ -13,7 +13,6 @@ class AssessmentInstrumentModel extends Model
     public function detail()
     {
         return $this->hasOne(AssessmentDetailModel::class, 'id', 'id_assessment_detail');
-
     }
 
 }

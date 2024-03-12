@@ -54,18 +54,17 @@ class AssignmentCT extends Controller
 
     public function data()
     {
-        $resprotect = Datatables::of(
-            AssignmentModel::join('assignment_categorys', 'assignment.id_category', '=', 'assignment_categorys.id')
-            ->select('assignment.*', 'assignment_categorys.name')
-            ->get())->make(true);
-
-        $res = $resprotect->getData();
-        return $res;
+        $model = AssignmentModel::join(
+            'assignment_categorys', 'assignment.id_category', '=', 'assignment_categorys.id')
+            ->select('assignment.*', 'assignment_categorys.category')
+            ->get();
+        return DataTables::of($model)->toJson();
     }
 
     public function data_category()
     {
-        return Datatables::of(AssignmentCategoryModel::all())->make(true);
+        $model = AssignmentCategoryModel::query();
+        return DataTables::of($model)->toJson();
     }
 
      /**

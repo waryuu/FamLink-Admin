@@ -33,14 +33,14 @@
                                         <label for="category">Kategori <span class="required-label">*</span></label>
                                         <select class="form-control" id="category" name="id_category" required>
                                             @foreach ($model['category'] as $category)
-                                            <option value={{$category->id}}>{{$category->name}}</option>
+                                            <option value={{$category->id}}>{{$category->category}}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="form-group form-show-validation row">
                                         <label for="question" >Pertanyaan <span class="required-label">*</span></label>
-                                            <input type="text" class="form-control" name="question" id="question" placeholder="Masukkan Pertanyaan" required/>
+                                            <textarea class="form-control" name="question" id="question" required></textarea>
                                     </div>
 
                                     <div class="form-group form-show-validation">

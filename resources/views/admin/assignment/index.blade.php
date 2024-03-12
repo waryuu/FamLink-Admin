@@ -54,7 +54,7 @@
                                                         Kategori
                                                         <span class="required-label">*</span></label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="name" name="name"
+                                                        <input type="text" class="form-control" id="category" name="category"
                                                             placeholder="Masukan Nama Kategori" required>
                                                     </div>
                                                 </div>
@@ -110,7 +110,7 @@
                                                             class="required-label">*</span></label>
                                                     <div class="col-12">
                                                         <input type="text" class="form-control"
-                                                            id="category_edit_name" name="name"
+                                                            id="category_edit_name" name="category"
                                                             placeholder="Masukan Nama Kategori" required>
                                                     </div>
                                                 </div>
@@ -239,10 +239,10 @@
                     }
                 },
                 {
-                    data: 'name',
-                    name: 'name',
+                    data: 'category',
+                    name: 'category',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['name'] +
+                        return '<strong class=" col-red" style="font-size: 12px">' + row['category'] +
                             '</strong>';
                     }
                 },
@@ -346,10 +346,10 @@
                     }
                 },
                 {
-                    data: 'name',
-                    name: 'name',
+                    data: 'category',
+                    name: 'category',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['name'] +
+                        return '<strong class=" col-red" style="font-size: 12px">' + row['category'] +
                             '</strong>';
                     }
                 },
@@ -375,6 +375,7 @@
                     }
                 }
             ];
+
             var columns = createColumnsAny(columnsData);
             table = initDataTableLoad(category_table_id, category_base_endpoint + 'datatable/list', columns);
             initFormValidation(category_formId, rulesForm);
@@ -406,7 +407,7 @@
             $.get(base_endpoint + id + '/edit', function(data) {
                 $('#modal_edit_form').modal('show');
                 $('#edit_binding_id').val(data.data.id);
-                $('#edit_name').val(data.data.name);
+                $('#edit_name').val(data.data.category);
             })
         }
 
@@ -414,7 +415,7 @@
             $.get(category_base_endpoint + id + '/edit', function(data) {
                 $('#category_modal_edit_form').modal('show');
                 $('#category_edit_binding_id').val(data.data.id);
-                $('#category_edit_name').val(data.data.name);
+                $('#category_edit_name').val(data.data.category);
                 $('#category_edit_status').val(data.data.status);
             })
         }
@@ -423,12 +424,12 @@
             var valid = $(category_formEditId).valid();
             if (valid) {
                 var id = $("#category_edit_binding_id").val();
-                var name = $("#category_edit_name").val();
+                var category = $("#category_edit_name").val();
                 var status = $("#category_edit_status").val();
                 var body = {
                     "_token": token,
                     "id": id,
-                    "name": name,
+                    "category": category,
                     "status": status,
                 };
 

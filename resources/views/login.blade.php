@@ -8,7 +8,7 @@
     <link rel="icon" href="{{ asset('assets/img/icon.ico') }}" type="image/x-icon" />
 
     <!-- Fonts and icons -->
-    <script src="{{ asset('assets/plugin/webfont/webfont.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
         WebFont.load({
             google: {

@@ -18,4 +18,9 @@ class AssignmentCategoryModel extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function assignments()
+    {
+        return $this->hasMany(AssignmentModel::class, 'id', 'id_category');
+    }
 }

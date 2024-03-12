@@ -58,13 +58,13 @@ class AssignmentCategoryCT extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'category' => 'required',
             'status' => 'required',
             ]
         );
 
         $model = new AssignmentCategoryModel();
-        $model->name = $request->name;
+        $model->category = $request->category;
         $model->status = $request->status;
         $model->created_at = Carbon::now();
         $model->save();
