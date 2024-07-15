@@ -44,7 +44,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="category_form_validation" action="/admin/assignment-category" method="POST"
+                                    <form id="category_form_validation" action="/admin/assignment" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-body">
@@ -54,7 +54,7 @@
                                                         Kategori
                                                         <span class="required-label">*</span></label>
                                                     <div class="col-12">
-                                                        <input type="text" class="form-control" id="category" name="category"
+                                                        <input type="text" class="form-control" id="title" name="title"
                                                             placeholder="Masukan Nama Kategori" required>
                                                     </div>
                                                 </div>
@@ -99,7 +99,9 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form id="category_edit_form_validation">
+
+                                    <form id="category_edit_form_validation" action="/admin/assignment" method="POST">
+                                        @csrf
                                         <input type="hidden" id="category_edit_binding_id"
                                             name="category_edit_binding_id" value="">
                                         <div class="modal-body">
@@ -110,7 +112,7 @@
                                                             class="required-label">*</span></label>
                                                     <div class="col-12">
                                                         <input type="text" class="form-control"
-                                                            id="category_edit_name" name="category"
+                                                            id="category_edit_name" name="title"
                                                             placeholder="Masukan Nama Kategori" required>
                                                     </div>
                                                 </div>
@@ -172,7 +174,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             {{-- <h4 class="card-title">Add Row</h4> --}}
-                            <a href="{{$model['base_url']}}create">
+                            <a href="{{$model['instrument_url']}}create">
                                 <button class="btn btn-primary btn-round ml-auto">
                                     <i class="fa fa-plus"></i>
                                     Tambah Data
@@ -188,11 +190,12 @@
                                         <th style="width: 5%">ID</th>
                                         <th>Category</th>
                                         <th>Question</th>
-                                        <th>Option A</th>
-                                        <th>Option B</th>
-                                        <th>Option C</th>
-                                        <th>Option D</th>
+                                        <th>Option 1</th>
+                                        <th>Option 2</th>
+                                        <th>Option 3</th>
+                                        <th>Option 4</th>
                                         <th>Correct_Answer</th>
+                                        <th>Diinput Oleh</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -202,11 +205,12 @@
                                         <th>ID</th>
                                         <th>Category</th>
                                         <th>Question</th>
-                                        <th>Option A</th>
-                                        <th>Option B</th>
-                                        <th>Option C</th>
-                                        <th>Option D</th>
+                                        <th>Option 1</th>
+                                        <th>Option 2</th>
+                                        <th>Option 3</th>
+                                        <th>Option 4</th>
                                         <th>Correct_Answer</th>
+                                        <th>Diinput Oleh</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -222,11 +226,105 @@
 @endsection
 @section('js')
 <script>
-        var base_endpoint = "{{ $model['base_url'] }}";
+        
+
+        var category_base_endpoint = "{{ $model['assignment_url'] }}";
+        var category_table_id = '#category_table_view';
+        var category_table = null;
+        var category_formId = '#category_form_validation';
+        var category_formEditId = '#category_edit_form_validation';
+        var category_modalEditButtonId = '#category_modal_edit_btn_update';
+        var rulesForm = null;
+        var rulesFormEdit = null;
+
+        $(document).ready(function() {
+            var columnsData = [{
+                    data: 'id',
+                    name: 'id',
+                    render: function(data, type, row) {
+                        return '<strong class=" col-red" style="font-size: 12px">' + row['id'] +
+                        '</strong>';
+                    }
+                },
+                {
+                    data: 'title',
+                    name: 'title',
+                    render: function(data, type, row) {
+                        return '<strong class=" col-red" style="font-size: 12px">' + row['title'] +
+                            '</strong>';
+                    }
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    render: function(data, type, row) {
+                        if (row['status'] == 1) {
+                            return '<button class="btn btn-success">Aktif</button>';
+                        } else {
+                            return '<button class="btn btn-danger">Tidak Aktif</button>';
+                        }
+                    }
+                },
+                {
+                    data: 'id',
+                    name: 'id',
+                    render: function(data, type, row) {
+                        return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" onclick="category_editData(' +
+                            row['id'] +
+                            ')"><i class="fa fa-edit"></i></button><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="category_deleteAlert(' +
+                            row['id'] + ')"><i class="fa fa-times"></i></button></div>';
+                    }
+                }
+            ];
+
+            var columns = createColumnsAny(columnsData);
+            table = initDataTableLoad(category_table_id, category_base_endpoint + 'datatable/list', columns);
+            initFormValidation(category_formId, rulesForm);
+            initFormValidation(category_formEditId, rulesFormEdit);
+            $(category_modalEditButtonId).click(function(e) {
+                category_setEditAction();
+            });
+        });
+        function category_deleteAlert(id) {
+            var body = {
+                "id": id,
+                "_token": token,
+            }
+            showDialogConfirmationAjax(null, 'Apakah anda yakin akan menghapus data?', 'Data berhasil dihapus!',
+                category_base_endpoint + id, 'DELETE', body, category_table_id);
+        }
+
+        function category_editData(id) {
+            $.get(category_base_endpoint + id + '/edit', function(data) {
+                $('#category_modal_edit_form').modal('show');
+                $('#category_edit_binding_id').val(data.data.id);
+                $('#category_edit_name').val(data.data.title);
+                $('#category_edit_status').val(data.data.status);
+            })
+        }
+
+        function category_setEditAction() {
+            var valid = $(category_formEditId).valid();
+            if (valid) {
+                var id = $("#category_edit_binding_id").val();
+                var title = $("#category_edit_name").val();
+                var status = $("#category_edit_status").val();
+                var body = {
+                    "_token": token,
+                    "id": id,
+                    "title": title,
+                    "status": status,
+                };
+
+                var endpoint = category_base_endpoint + id;
+                showDialogConfirmationAjax('#category_modal_edit_form', 'Apakah anda yakin akan mengupdate data?',
+                    'Update data berhasil!', endpoint, 'PUT', body, category_table_id);
+            }
+        }
+
+        var base_endpoint = "{{ $model['instrument_url'] }}";
         var table_id = '#table_view';
         var table = null;
-        var formId = '#form_validation';
-        var formEditId = '#edit_form_validation';
         var modalEditButtonId = '#modal_edit_btn_update';
 
         $(document).ready(function() {
@@ -239,10 +337,10 @@
                     }
                 },
                 {
-                    data: 'category',
-                    name: 'category',
+                    data: 'title',
+                    name: 'title',
                     render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['category'] +
+                        return '<strong class=" col-red" style="font-size: 12px">' + row['title'] +
                             '</strong>';
                     }
                 },
@@ -297,6 +395,14 @@
                             '</strong>';
                     }
                 },
+                {
+                    data: 'name',
+                    name: 'name',
+                    render: function(data, type, row) {
+                        return '<strong class=" col-red" style="font-size: 12px">' + row['name'] +
+                            '</strong>';
+                    }
+                },
 
                 {
                     data: 'status',
@@ -314,75 +420,14 @@
                     data: 'id',
                     name: 'id',
                     render: function(data, type, row) {
-                        return '<div class="form-button-action"><a href="' + base_endpoint + row['id'] +
-                            '"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="Edit"><i class="fa fa-eye"></i></button></a><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert(' +
+                        return '<div class="form-button-action"><a href="' + base_endpoint + row['id'] + 
+                            '"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="Edit"><i class="fa fa-edit"></i></button></a><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="deleteAlert(' +
                             row['id'] + ')"><i class="fa fa-times"></i></button></div>';
                     }
                 }
             ];
             var columns = createColumnsAny(columnsData);
             table = initDataTableLoad(table_id, base_endpoint + 'datatable/list', columns);
-            // initFormValidation(formId, rulesForm);
-            // initFormValidation(formEditId, rulesFormEdit);
-            // $(modalEditButtonId).click(function(e){
-            //     setEditAction();
-            // });
-        });
-
-        var category_base_endpoint = "{{ $model['category_base_url'] }}";
-        var category_table_id = '#category_table_view';
-        var category_table = null;
-        var category_formId = '#category_form_validation';
-        var category_formEditId = '#category_edit_form_validation';
-        var category_modalEditButtonId = '#category_modal_edit_btn_update';
-
-        $(document).ready(function() {
-            var columnsData = [{
-                    data: 'id',
-                    name: 'id',
-                    render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['id'] +
-                        '</strong>';
-                    }
-                },
-                {
-                    data: 'category',
-                    name: 'category',
-                    render: function(data, type, row) {
-                        return '<strong class=" col-red" style="font-size: 12px">' + row['category'] +
-                            '</strong>';
-                    }
-                },
-                {
-                    data: 'status',
-                    name: 'status',
-                    render: function(data, type, row) {
-                        if (row['status'] == 1) {
-                            return '<button class="btn btn-success">Aktif</button>';
-                        } else {
-                            return '<button class="btn btn-danger">Tidak Aktif</button>';
-                        }
-                    }
-                },
-                {
-                    data: 'id',
-                    name: 'action',
-                    render: function(data, type, row) {
-                        return '<div class="form-button-action"><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" onclick="category_editData(' +
-                            row['id'] +
-                            ')"><i class="fa fa-edit"></i></button><button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Hapus" onclick="category_deleteAlert(' +
-                            row['id'] + ')"><i class="fa fa-times"></i></button></div>';
-                    }
-                }
-            ];
-
-            var columns = createColumnsAny(columnsData);
-            table = initDataTableLoad(category_table_id, category_base_endpoint + 'datatable/list', columns);
-            initFormValidation(category_formId, rulesForm);
-            initFormValidation(category_formEditId, rulesFormEdit);
-            $(category_modalEditButtonId).click(function(e) {
-                category_setEditAction();
-            });
         });
 
         function deleteAlert(id) {
@@ -392,51 +437,6 @@
             }
             showDialogConfirmationAjax(null, 'Apakah anda yakin akan menghapus data?', 'Data berhasil dihapus!',
                 base_endpoint + id, 'DELETE', body, table_id);
-        }
-
-        function category_deleteAlert(id) {
-            var body = {
-                "id": id,
-                "_token": token,
-            }
-            showDialogConfirmationAjax(null, 'Apakah anda yakin akan menghapus data?', 'Data berhasil dihapus!',
-                category_base_endpoint + id, 'DELETE', body, category_table_id);
-        }
-
-        function editData(id) {
-            $.get(base_endpoint + id + '/edit', function(data) {
-                $('#modal_edit_form').modal('show');
-                $('#edit_binding_id').val(data.data.id);
-                $('#edit_name').val(data.data.category);
-            })
-        }
-
-        function category_editData(id) {
-            $.get(category_base_endpoint + id + '/edit', function(data) {
-                $('#category_modal_edit_form').modal('show');
-                $('#category_edit_binding_id').val(data.data.id);
-                $('#category_edit_name').val(data.data.category);
-                $('#category_edit_status').val(data.data.status);
-            })
-        }
-
-        function category_setEditAction() {
-            var valid = $(category_formEditId).valid();
-            if (valid) {
-                var id = $("#category_edit_binding_id").val();
-                var category = $("#category_edit_name").val();
-                var status = $("#category_edit_status").val();
-                var body = {
-                    "_token": token,
-                    "id": id,
-                    "category": category,
-                    "status": status,
-                };
-
-                var endpoint = category_base_endpoint + id;
-                showDialogConfirmationAjax('#category_modal_edit_form', 'Apakah anda yakin akan mengupdate data?',
-                    'Update data berhasil!', endpoint, 'PUT', body, category_table_id);
-            }
         }
     </script>
 @endsection

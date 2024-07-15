@@ -6,7 +6,7 @@ use App\Http\Controllers\AssessmentDetailCT;
 use App\Http\Controllers\AssessmentInstrumenCT;
 use App\Http\Controllers\AssesmentResultCT;
 use App\Http\Controllers\AssignmentCT;
-use App\Http\Controllers\AssignmentCategoryCT;
+use App\Http\Controllers\AssignmentInstrumentCT;
 use App\Http\Controllers\AuthCT;
 use App\Http\Controllers\BannerCT;
 use App\Http\Controllers\CategoryCT;
@@ -21,6 +21,7 @@ use App\Http\Controllers\MaterialCT;
 use App\Http\Controllers\MenuNavigationCT;
 use App\Http\Controllers\NotificationCT;
 use App\Http\Controllers\ReportCT;
+use App\Http\Controllers\ReportAssignmentCT;
 use App\Http\Controllers\ReportConsultationCT;
 use App\Http\Controllers\ReportStThreadsCT;
 use App\Http\Controllers\RoleController;
@@ -150,13 +151,20 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         //Assignment Batch 3
-        Route::resource('assignment', AssignmentCT::class);
-        Route::get('assignment/delete/{id}', [AssignmentCT::class, 'delete'])->name('delete');
-        Route::get('assignment/datatable/list', [AssignmentCT::class, 'data']);
+        Route::resource('assignment-instrument', AssignmentInstrumentCT::class);
+        Route::get('assignment-instrument/delete/{id}', [AssignmentInstrumentCT::class, 'delete'])->name('delete');
+        Route::get('assignment-instrument/datatable/list', [AssignmentInstrumentCT::class, 'data']);
 
-        //Kategori Assignment
-        Route::resource('assignment-category', AssignmentCategoryCT::class);
-        Route::get('assignment-category/datatable/list', [AssignmentCT::class, 'data_category']);
+        //Kategori/Main Assignment
+        Route::resource('assignment', AssignmentCT::class);
+        Route::get('assignment/datatable/list', [AssignmentCT::class, 'data_category']);
+
+        Route::resource('reportassignment', ReportAssignmentCT::class);
+        //Route::get('reportassignment', [ReportAssignmentCT::class, 'index']);
+        Route::get('reportassignment/datatable/list', [ReportAssignmentCT::class, 'data']);
+        Route::get('reportassignment/download/excel', [ReportAssignmentCT::class, 'downloadExcel']);
+        Route::get('reportassignment/datatable/list/{filter}', [ConsultationCT::class, 'getTypeReportConsultation']);
+       
 
         
 

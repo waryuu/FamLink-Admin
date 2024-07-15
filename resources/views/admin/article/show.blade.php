@@ -1,9 +1,9 @@
 @extends('layouts.base')
-@section('title', 'Update Assessment')
+@section('title', 'Update Article')
 @section('content')
 <div class="container">
     <div class="page-inner">
-        <div class="page-header"><h4 class="page-title">Update Assessment</h4></div>
+        <div class="page-header"><h4 class="page-title">Update Article</h4></div>
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

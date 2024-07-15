@@ -2,19 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class AssignmentModel extends Model
 {
+    use HasFactory;
+
     protected $table = "assignment";
     protected $primaryKey = "id";
-    public $incrementing = false;
-    public $timestamps = false; 
 
-    public function category()
+    protected $fillable = ['name', 'status'];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+    public function assignments()
     {
-        return $this->hasOne(AssignmentCategoryModel::class, 'id', 'id_category');
+        return $this->hasMany(AssignmentModel::class, 'id', 'id_assignment');
     }
 }
-
-    

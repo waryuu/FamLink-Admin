@@ -17,7 +17,7 @@
             <div class="col-12 col-lg-12 col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form id="form_validation" action="{{$model['base_url']}}" method="POST" enctype="multipart/form-data">
+                        <form id="form_validation" action="{{$model['instrument_url']}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
                                 <div class="card-body">
@@ -30,17 +30,17 @@
                                     <div class="separator-solid"></div>
 
                                     <div class="form-group form-show-validation row">
-                                        <label for="category">Kategori <span class="required-label">*</span></label>
-                                        <select class="form-control" id="category" name="id_category" required>
-                                            @foreach ($model['category'] as $category)
-                                            <option value={{$category->id}}>{{$category->category}}</option>
+                                        <label for="assignment">Kategori <span class="required-label">*</span></label>
+                                        <select class="form-control" id="assignment" name="id_assignment" required>
+                                            @foreach ($model['assignment'] as $assignment)
+                                            <option value={{$assignment->id}}>{{$assignment->title}}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div class="form-group form-show-validation row">
                                         <label for="question" >Pertanyaan <span class="required-label">*</span></label>
-                                            <textarea class="form-control" name="question" id="question" required></textarea>
+                                            <textarea class="form-control" name="question" id="question" placeholder="Masukan Pertanyaan" rows="5" required></textarea>
                                     </div>
 
                                     <div class="form-group form-show-validation">
@@ -48,22 +48,22 @@
                                         
                                         <div class="form-group row"> 
                                                 <label class="btn default" for="option_A" class="col-sm-1 col-form-label">A</label>
-                                                <input type="text" class="col-sm-11 form-control" name="option_a" id="option_a" placeholder="Masukkan Jawaban"/>   
+                                                <textarea type="text" class="col-sm-11 form-control" name="option_a" id="option_a" placeholder="Masukkan Jawaban"></textarea>  
                                         </div>
 
                                         <div class="form-group row"> 
                                                 <label class="btn default" for="option_B" class="col-sm-1 col-form-label">B</label>
-                                                <input type="text" class="col-sm-11 form-control" name="option_b" id="option_b" placeholder="Masukkan Jawaban"/>   
+                                                <textarea type="text" class="col-sm-11 form-control" name="option_b" id="option_b" placeholder="Masukkan Jawaban"></textarea>
                                         </div>
 
                                         <div class="form-group row"> 
                                                 <label class="btn default" for="option_C" class="col-sm-1 col-form-label">C</label>
-                                                <input type="text" class="col-sm-11 form-control" name="option_c" id="option_c" placeholder="Masukkan Jawaban"/>   
+                                                <textarea type="text" class="col-sm-11 form-control" name="option_c" id="option_c" placeholder="Masukkan Jawaban"></textarea> 
                                         </div>
 
                                         <div class="form-group row"> 
                                                 <label class="btn default" for="option_D" class="col-sm-1 col-form-label">D</label>
-                                                <input type="text" class="col-sm-11 form-control" name="option_d" id="option_d" placeholder="Masukkan Jawaban"/>   
+                                                <textarea type="text" class="col-sm-11 form-control" name="option_d" id="option_d" placeholder="Masukkan Jawaban"></textarea>
                                         </div>
                                     </div>
 
@@ -72,16 +72,16 @@
                                         <br>
 
                                         <div class="form-check form-check-inline">
-                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_A" style="height:20px; width:20px;" value="A" required>
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_A" style="height:20px; width:20px;" value=1 required>
                                           <label class="form-check-label" for="option_A">A</label>
 
-                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_B" style="height:20px; width:20px;" value="B">
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_B" style="height:20px; width:20px;" value=2>
                                           <label class="form-check-label" for="option_B">B</label>
 
-                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_C" style="height:20px; width:20px;" value="C">
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_C" style="height:20px; width:20px;" value=3>
                                           <label class="form-check-label" for="option_C">C</label>
 
-                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_D" style="height:20px; width:20px;" value="D">
+                                          <input class="form-check-input col-sm-2" type="radio" name="correct_answer" id="option_D" style="height:20px; width:20px;" value=4>
                                          <label class="form-check-label" for="option_D">D</label>
                                     </div>
 
@@ -104,7 +104,7 @@
                                                         
                             <div class="modal-footer border-0">
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                                <a href="{{$model['base_url']}}"><button type="button" class="btn btn-warning">Kembali</button></a>
+                                <a href="{{$model['assignment_url']}}"><button type="button" class="btn btn-warning">Kembali</button></a>
                             </div>
                         </form>
                     </div>
