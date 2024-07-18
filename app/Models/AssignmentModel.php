@@ -21,6 +21,6 @@ class AssignmentModel extends Model
 
     public function assignments()
     {
-        return $this->hasMany(AssignmentModel::class, 'id', 'id_assignment');
+        return $this->hasMany(AssignmentInstrumentModel::class, 'id', 'id_assignment');
     }
 }
